@@ -9,7 +9,7 @@
 /* Layout: fixed WebGL space behind, tall scroll track drives the camera, HTML captions float on top */
 :root{
   --bg:#ffffff; --fog:#ffffff; --fg:#1f1b20; --muted:#6f6870; --accent:#d9572f;
-  --display:"Humane","Familjen Grotesk", system-ui, sans-serif; --body:"Humane","Familjen Grotesk", system-ui, sans-serif;
+  --display:"Humane","Familjen Grotesk", system-ui, sans-serif; --body:"Familjen Grotesk", system-ui, sans-serif;
   color-scheme:light;
 }
 html,body{background:var(--bg);color:var(--fg);font-family:var(--body)}
@@ -69,12 +69,12 @@ body.paged #gl{visibility:hidden}
 .pg-in{padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));max-width:760px;margin:0 auto}
 .pg-in .pg-line{margin:28px 0 6px;font:500 .74rem "Roboto Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:#6f6870}
 .pg-name{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(4rem,12vw,7.5rem);line-height:.9;letter-spacing:.01em;text-wrap:balance}
-.pg-in .pg-idea{margin:14px 0 0;font-size:1.9rem;line-height:1.1;max-width:38rem}
+.pg-in .pg-idea{margin:14px 0 0;font-size:1.2rem;line-height:1.45;max-width:38rem}
 .pg-in .pg-q{margin:36px 0 8px;font-weight:700;font-size:clamp(2.4rem,6vw,3.4rem);line-height:1;text-wrap:balance;color:#1f1b20}
 .lbl{display:block;font:500 .78rem "Roboto Mono",ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:#0000ff;margin:30px 0 8px}
-.pg-in p{margin:0 0 12px;font-size:1.55rem;line-height:1.15;max-width:60ch;letter-spacing:.01em}
+.pg-in p{margin:0 0 12px;font-size:1rem;line-height:1.6;max-width:65ch}
 .pg-in ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
-.pg-in li{font-size:1.55rem;line-height:1.15;letter-spacing:.01em;padding-left:18px;position:relative}
+.pg-in li{font-size:1rem;line-height:1.5;padding-left:18px;position:relative}
 .pg-in li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:1px;background:#1f1b20}
 .pg-res li{font-weight:600}
 .gal{columns:2 260px;column-gap:14px;margin:40px auto 0;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));max-width:880px}
@@ -85,7 +85,7 @@ body.paged #gl{visibility:hidden}
 .pg-next{font:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:left;color:#1f1b20}
 .pg-next small{display:block;font:500 .74rem "Roboto Mono",ui-monospace,monospace;color:#0000ff;letter-spacing:.04em}
 .pg-next span{font-family:var(--display);font-weight:700;font-size:2.6rem;line-height:1}
-.pg-link a{color:#0000ff;font-size:1.3rem}.pg-link a.pg-cta{display:inline-block;background:#0000ff;color:#fff;text-decoration:none;padding:12px 20px;border-radius:999px;font-size:1.05rem}.pg-in .pg-mail{margin:0;font-size:1.4rem}.pg-mail a{color:#0000ff}
+.pg-link a{color:#0000ff;font-size:1.3rem}.pg-link a.pg-cta{display:inline-block;background:#0000ff;color:#fff;text-decoration:none;padding:12px 20px;border-radius:999px;font-size:1.05rem}.pg-in .pg-mail{margin:0;font-size:.95rem}.pg-mail a{color:#0000ff}
 @media (max-width:640px){.sheet{width:100%;box-shadow:none}.gal{columns:1}}
 @media (prefers-reduced-motion: reduce){#gl{transition:none}}
 .casebar{position:fixed;z-index:4;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 18px);display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border:1px solid #ece8e3;border-radius:999px;padding:6px;max-width:calc(100% - 24px)}
@@ -333,9 +333,9 @@ function textBlock(spec){
     else if(p.t==='name')add('700 160px "Humane", "Familjen Grotesk", system-ui, sans-serif',INK,p.s,148);
     else if(p.t==='brand')add('700 104px "Humane", "Familjen Grotesk", system-ui, sans-serif',INK,p.s,100);
     else if(p.t==='q')add('700 84px "Humane", "Familjen Grotesk", system-ui, sans-serif',INK,p.s,84);
-    else if(p.t==='body')add('400 50px "Humane", "Familjen Grotesk", system-ui, sans-serif',INK,p.s,56);
-    else if(p.t==='big')add('700 66px "Humane", "Familjen Grotesk", system-ui, sans-serif',INK,p.s,68);
-    else if(p.t==='li'){add('400 50px "Humane", "Familjen Grotesk", system-ui, sans-serif',INK,'–',56);y-=56;add(p.b?'700 54px "Humane", "Familjen Grotesk", system-ui, sans-serif':'400 50px "Humane", "Familjen Grotesk", system-ui, sans-serif',INK,p.s,p.b?58:56,W-40,30);}
+    else if(p.t==='body')add('400 32px "Familjen Grotesk", system-ui, sans-serif',INK,p.s,46);
+    else if(p.t==='big')add('600 40px "Familjen Grotesk", system-ui, sans-serif',INK,p.s,54);
+    else if(p.t==='li'){add('400 32px "Familjen Grotesk", system-ui, sans-serif',INK,'–',46);y-=46;add(p.b?'600 34px "Familjen Grotesk", system-ui, sans-serif':'400 32px "Familjen Grotesk", system-ui, sans-serif',INK,p.s,p.b?48:46,W-40,36);}
   });
   const P=spec.card===false?6:34;c.width=Math.ceil(maxW)+P*2;c.height=Math.ceil(y)+P*2;g.textBaseline='top';
   if(spec.card!==false){g.fillStyle=spec.cta?BLUE:'rgba(255,255,255,.95)';g.fillRect(0,0,c.width,c.height);}
