@@ -490,4 +490,47 @@ let t=0,last=performance.now();
 })();
 </script>
 
+
+<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gateT">
+  <form id="gateF" autocomplete="off">
+    <p id="gateT" class="g-t">Nigel Ooms</p>
+    <p class="g-s">This portfolio is private. Enter the PIN you received.</p>
+    <input id="gateI" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" aria-label="PIN" placeholder="••••" autofocus>
+    <button type="submit">Enter</button>
+    <p id="gateE" class="g-e" aria-live="polite"></p>
+  </form>
+</div>
+<style>
+#gate{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:#fff;padding:16px;font-family:"Familjen Grotesk",system-ui,sans-serif;color:#1f1b20}
+#gate form{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;max-width:22rem}
+.g-t{margin:0;font-family:"Archivo Black",system-ui,sans-serif;font-size:2rem;line-height:1}
+.g-s{margin:0;color:#6f6870;font-size:.95rem}
+#gateI{font:600 1.4rem "Roboto Mono",ui-monospace,monospace;letter-spacing:.4em;text-align:center;width:9rem;padding:10px 8px 10px 16px;border:1px solid #d6d0c9;border-radius:999px;outline:none}
+#gateI:focus{border-color:#0000ff}
+#gate button{font:600 .78rem "Roboto Mono",ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:#0000ff;border:0;border-radius:999px;padding:12px 22px;cursor:pointer}
+#gate button:focus-visible{outline:2px solid #1f1b20;outline-offset:3px}
+.g-e{margin:0;min-height:1.2em;color:#d8261c;font-size:.85rem}
+body.locked{overflow:hidden}
+</style>
+<script>
+(function(){
+  // Soft lock: keeps casual visitors out. The PIN is stored as a hash, but this is not real security.
+  var H='dbff5341acad5e2a58db4efd5e72e2d9a0a843a28e02b1183c68162d0a3a3de6',K='nigel-pin-ok';
+  var g=document.getElementById('gate'),f=document.getElementById('gateF'),i=document.getElementById('gateI'),e=document.getElementById('gateE');
+  function open(){g.remove();document.body.classList.remove('locked');}
+  try{if(localStorage.getItem(K)===H){open();return;}}catch(_){}
+  document.body.classList.add('locked');
+  async function hash(t){
+    if(window.crypto&&crypto.subtle){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0');}).join('');}
+    return '';
+  }
+  f.addEventListener('submit',async function(ev){ev.preventDefault();
+    var h=await hash(i.value.trim());
+    if(h===H){try{localStorage.setItem(K,H);}catch(_){}open();}
+    else{e.textContent='Wrong PIN, try again.';i.value='';i.focus();}
+  });
+  ['keydown','wheel','pointerdown','touchstart'].forEach(function(t){g.addEventListener(t,function(ev){ev.stopPropagation();},{passive:true});});
+})();
+</script>
+
 </body></html>
