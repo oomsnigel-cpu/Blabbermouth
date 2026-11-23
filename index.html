@@ -320,21 +320,18 @@ function makeWatch(H){const g=new THREE.Group(),R=H*.34,rc=R*.56,hc=R*.22;
   const bz=mesh(new THREE.TorusGeometry(rc*.97,rc*.06,4,12),FM({color:0x9a9aa0,metalness:.6,roughness:.3}),0,R,R+hc*.82);g.add(bz);
   [.25,-.25].forEach(a=>g.add(mesh(new THREE.BoxGeometry(rc*.12,rc*.2,hc*.5),cs,Math.cos(a)*rc*1.03,R+Math.sin(a)*rc*1.03,R+hc*.3)));
   return {g};}
-// CHARLATÁN TV: the snake around the grid globe, with a cyan and magenta ghost
-function makeCharlatan(H){const g=new THREE.Group(),r=H*.3,cy=H*.5,tb=r*.035,blue=GLOW(0x1515ff,.45);
-  const gl=new THREE.Group();gl.scale.x=1.3;gl.position.y=cy;g.add(gl);gl.add(mesh(new THREE.IcosahedronGeometry(r*.97,1),GLOW(0x0a0aee,.35,{roughness:.8})));const gw=GLOW(0xdfe6ff,.5);
-  for(let i=-2;i<=2;i++){const la=i*Math.PI/6,m=mesh(new THREE.TorusGeometry(r*Math.cos(la),tb,4,14),gw,0,r*Math.sin(la),0);m.rotation.x=Math.PI/2;gl.add(m);}
-  for(let i=0;i<4;i++){const m=mesh(new THREE.TorusGeometry(r,tb,4,16),gw);m.rotation.y=i*Math.PI/4;gl.add(m);}
-  const pts=[];for(let i=0;i<=48;i++){const t=i/48,th=t*Math.PI*2.5-.6,R2=r*1.1;pts.push(new THREE.Vector3(Math.cos(th)*R2*1.32,Math.sin(t*Math.PI*4.4)*r*.8,Math.sin(th)*R2));}
-  const cu=new THREE.CatmullRomCurve3(pts),TS=140,RS=5,geo=new THREE.TubeGeometry(cu,TS,r*.085,RS,false),pa=geo.attributes.position,c=new THREE.Vector3(),v=new THREE.Vector3();
-  for(let i=0;i<=TS;i++){const u=i/TS,f=Math.min(1,u*5+.06)*(u>.95?.8:1);cu.getPointAt(u,c);for(let j=0;j<=RS;j++){const k=i*(RS+1)+j;v.fromBufferAttribute(pa,k).sub(c).multiplyScalar(f).add(c);pa.setXYZ(k,v.x,v.y,v.z);}}
-  geo.computeVertexNormals();
-  const sn=new THREE.Group();sn.position.y=cy;g.add(sn);
-  const ghost=(col,dx,dz)=>{const m=mesh(geo,new THREE.MeshBasicMaterial({color:col,fog:false}),dx,0,dz);sn.add(m);};
-  ghost(0xff00ff,-r*.022,-r*.015);ghost(0x00ffff,r*.022,-r*.015);const sc=cTex(256,64,(x,W,Hh)=>{x.fillStyle='#f4f6ff';x.fillRect(0,0,W,Hh);x.strokeStyle='#1515ff';x.lineWidth=5;for(let i=-Hh;i<W+Hh;i+=22){x.beginPath();x.moveTo(i,0);x.lineTo(i+Hh,Hh);x.stroke();x.beginPath();x.moveTo(i+Hh,0);x.lineTo(i,Hh);x.stroke();}});sc.wrapS=sc.wrapT=THREE.RepeatWrapping;sc.repeat.set(14,1);sn.add(mesh(geo,FM({map:sc,roughness:.5,emissive:0x222244})));
-  const end=cu.getPointAt(1),tan=cu.getTangentAt(1),hd=mesh(new THREE.OctahedronGeometry(r*.12),GLOW(0xffffff,.25),end.x,end.y,end.z);hd.scale.set(1,.65,1.8);hd.lookAt(end.clone().add(tan));sn.add(hd);
-  const tg=rod(end.clone().addScaledVector(tan,r*.15),end.clone().addScaledVector(tan,r*.32),r*.012,new THREE.MeshBasicMaterial({color:0xff2a2a,fog:false}));sn.add(tg);
-  return {g};}
+// CHARLATÁN TV: the C·TV badge, with the cyan and magenta ghosts peeking out
+function makeCharlatan(H){const g=new THREE.Group(),w=H*.95,hh=w*.5,d=w*.09,cy=H*.36;
+  const tex=cTex(1024,512,(x,W,Hh)=>{x.fillStyle='#ffffff';x.fillRect(0,0,W,Hh);x.lineJoin='bevel';x.lineCap='butt';x.lineWidth=46;
+    const C=[[318,130],[176,130],[140,166],[140,346],[176,382],[318,382]],T=[[[452,130],[640,130]],[[546,130],[546,382]]],V=[[694,120],[694,300],[776,382],[808,382],[890,300],[890,120]];
+    const draw=(col,dx,dy)=>{x.strokeStyle=col;x.fillStyle=col;const pl=pts=>{x.beginPath();pts.forEach(([px,py],i)=>i?x.lineTo(px+dx,py+dy):x.moveTo(px+dx,py+dy));x.stroke();};
+      pl(C);T.forEach(pl);pl(V);x.beginPath();x.arc(388+dx,256+dy,20,0,Math.PI*2);x.fill();};
+    draw('#ff00ff',8,20);draw('#00e5ff',-4,10);draw('#1515ff',0,0);});
+  const wm=FM({color:0xffffff,roughness:.5}),fm=FM({map:tex,roughness:.5});
+  const sl=mesh(new THREE.BoxGeometry(w,hh,d),[wm,wm,wm,wm,fm,fm],0,cy,0);g.add(sl);
+  g.add(mesh(new THREE.BoxGeometry(w*.995,hh,d*.9),GLOW(0xff00ff,.4),0,cy+hh*.045,-d*.12));
+  g.add(mesh(new THREE.BoxGeometry(w*.99,hh,d*.8),GLOW(0x00e5ff,.4),0,cy+hh*.085,-d*.24));
+  return {g,anim:t=>{g.position.y=Math.sin(t*1.1)*H*.02;}};}
 // The Quiet Record: a waveform drawn as a constellation on the night-blue record, sound rings drifting out
 function makeQuiet(H){const g=new THREE.Group(),R=H*.45,cy=H*.5,z0=R*.04;
   const disc=mesh(new THREE.CylinderGeometry(R,R,R*.06,14),FM({color:0x151a2e,roughness:.9}),0,cy,0);disc.rotation.x=Math.PI/2;g.add(disc);
