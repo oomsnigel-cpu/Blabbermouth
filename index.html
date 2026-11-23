@@ -320,25 +320,23 @@ function makeWatch(H){const g=new THREE.Group(),R=H*.34,rc=R*.56,hc=R*.22;
   const bz=mesh(new THREE.TorusGeometry(rc*.97,rc*.06,4,12),FM({color:0x9a9aa0,metalness:.6,roughness:.3}),0,R,R+hc*.82);g.add(bz);
   [.25,-.25].forEach(a=>g.add(mesh(new THREE.BoxGeometry(rc*.12,rc*.2,hc*.5),cs,Math.cos(a)*rc*1.03,R+Math.sin(a)*rc*1.03,R+hc*.3)));
   return {g};}
-// CHARLATÁN TV: the C·TV badge, with the cyan and magenta ghosts peeking out
-function makeCharlatan(H){const g=new THREE.Group(),w=H*.5,hh=w*.5,d=w*.09,cy=H*.78+hh/2;
-  // a rooftop TV antenna as the mast, the badge on top, signal going out
-  const mt=FM({color:0x8c8f96,metalness:.6,roughness:.35}),pr=H*.011;
-  g.add(mesh(new THREE.CylinderGeometry(pr,pr*1.2,H*.8,6),mt,0,H*.4,0));
-  [0,2.1,4.2].forEach(a=>g.add(rod(new THREE.Vector3(0,H*.18,0),new THREE.Vector3(Math.cos(a)*H*.17,0,Math.sin(a)*H*.17),pr*.8,mt)));
-  [[H*.6,H*.62,8],[H*.38,H*.44,6]].forEach(([y,L,n])=>{g.add(rod(new THREE.Vector3(0,y,-L*.25),new THREE.Vector3(0,y,L*.75),pr*.8,mt));
-    for(let i=0;i<n;i++){const z=-L*.2+i*L*.9/(n-1),e=L*(.55-i*.3/n);g.add(rod(new THREE.Vector3(-e/2,y,z),new THREE.Vector3(e/2,y,z),pr*.55,mt));}});
-  const waves=[0,1,2].map(i=>{const m=mesh(new THREE.TorusGeometry(w*.35,w*.018,3,14,Math.PI*.7),new THREE.MeshBasicMaterial({color:i%2?0xff00ff:0x00e5ff,transparent:true,fog:false}),0,cy+hh*.55,0);m.rotation.z=Math.PI*.15;g.add(m);return m;});
-  const tex=cTex(1024,512,(x,W,Hh)=>{x.fillStyle='#ffffff';x.fillRect(0,0,W,Hh);x.lineJoin='bevel';x.lineCap='butt';x.lineWidth=46;
-    const C=[[318,130],[176,130],[140,166],[140,346],[176,382],[318,382]],T=[[[452,130],[640,130]],[[546,130],[546,382]]],V=[[694,120],[694,300],[776,382],[808,382],[890,300],[890,120]];
-    const draw=(col,dx,dy)=>{x.strokeStyle=col;x.fillStyle=col;const pl=pts=>{x.beginPath();pts.forEach(([px,py],i)=>i?x.lineTo(px+dx,py+dy):x.moveTo(px+dx,py+dy));x.stroke();};
-      pl(C);T.forEach(pl);pl(V);x.beginPath();x.arc(388+dx,256+dy,20,0,Math.PI*2);x.fill();};
-    draw('#ff00ff',8,20);draw('#00e5ff',-4,10);draw('#1515ff',0,0);});
-  const wm=FM({color:0xffffff,roughness:.5}),fm=FM({map:tex,roughness:.5});
-  const sl=mesh(new THREE.BoxGeometry(w,hh,d),[wm,wm,wm,wm,fm,fm],0,cy,0);g.add(sl);
-  g.add(mesh(new THREE.BoxGeometry(w*.995,hh,d*.9),GLOW(0xff00ff,.4),0,cy+hh*.045,-d*.12));
-  g.add(mesh(new THREE.BoxGeometry(w*.99,hh,d*.8),GLOW(0x00e5ff,.4),0,cy+hh*.085,-d*.24));
-  return {g,anim:t=>{waves.forEach((m,i)=>{const f=(t*.5+i/3)%1;m.scale.setScalar(.6+f*1.4);m.material.opacity=Math.sin(f*Math.PI)*.9;});}};}
+// CHARLATÁN TV: the snake around the grid globe, with a cyan and magenta ghost
+function makeCharlatan(H){const g=new THREE.Group(),r=H*.3,cy=H*.5,tb=r*.024,blue=new THREE.MeshBasicMaterial({color:0x1010f0,fog:false});
+  // open wire globe, faceted like the logo, with a magenta and cyan ghost of the grid
+  const globe=(mat,dx,dz)=>{const gl=new THREE.Group();gl.scale.x=1.4;gl.position.set(dx,cy,dz);g.add(gl);
+    for(let i=-2;i<=2;i++){const la=i*Math.PI/6,m=mesh(new THREE.TorusGeometry(r*Math.cos(la),tb,3,12),mat,0,r*Math.sin(la),0);m.rotation.x=Math.PI/2;gl.add(m);}
+    for(let i=0;i<6;i++){const m=mesh(new THREE.TorusGeometry(r,tb,3,12),mat);m.rotation.y=i*Math.PI/6;gl.add(m);}};
+  globe(new THREE.MeshBasicMaterial({color:0xff00ff,fog:false}),-r*.025,-r*.02);globe(new THREE.MeshBasicMaterial({color:0x00e5ff,fog:false}),r*.025,-r*.02);globe(blue,0,0);
+  const pts=[];for(let i=0;i<=48;i++){const t=i/48,th=t*Math.PI*2.5-.6,R2=r*1.1;pts.push(new THREE.Vector3(Math.cos(th)*R2*1.32,Math.sin(t*Math.PI*4.4)*r*.8,Math.sin(th)*R2));}
+  const cu=new THREE.CatmullRomCurve3(pts),TS=140,RS=5,geo=new THREE.TubeGeometry(cu,TS,r*.085,RS,false),pa=geo.attributes.position,c=new THREE.Vector3(),v=new THREE.Vector3();
+  for(let i=0;i<=TS;i++){const u=i/TS,f=Math.min(1,u*5+.06)*(u>.95?.8:1);cu.getPointAt(u,c);for(let j=0;j<=RS;j++){const k=i*(RS+1)+j;v.fromBufferAttribute(pa,k).sub(c).multiplyScalar(f).add(c);pa.setXYZ(k,v.x,v.y,v.z);}}
+  geo.computeVertexNormals();
+  const sn=new THREE.Group();sn.position.y=cy;g.add(sn);
+  const ghost=(col,dx,dz)=>{const m=mesh(geo,new THREE.MeshBasicMaterial({color:col,fog:false}),dx,0,dz);sn.add(m);};
+  ghost(0xff00ff,-r*.022,-r*.015);ghost(0x00ffff,r*.022,-r*.015);const sc=cTex(256,64,(x,W,Hh)=>{x.fillStyle='#f4f6ff';x.fillRect(0,0,W,Hh);x.strokeStyle='#1515ff';x.lineWidth=5;for(let i=-Hh;i<W+Hh;i+=22){x.beginPath();x.moveTo(i,0);x.lineTo(i+Hh,Hh);x.stroke();x.beginPath();x.moveTo(i+Hh,0);x.lineTo(i,Hh);x.stroke();}});sc.wrapS=sc.wrapT=THREE.RepeatWrapping;sc.repeat.set(14,1);sn.add(mesh(geo,FM({map:sc,roughness:.5,emissive:0x222244})));
+  const end=cu.getPointAt(1),tan=cu.getTangentAt(1),hd=mesh(new THREE.OctahedronGeometry(r*.13),FM({color:0xdfe4ff,emissive:0x222244}),end.x,end.y,end.z);hd.scale.set(1,.65,1.8);hd.lookAt(end.clone().add(tan));sn.add(hd);
+  const tg=rod(end.clone().addScaledVector(tan,r*.15),end.clone().addScaledVector(tan,r*.32),r*.012,new THREE.MeshBasicMaterial({color:0xff2a2a,fog:false}));sn.add(tg);
+  return {g};}
 // The Quiet Record: a small low-poly Earth riding its orbit, "We are here"
 function makeQuiet(H){const g=new THREE.Group(),R=H*.55,cy=H*.42,er=R*.15;
   const orb=new THREE.Group();orb.position.y=cy;orb.rotation.x=.5;g.add(orb);
@@ -349,7 +347,7 @@ function makeQuiet(H){const g=new THREE.Group(),R=H*.55,cy=H*.42,er=R*.15;
   const ep=new THREE.Group();orb.add(ep);const earth=mesh(geo,FM({vertexColors:true,roughness:.7}),0,er*.55,0);ep.add(earth);
   const lt=cTex(512,256,(x,W,Hh)=>{x.clearRect(0,0,W,Hh);x.fillStyle='#151a2e';x.textAlign='center';x.textBaseline='middle';x.font='600 64px "Familjen Grotesk", Arial, sans-serif';
     const sp=(t,y)=>{const ch=t.split(''),ws=ch.map(c=>x.measureText(c).width+14),tw=ws.reduce((a,b)=>a+b,0);let px=W/2-tw/2;ch.forEach((c,i)=>{x.fillText(c,px+ws[i]/2,y);px+=ws[i];});};sp('We are',86);sp('here',170);});
-  const lab=new THREE.Sprite(new THREE.SpriteMaterial({map:lt,transparent:true,depthWrite:false,fog:false}));lab.scale.set(R*.62,R*.31,1);lab.position.set(0,-er*1.3,0);ep.add(lab);
+  const lab=new THREE.Sprite(new THREE.SpriteMaterial({map:lt,transparent:true,depthWrite:false,fog:false}));lab.scale.set(R*.95,R*.475,1);orb.add(lab);
   return {g,spin:false,anim:t=>{const a=t*.22;ep.position.set(Math.cos(a)*R,0,Math.sin(a)*R);earth.rotation.y=t*.8;orb.rotation.y=Math.sin(t*.15)*.2;}};}
 // EDITFEST: the runner on an edit timeline, playhead moving
 async function makeEdit(H){const g=new THREE.Group(),tlh=H*.05,p=await lowPolyPhoto('lp/editfest.webp',H*.9,{cols:18,depth:.3,gain:.9});p.g.position.y=tlh*1.6;g.add(p.g);
