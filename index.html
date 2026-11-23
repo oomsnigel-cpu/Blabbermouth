@@ -196,7 +196,19 @@ function makeSolare(H){
   const label=new THREE.Mesh(new THREE.CylinderGeometry(192*S2,192*S2,250*S2,seg,1,true,-Math.PI,Math.PI*2),new THREE.MeshStandardMaterial(flat({map:lab,roughness:.6,side:THREE.DoubleSide})));label.position.y=825*S2;
   // small neck label
   const neck=new THREE.Mesh(new THREE.CylinderGeometry(68*S2,68*S2,110*S2,seg,1,true),new THREE.MeshStandardMaterial(flat({color:0x1c2a55,roughness:.6,side:THREE.DoubleSide})));neck.position.y=1130*S2;
-  g.add(liquid,glass,label,neck,cap);return {g,w:380*S2,h:H};}
+  g.add(liquid,glass,label,neck,cap);
+  // the Solare Spritz next to it: balloon glass, ice, a lemon wheel and rosemary, turning on its own
+  const cg=new THREE.Group();cg.position.set(470*S2,0,60*S2);g.add(cg);
+  cg.add(new THREE.Mesh(new THREE.LatheGeometry(P([[0,0],[120,0],[120,10],[16,30],[12,260],[70,290],[150,360],[186,450],[178,560],[152,650]]),9),
+    new THREE.MeshStandardMaterial(flat({color:0xe8eef2,roughness:.1,transparent:true,opacity:.35,side:THREE.DoubleSide,depthWrite:false}))));
+  cg.add(new THREE.Mesh(new THREE.LatheGeometry(P([[0,272],[64,294],[144,364],[178,450],[172,520],[0,520]]),9),new THREE.MeshStandardMaterial(flat({color:0xf6c400,emissive:0x7a5200,emissiveIntensity:.35,roughness:.35}))));
+  const ice=new THREE.MeshStandardMaterial(flat({color:0xeaf6ff,transparent:true,opacity:.75,roughness:.1}));[[-50,540,20,.3],[45,548,-30,.9],[5,560,55,1.6]].forEach(([x,y,z,r])=>{const m=new THREE.Mesh(new THREE.BoxGeometry(80*S2,80*S2,80*S2),ice);m.position.set(x*S2,y*S2,z*S2);m.rotation.set(r,r*.7,r*.3);cg.add(m);});
+  const lw=new THREE.Group();lw.position.set(150*S2,640*S2,0);lw.rotation.set(Math.PI/2,0,.25);cg.add(lw);
+  lw.add(new THREE.Mesh(new THREE.CylinderGeometry(78*S2,78*S2,14*S2,10),new THREE.MeshStandardMaterial(flat({color:0xf1d21c,roughness:.6}))));
+  const lt=new THREE.Mesh(new THREE.CylinderGeometry(66*S2,66*S2,16*S2,10),new THREE.MeshStandardMaterial(flat({color:0xf9eb8a,roughness:.7})));lw.add(lt);
+  const ros=new THREE.MeshStandardMaterial(flat({color:0x4f6b3a,roughness:.8}));const st=new THREE.Mesh(new THREE.CylinderGeometry(5*S2,5*S2,420*S2,4),ros);st.position.set(-70*S2,720*S2,-40*S2);st.rotation.z=.22;cg.add(st);
+  for(let i=0;i<14;i++){const lf=new THREE.Mesh(new THREE.BoxGeometry(6*S2,48*S2,10*S2),ros);const f=i/13;lf.position.set(-70*S2-Math.sin(.22)*(f-.5)*400*S2,720*S2+Math.cos(.22)*(f-.5)*400*S2,-40*S2);lf.rotation.z=.22+(i%2?.9:-.9);cg.add(lf);}
+  return {g,anim:(t,dt)=>{cg.rotation.y-=dt*.9;}};}
 const FM=o=>new THREE.MeshStandardMaterial(Object.assign({flatShading:true,fog:false,roughness:.6},o));
 const GLOW=(c,i=.6,o={})=>new THREE.MeshStandardMaterial(Object.assign({color:c,emissive:c,emissiveIntensity:i,flatShading:true,fog:false},o));
 function cTex(w,h,draw){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');draw(x,w,h);const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=4;return t;}
@@ -225,7 +237,7 @@ async function lowPolyPhoto(src,H,o={}){
   const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setAttribute('color',new THREE.Float32BufferAttribute(col,3));geo.computeVertexNormals();
   g.add(new THREE.Mesh(geo,FM({vertexColors:true,roughness:.9,side:THREE.DoubleSide})));return {g,w,h:H};}
 // TADAAM growth: the white modem with its three green lights
-async function makeModem(H){const g=new THREE.Group(),w=H*.47,d=w*.62,logo=await loadImg('lp/logo-black.png');
+async function makeModem(H){const g=new THREE.Group(),w=H*.47,d=w,logo=await loadImg('lp/logo-black.png');
   const front=cTex(470,980,(x,W,Hh)=>{x.fillStyle='#a6a6a2';x.fillRect(0,0,W,Hh);x.fillStyle='#8a8a8a';x.fillRect(0,Hh*.975,W,Hh*.025);
     if(logo){const lw=W*.36,lh=lw*logo.height/logo.width;x.drawImage(logo,(W-lw)/2,Hh*.215-lh/2,lw,lh);}
     x.strokeStyle='#b9b9b9';x.lineWidth=3;x.beginPath();x.arc(W/2,Hh*.806,W*.085,0,Math.PI*2);x.stroke();});
@@ -281,14 +293,22 @@ async function makeBasket(H){const g=new THREE.Group(),L=H*1.25,Dp=L*.6,bh=L*.36
   tu.position.set(L*.16,bh*.3,-Dp*.08);tu.rotation.z=-.14;g.add(tu);
   return {g};}
 // Galaxy S23: the man in the beam, the phone falling towards him
-async function makeBeam(H){const g=new THREE.Group(),p=await lowPolyPhoto('lp/galaxy-s23.webp',H*.8,{cols:30,depth:.3,gain:1.9});g.add(p.g);p.g.position.z=.05;
-  const cm=new THREE.MeshBasicMaterial({color:0x7fd3df,transparent:true,opacity:.2,side:THREE.DoubleSide,depthWrite:false,fog:false});
-  g.add(mesh(new THREE.ConeGeometry(p.w*.8,H*1.08,7,1,true),cm,0,H*.54,0));
-  const fl=mesh(new THREE.CircleGeometry(p.w*.8,7),new THREE.MeshBasicMaterial({color:0x7fd3df,transparent:true,opacity:.35,depthWrite:false,fog:false}),0,.01,0);fl.rotation.x=-Math.PI/2;g.add(fl);
+async function makeBeam(H){const g=new THREE.Group(),p=await lowPolyPhoto('lp/galaxy-s23.webp',H*.82,{cols:26,depth:.3,gain:1.35});g.add(p.g);p.g.position.z=.15;
+  // his DJ booth behind him
+  const bw=p.w*2.2,bh=H*.36,bd=H*.28,dk=FM({color:0x141416,roughness:.7});
+  g.add(mesh(new THREE.BoxGeometry(bw,bh,bd),dk,0,bh/2,-bd/2-.05));
+  [-.3,.3].forEach(f=>{g.add(mesh(new THREE.BoxGeometry(bw*.26,H*.025,bd*.75),FM({color:0x2a2a2e}),bw*f,bh+H*.0125,-bd/2-.05));g.add(mesh(new THREE.CylinderGeometry(bw*.08,bw*.08,H*.02,10),FM({color:0x55555c,metalness:.4}),bw*f,bh+H*.035,-bd/2-.05));});
+  g.add(mesh(new THREE.BoxGeometry(bw*.18,H*.03,bd*.7),FM({color:0x2a2a2e}),0,bh+H*.015,-bd/2-.05));
+  const btn=[];for(let i=0;i<8;i++){const m=mesh(new THREE.BoxGeometry(H*.018,H*.01,H*.018),GLOW(i%3?0x39ff5c:0xffffff,.8),(i%4-1.5)*bw*.035,bh+H*.035,-bd/2-.05+(i<4?-1:1)*bd*.15);g.add(m);btn.push(m);}
+  // two spots from the top corners, crossing on him
+  const cm=new THREE.MeshBasicMaterial({color:0x8fdde6,transparent:true,opacity:.26,side:THREE.DoubleSide,depthWrite:false,fog:false});
+  [-1,1].forEach(sx=>{const A=new THREE.Vector3(sx*p.w*1.25,H*1.2,-.1),T=new THREE.Vector3(-sx*p.w*.15,0,.1),d=new THREE.Vector3().subVectors(T,A),L=d.length();
+    const sp=new THREE.Group();sp.position.copy(A);sp.quaternion.setFromUnitVectors(new THREE.Vector3(0,-1,0),d.normalize());g.add(sp);
+    sp.add(mesh(new THREE.ConeGeometry(p.w*.5,L,7,1,true),cm,0,-L/2,0));sp.add(mesh(new THREE.CylinderGeometry(H*.035,H*.045,H*.07,7),GLOW(0xffffff,1),0,0,0));});
   const ph=new THREE.Group(),pw=H*.065;ph.add(mesh(new THREE.BoxGeometry(pw,pw*2.05,pw*.13),FM({color:0x1c1c20,metalness:.4,roughness:.35})));
   [.7,.4,.1].forEach(y=>ph.add(mesh(new THREE.CylinderGeometry(pw*.12,pw*.12,pw*.06,7),FM({color:0x050505}),-pw*.25,pw*y,-pw*.08).rotateX(Math.PI/2)));
-  ph.position.set(-p.w*.04,H*.93,.05);g.add(ph);
-  return {g,spin:false,anim:t=>{g.rotation.y=Math.sin(t*.45)*.4;ph.rotation.y+=.02;ph.rotation.x=Math.sin(t*.8)*.4;ph.position.y=H*.93+Math.sin(t*1.1)*H*.03;}};}
+  const px=p.w*.375,py=H*.82*.93;ph.position.set(px,py,p.w*.12+.1);ph.rotation.z=-.15;g.add(ph);
+  return {g,spin:false,anim:t=>{g.rotation.y=Math.sin(t*.45)*.4;ph.rotation.y=Math.sin(t*.9)*.5;ph.position.y=py+Math.sin(t*1.6)*H*.012;btn.forEach((m,i)=>m.material.emissiveIntensity=.3+.7*(Math.sin(t*4+i*2.1)>0));}};}
 // Galaxy Watch4: round case on a strap loop
 function makeWatch(H){const g=new THREE.Group(),R=H*.34,rc=R*.56,hc=R*.22;
   const st=mesh(new THREE.CylinderGeometry(R,R,R*.6,10,1,true),FM({color:0x1d1d20,roughness:.85,side:THREE.DoubleSide}),0,R,0);st.rotation.z=Math.PI/2;g.add(st);
@@ -352,7 +372,23 @@ function makeCointreau(H){const g=new THREE.Group(),bw=H*.21,bh=H*.62,sh=H*.07,n
   g.add(mesh(new THREE.PlaneGeometry(bw*1.55,bh*.52),FM({map:lab,roughness:.7}),0,bh*.36,fz));
   g.add(mesh(new THREE.BoxGeometry(bw*.16,bh*.36+sh,.01),red,0,bh*.82,fz-.002));
   const md=mesh(new THREE.CylinderGeometry(bw*.3,bw*.3,.02,10),[red,FM({map:cTex(256,256,(x,W)=>{x.fillStyle='#9b1d12';x.fillRect(0,0,W,W);x.translate(W/2,W/2);x.rotate(-Math.PI/2);x.translate(-W/2,-W/2);x.fillStyle='#e9c77a';x.textAlign='center';x.textBaseline='middle';x.font='700 84px "Familjen Grotesk", Arial, sans-serif';x.fillText('1849',W/2,W/2);})}),red],0,bh*.84,fz+.012);md.rotation.x=Math.PI/2;g.add(md);
-  [[0xf28a1a,H*.1,bw*1.9,H*.1,bw*.6],[0x9ccc2a,H*.075,bw*2.4,H*.075,-bw*.7],[0xf5d21f,H*.07,-bw*1.9,H*.07,bw*.5]].forEach(([c,r,x,y,z])=>g.add(mesh(new THREE.IcosahedronGeometry(r,1),FM({color:c,roughness:.7}),x,y,z)));
+  const B='#1f43a6',tile=cTex(512,512,(x,W)=>{x.fillStyle='#f7f6f1';x.fillRect(0,0,W,W);x.strokeStyle=B;x.fillStyle=B;x.lineWidth=10;x.strokeRect(16,16,W-32,W-32);x.lineWidth=5;
+    [[0,0],[W,0],[0,W],[W,W]].forEach(([cx,cy])=>{for(let r=40;r<=70;r+=15){x.beginPath();x.arc(cx,cy,r,0,Math.PI*2);x.stroke();}});
+    x.lineWidth=9;x.beginPath();x.arc(W/2,W/2,196,0,Math.PI*2);x.stroke();x.lineWidth=5;x.beginPath();x.arc(W/2,W/2,150,0,Math.PI*2);x.stroke();
+    const tx='1849 · MAISON COINTREAU · ANGERS · ';x.font='700 26px "Familjen Grotesk", Arial, sans-serif';x.textAlign='center';x.textBaseline='middle';
+    for(let i=0;i<tx.length;i++){const a=-Math.PI/2+i/tx.length*Math.PI*2;x.save();x.translate(W/2+Math.cos(a)*173,W/2+Math.sin(a)*173);x.rotate(a+Math.PI/2);x.fillText(tx[i],0,0);x.restore();}
+    x.lineWidth=6;x.beginPath();x.arc(W/2,W/2-20,62,0,Math.PI*2);x.stroke();for(let i=0;i<10;i++){const a=i/10*Math.PI*2;x.beginPath();x.moveTo(W/2,W/2-20);x.lineTo(W/2+Math.cos(a)*56,W/2-20+Math.sin(a)*56);x.stroke();}
+    x.font='700 44px "Familjen Grotesk", Arial, sans-serif';x.fillText('1849',W/2,W/2+88);
+    [[110,250],[400,250],[256,105],[256,410]].forEach(([cx,cy],k)=>{x.beginPath();x.arc(cx,cy,16,k,k+4.4);x.stroke();});});
+  const ts=H*.5,tl=mesh(new THREE.BoxGeometry(ts,ts,H*.025),[FM({color:0xf7f6f1}),FM({color:0xf7f6f1}),FM({color:0xf7f6f1}),FM({color:0xf7f6f1}),FM({map:tile,roughness:.35}),FM({color:0xf7f6f1})],bw*2.7,ts/2*Math.cos(.2)+.01,-bw*.2);tl.rotation.x=-.2;g.add(tl);
+  const paint=cTex(512,256,(x,W,Hh)=>{x.fillStyle='#f7f6f1';x.fillRect(0,0,W,Hh);x.strokeStyle=B;x.lineCap='round';x.lineWidth=14;const r=seeded(9);
+    for(let i=0;i<9;i++){x.beginPath();const sx=r()*W,sy=r()*Hh;x.moveTo(sx,sy);x.bezierCurveTo(sx+60*r(),sy-80*r(),sx+120*r(),sy+80*r(),sx+90+60*r(),sy-30+60*r());x.stroke();}});
+  const mg=new THREE.Group(),u=H*.75;mg.position.set(-bw*2.3,0,bw*1.1);g.add(mg);
+  mg.add(mesh(new THREE.LatheGeometry([[0,0],[.12,0],[.12,.02],[.035,.05],[.035,.2],[.07,.23],[.26,.36],[.28,.375]].map(([a,b])=>new THREE.Vector2(a*u,b*u)),10),FM({map:paint,roughness:.3,side:THREE.DoubleSide})));
+  mg.add(mesh(new THREE.CylinderGeometry(.255*u,.255*u,.01*u,10),FM({color:0xe7ecc8,roughness:.3}),0,.35*u,0));
+  const rim=mesh(new THREE.TorusGeometry(.28*u,.014*u,4,12),FM({color:0xffffff,roughness:.9}),0,.375*u,0);rim.rotation.x=Math.PI/2;mg.add(rim);
+  const wd=mesh(pacman(.11*u,1/6,.035*u),FM({color:0x8cc63f}),.25*u,.37*u,0);wd.rotation.set(Math.PI/2,0,.4);mg.add(wd);
+  [[0xf28a1a,H*.1,bw*2.2,H*.1,bw*1.6],[0x9ccc2a,H*.075,-bw*3.5,H*.075,-bw*.4],[0xf5d21f,H*.07,bw*3.6,H*.07,bw*1.2]].forEach(([c,r,x,y,z])=>g.add(mesh(new THREE.IcosahedronGeometry(r,1),FM({color:c,roughness:.7}),x,y,z)));
   return {g};}
 const MODELS={solare:makeSolare,modem:makeModem,pizza:makePizza,basket:makeBasket,beam:makeBeam,watch:makeWatch,charlatan:makeCharlatan,rosie:makeRosie,quiet:makeQuiet,edit:makeEdit,face:makeFace,cointreau:makeCointreau};
 const items=[];
