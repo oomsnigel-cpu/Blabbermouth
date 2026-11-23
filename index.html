@@ -13,6 +13,9 @@
 html,body{background:var(--bg);color:var(--fg);font-family:var(--body)}
 body{touch-action:pan-y;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 #gl{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
+#veil{position:fixed;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.78) 55%,rgba(255,255,255,.86));transition:opacity 1s ease}
+body.inside #veil{opacity:0}
+@media (prefers-reduced-motion: reduce){#veil{transition:none}}
 #track{position:relative;z-index:1;pointer-events:none}
 .hud{position:fixed;left:0;right:0;z-index:2;pointer-events:none;
   padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
@@ -108,7 +111,7 @@ body.incase .hint{opacity:0!important}
 @media (max-width:600px){.cv div{margin-left:0!important}}
 </style>
 
-<canvas id="gl" aria-label="3D space with portfolio key visuals"></canvas>
+<div id="veil" aria-hidden="true"></div><canvas id="gl" aria-label="3D space with portfolio key visuals"></canvas>
 <div class="cv" id="cv"><div style="margin-left:0em"><b>01</b><span>Freelance creative &amp; strategist, Madrid</span></div><div style="margin-left:9em"><b>02</b><span>Creative strategy, concepts &amp; pitches</span></div><div style="margin-left:5em"><b>03</b><span>PR, influencer &amp; KOL campaigns</span></div><div style="margin-left:13em"><b>04</b><span>Branded content &amp; vertical video</span></div><div style="margin-left:3em"><b>05</b><span>Always-on &amp; growth: test, learn, scale</span></div><div style="margin-left:10em"><b>06</b><span>Workshops: briefs &amp; community mapping</span></div><div style="margin-left:6em"><b>07</b><span>Dutch, English, French, Spanish</span></div></div>
 <div class="intro" id="intro"></div>
 <div class="hint" id="hint">Drag to look around · click the floor to move · click a case to open it</div>
@@ -431,8 +434,8 @@ texFromImg("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJgAAACuCAYAAADK4cSRAA
         col=mix(vec3(1.,0.,.95),col,smoothstep(.0,.38,distance(p,vec2(.55+.3*sin(s*.6+1.),.12+.12*cos(s*.8)))));
         col=mix(vec3(.02,.0,.02),col,smoothstep(.05,.45,distance(p,vec2(.9+.08*cos(s*.5),.55+.3*sin(s*.65+2.)))));
         col=mix(vec3(.25,1.,1.),col,smoothstep(.0,.16,distance(p,vec2(.5+.15*sin(s*1.1),.05))));
-        gl_FragColor=vec4(col,a*fade);}`}));m.position.set(0,LOGO_Y,LOGO_Z);m.userData.logo=1;S.add(m);logoM=m;
-  const sh=new THREE.Mesh(new THREE.PlaneGeometry(h*ar*.8,1.1),new THREE.MeshBasicMaterial({map:shadowTex,transparent:true,depthWrite:false}));sh.rotation.x=-Math.PI/2;sh.position.set(0,FL+.01,LOGO_Z);S.add(sh);logoSh=sh;});
+        gl_FragColor=vec4(col,a*fade);}`}));m.position.set(0,LOGO_Y,LOGO_Z);m.userData.logo=1;logoM=null;
+  const sh=new THREE.Mesh(new THREE.PlaneGeometry(h*ar*.8,1.1),new THREE.MeshBasicMaterial({map:shadowTex,transparent:true,depthWrite:false}));sh.rotation.x=-Math.PI/2;sh.position.set(0,FL+.01,LOGO_Z);logoSh=null;});
 let logoM=null,logoMat=null,logoSh=null;
 // free navigation: start at the logo, click it to enter, then look around, walk, or click a case to fly to it
 const track=document.getElementById('track');track.style.display='none';
@@ -469,7 +472,7 @@ function pick(x,y){ndc.set(x/innerWidth*2-1,-(y/innerHeight)*2+1);ray.setFromCam
   if(world==='case'){const hit=ray.intersectObjects(cObjs.map(o=>o.mesh),false)[0];return hit?hit.object.userData:null;}
   const objs=[];items.forEach(it=>it&&it.m.traverse(o=>{if(o.isMesh)objs.push(o);}));if(logoM)objs.push(logoM);
   const hit=ray.intersectObjects(objs,false).find(h=>!h.object.material.map||h.object.userData.logo||true);return hit?hit.object.userData:null;}
-function onClick(x,y){const u=pick(x,y);if(!u){if(world==='main'&&mode==='room')walkTo(x,y);return;}
+function onClick(x,y){if(mode==='land'&&world==='main'){enter();return;}const u=pick(x,y);if(!u){if(world==='main'&&mode==='room')walkTo(x,y);return;}
   if(world==='case'){if(u.url){window.open(u.url,'_blank','noopener');return;}if(u.next!==undefined){enterCase(u.next);return;}if(u.c===undefined)return;const o=cObjs[u.c];if(cFocus===u.c&&!fly&&(!o.wall||Math.abs(wallY-o.base)<.6)){if(o.video){o.video.muted=!o.video.muted;if(!o.video.muted)o.video.play().catch(()=>{});}return;}flyToC(u.c);return;}
   if(u.logo){mode==='land'?enter():leave();return;}
   if(mode==='land'){enter();return;}
@@ -492,7 +495,7 @@ cvs.addEventListener('touchmove',e=>{if(e.touches.length===2&&pinch){const[a,b]=
 cvs.addEventListener('touchend',e=>{if(e.touches.length<2)setTimeout(()=>pinch=null,50);},{passive:true});
 const keys={};addEventListener('keydown',e=>{if(pageIdx>=0)return;if(e.key==='Escape'&&world==='case'){exitCase();return;}if(e.target&&e.target.closest&&e.target.closest('button'))return;keys[e.key.toLowerCase()]=1;if(e.key==='Enter'){if(mode==='land')enter();else if(world==='main'&&focusIdx>=0)enterCase(focusIdx);}if(e.key==='Escape'&&mode==='room'){world==='case'?exitCase():leave();}});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=0);
 {const h=document.getElementById('navHome');const go=()=>{if(world==='case')exitCase();leave();};h.addEventListener('click',go);h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();go();}});}
-document.getElementById('navCV').addEventListener('click',()=>{if(world==='case')exitCase();mode='room';document.body.classList.add('inside');goCase(CASES.length-1);});
+document.getElementById('navCV').addEventListener('click',()=>{if(world==='case')exitCase();openPage(CASES.findIndex(c=>c.cv));});
 
 // ---------- case pages
 let focusIdx=-1,pageIdx=-1;
