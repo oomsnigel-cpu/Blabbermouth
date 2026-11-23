@@ -855,16 +855,13 @@ async function buildNS(){
   const wall=FM({color:0x8f9a8a,roughness:.95});add(mesh(new THREE.PlaneGeometry(7.4,3.1),wall),0,1.55,-2.62);
   [-3.7,3.7].forEach(x=>{const w=add(mesh(new THREE.PlaneGeometry(7.1,3.1),wall),x,1.55,.9);w.rotation.y=x<0?Math.PI/2:-Math.PI/2;});
   const ce=add(mesh(new THREE.PlaneGeometry(7.4,7.1),FM({color:0x3c403b})),0,3.1,.9);ce.rotation.x=Math.PI/2;
-  // a broken TL fixture: one end came loose and hangs on its wire, one tube dead, the other flickering
-  {const g=new THREE.Group(),hs=FM({color:0xd9dbd6,roughness:.6}),L=1.25;
-    g.add(mesh(new THREE.BoxGeometry(L,.05,.22),hs,L/2,0,0));
-    const dead=mesh(new THREE.CylinderGeometry(.018,.018,L-.08,8),FM({color:0x8e918c,roughness:.4}),L/2,-.045,-.05);dead.rotation.z=Math.PI/2;g.add(dead);
-    const tm=new THREE.MeshBasicMaterial({color:0xeafff2,fog:false}),live=mesh(new THREE.CylinderGeometry(.018,.018,L-.08,8),tm,L/2,-.045,.05);live.rotation.z=Math.PI/2;g.add(live);
-    [-1,1].forEach(k=>g.add(mesh(new THREE.BoxGeometry(.04,.05,.2),FM({color:0x6c6f6a}),L/2+k*(L/2-.02),-.045,0)));
-    g.position.set(-1.35,3.1-.03,-.9);g.rotation.z=-.32;S2.add(g);
-    // the other end hangs on a wire
-    const wx=-1.35+L*Math.cos(.32),wy=3.1-.03-L*Math.sin(.32);add(mesh(new THREE.CylinderGeometry(.003,.003,3.1-wy,4),FM({color:0x222222}),wx-.01,(3.1+wy)/2,-.9));
-    const bl=new THREE.PointLight(0xeafff0,.35,4);bl.position.set(-.8,2.75,-.9);S2.add(bl);
+  // the TL in the middle of the ceiling, flickering
+  {const g=new THREE.Group(),hs=FM({color:0xd9dbd6,roughness:.6}),L=1.25,tm=new THREE.MeshBasicMaterial({color:0xeafff2,fog:false});
+    g.add(mesh(new THREE.BoxGeometry(L,.05,.22),hs,0,0,0));
+    [-.05,.05].forEach(z=>{const tb=mesh(new THREE.CylinderGeometry(.018,.018,L-.08,8),tm,0,-.045,z);tb.rotation.z=Math.PI/2;g.add(tb);});
+    [-1,1].forEach(k=>g.add(mesh(new THREE.BoxGeometry(.04,.05,.2),FM({color:0x6c6f6a}),k*(L/2-.02),-.045,0)));
+    g.position.set(0,3.1-.03,.4);S2.add(g);
+    const bl=new THREE.PointLight(0xeafff0,.35,5);bl.position.set(0,2.85,.4);S2.add(bl);
     nsAnims.push(t=>{const on=Math.sin(t*9.3)+Math.sin(t*23.7)*.6>.2&&(t%4.2)>.5;tm.color.setHex(on?0xeafff2:0x6f726d);bl.intensity=on?.35:0;});}
   // the lightbox sign
   const sg=cTex(512,180,(x,W,H)=>{x.fillStyle='#fbfbf8';x.fillRect(0,0,W,H);x.fillStyle='#d8261c';x.font='700 70px "Clash Display", Arial, sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('NIGEL',W/2,52);x.fillText('SHOP',W/2,128);});
