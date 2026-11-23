@@ -162,7 +162,7 @@ body.incase .hint{opacity:0!important}
 @media (max-width:600px){.cv div{margin-left:0!important}}
 </style>
 
-<div id="nsClosed" role="dialog" aria-modal="true" aria-labelledby="nscT" hidden><div class="nsc"><button type="button" class="nsc-x" id="nscX" aria-label="Close">×</button><p class="nsc-k">NIGELSHOP</p><h2 id="nscT">Closed.<br>Open from 18:00.</h2><p>The shop opens every night from 18:00 to 06:00, your time. Come back after six.</p><form id="nscF"><label for="nscE">Leave your email and I'll let you know when it's open.</label><div class="nsc-r"><input id="nscE" type="email" required placeholder="you@company.com" autocomplete="email"><button type="submit">Notify me</button></div><p class="nsc-ok" id="nscOk" hidden>Thanks. Your mail app opened with the request, just hit send.</p></form></div></div><div id="nsRcpt" role="dialog" aria-modal="true" aria-label="Receipt: Nigel Ooms, freelance creative and strategist, and the assortiment" tabindex="-1" hidden><img alt="NIGELSHOP receipt. Nigel Ooms, freelance creative &amp; strategist. Assortiment: 01 Creative concepting &amp; naming, 02 Brand &amp; communications strategy, 03 Strategy &amp; creative workshops, 04 Briefing &amp; creative exploration, 05 Influencer &amp; PR, 06 Content &amp; production, 07 Growth &amp; performance, 08 Brand experiences &amp; activation, 09 Copywriting &amp; transcreation, 10 Pitch &amp; award support."></div><div id="veil" aria-hidden="true"></div><div id="nsGrain" aria-hidden="true"></div><canvas id="gl" aria-label="3D space with portfolio key visuals"></canvas>
+<div id="nsClosed" role="dialog" aria-modal="true" aria-labelledby="nscT" hidden><div class="nsc"><button type="button" class="nsc-x" id="nscX" aria-label="Close">×</button><p class="nsc-k">NIGELSHOP</p><h2 id="nscT">Closed.<br>Open from 18:00.</h2><p>The shop opens every night from 18:00 to 06:00, your time. Come back after six.</p><form id="nscF"><label for="nscE">Leave your email and I'll let you know when it's open.</label><div class="nsc-r"><input id="nscE" type="email" required placeholder="you@company.com" autocomplete="email"><button type="submit">Notify me</button></div><p class="nsc-ok" id="nscOk" hidden>Thanks. Your mail app opened with the request, just hit send.</p></form></div></div><div id="nsRcpt" role="dialog" aria-modal="true" aria-label="Receipt: Nigel Ooms, freelance creative and strategist" tabindex="-1" hidden><img alt="Receipt. Nigel Ooms, freelance creative &amp; strategist. Assortiment: 01 Creative concepting &amp; naming, 02 Brand &amp; communications strategy, 03 Strategy &amp; creative workshops, 04 Briefing &amp; creative exploration, 05 Influencer &amp; PR, 06 Content &amp; production, 07 Growth &amp; performance, 08 Brand experiences &amp; activation, 09 Copywriting &amp; transcreation, 10 Pitch &amp; award support. Get in touch: ooms.nigel@gmail.com."></div><div id="veil" aria-hidden="true"></div><div id="nsGrain" aria-hidden="true"></div><canvas id="gl" aria-label="3D space with portfolio key visuals"></canvas>
 <div class="cv" id="cv"><div style="margin-left:0"><b></b><span>Freelance creative &amp; strategist</span></div><div style="margin-left:0em"><b>01</b><span>Creative concepting &amp; naming</span></div><div style="margin-left:9em"><b>02</b><span>Brand &amp; communications strategy</span></div><div style="margin-left:5em"><b>03</b><span>Strategy &amp; creative workshops</span></div><div style="margin-left:13em"><b>04</b><span>Briefing &amp; creative exploration</span></div><div style="margin-left:3em"><b>05</b><span>Influencer &amp; PR</span></div><div style="margin-left:10em"><b>06</b><span>Content &amp; production</span></div><div style="margin-left:6em"><b>07</b><span>Growth &amp; performance</span></div><div style="margin-left:12em"><b>08</b><span>Brand experiences &amp; activation</span></div><div style="margin-left:2em"><b>09</b><span>Copywriting &amp; transcreation</span></div><div style="margin-left:8em"><b>10</b><span>Pitch &amp; award support</span></div></div>
 <div class="intro" id="intro"></div>
 <div class="hint" id="hint">Drag to look around · click the floor to move · click a case to open it</div>
@@ -435,15 +435,15 @@ function makeCointreau(H){const g=new THREE.Group(),bw=H*.21,bh=H*.62,sh=H*.07,n
     x.lineWidth=6;x.beginPath();x.arc(W/2,W/2-20,62,0,Math.PI*2);x.stroke();for(let i=0;i<10;i++){const a=i/10*Math.PI*2;x.beginPath();x.moveTo(W/2,W/2-20);x.lineTo(W/2+Math.cos(a)*56,W/2-20+Math.sin(a)*56);x.stroke();}
     x.font='700 44px "Clash Display", Arial, sans-serif';x.fillText('1849',W/2,W/2+88);
     [[110,250],[400,250],[256,105],[256,410]].forEach(([cx,cy],k)=>{x.beginPath();x.arc(cx,cy,16,k,k+4.4);x.stroke();});});
-  const ts=H*.5,tl=mesh(new THREE.BoxGeometry(ts,ts,H*.025),[FM({color:0xf7f6f1}),FM({color:0xf7f6f1}),FM({color:0xf7f6f1}),FM({color:0xf7f6f1}),FM({map:tile,roughness:.35}),FM({color:0xf7f6f1})],bw*2.7,ts/2*Math.cos(.2)+.01,-bw*.2);tl.rotation.x=-.2;g.add(tl);
+  const ts=H*.5,tl=g.userData.tile=mesh(new THREE.BoxGeometry(ts,ts,H*.025),[FM({color:0xf7f6f1}),FM({color:0xf7f6f1}),FM({color:0xf7f6f1}),FM({color:0xf7f6f1}),FM({map:tile,roughness:.35}),FM({color:0xf7f6f1})],bw*2.7,ts/2*Math.cos(.2)+.01,-bw*.2);tl.rotation.x=-.2;g.add(tl);
   const paint=cTex(512,256,(x,W,Hh)=>{x.fillStyle='#f7f6f1';x.fillRect(0,0,W,Hh);x.strokeStyle=B;x.lineCap='round';x.lineWidth=14;const r=seeded(9);
     for(let i=0;i<9;i++){x.beginPath();const sx=r()*W,sy=r()*Hh;x.moveTo(sx,sy);x.bezierCurveTo(sx+60*r(),sy-80*r(),sx+120*r(),sy+80*r(),sx+90+60*r(),sy-30+60*r());x.stroke();}});
-  const mg=new THREE.Group(),u=H*.75;mg.position.set(-bw*2.3,0,bw*1.1);g.add(mg);
+  const mg=g.userData.glass=new THREE.Group(),u=H*.75;mg.position.set(-bw*2.3,0,bw*1.1);g.add(mg);
   mg.add(mesh(new THREE.LatheGeometry([[0,0],[.12,0],[.12,.02],[.035,.05],[.035,.2],[.07,.23],[.26,.36],[.28,.375]].map(([a,b])=>new THREE.Vector2(a*u,b*u)),10),FM({map:paint,roughness:.3,side:THREE.DoubleSide})));
   mg.add(mesh(new THREE.CylinderGeometry(.255*u,.255*u,.01*u,10),FM({color:0xe7ecc8,roughness:.3}),0,.35*u,0));
   const rim=mesh(new THREE.TorusGeometry(.28*u,.014*u,4,12),FM({color:0xffffff,roughness:.9}),0,.375*u,0);rim.rotation.x=Math.PI/2;mg.add(rim);
   const wd=mesh(pacman(.11*u,1/6,.035*u),FM({color:0x8cc63f}),.25*u,.37*u,0);wd.rotation.set(Math.PI/2,0,.4);mg.add(wd);
-  [[0xf28a1a,H*.1,bw*2.2,H*.1,bw*1.6],[0x9ccc2a,H*.075,-bw*3.5,H*.075,-bw*.4],[0xf5d21f,H*.07,bw*3.6,H*.07,bw*1.2]].forEach(([c,r,x,y,z])=>g.add(mesh(new THREE.IcosahedronGeometry(r,1),FM({color:c,roughness:.7}),x,y,z)));
+  [[0xf28a1a,H*.1,bw*2.2,H*.1,bw*1.6],[0x9ccc2a,H*.075,-bw*3.5,H*.075,-bw*.4],[0xf5d21f,H*.07,bw*3.6,H*.07,bw*1.2]].forEach(([c,r,x,y,z])=>{const f=mesh(new THREE.IcosahedronGeometry(r,1),FM({color:c,roughness:.7}),x,y,z);f.userData.fruit=1;g.add(f);});
   return {g};}
 // where each case's text sits against its 3D model, so the two read as one piece: [x, y, z, shift model x, scale] in the model's frame
 const TXL={
@@ -851,7 +851,14 @@ async function buildNS(){
   // the work, as products
   const put=async(id,make,H,x,y,z,ry=0,s=1)=>{const m=await make(H);const g=m.g;g.scale.setScalar(s);add(g,x,y,z,ry);mark(g,id);if(m.anim&&id==='tadaam-growth')nsAnims.push(m.anim);return g;};
   const top=BY[2]+.015,mid=BY[1]+.015;
-  await put('la-maison',makeCointreau,.52,-1.95,top,SZ+.02);S2.add(tag('la-maison',-1.95,BY[2]-.07,-2.14));
+  // La Maison: four Cointreau bottles, the tile hung on the inside of the left shelf wall, a crate of lemons & limes below
+  {let tileM=null;for(let i=0;i<4;i++){const m=makeCointreau(.52),g=m.g;const t=g.userData.tile;g.remove(g.userData.glass);g.children.filter(o=>o.userData.fruit).forEach(o=>g.remove(o));g.remove(t);if(!i)tileM=t;add(g,-2.46+i*.235,top,SZ+.02+(i%2)*.03);mark(g,'la-maison');}
+    tileM.position.set(SX0+.04,top+.27,SZ);tileM.rotation.set(0,Math.PI/2,0);S2.add(tileM);mark(tileM,'la-maison');
+    const cr=new THREE.Group(),wd=FM({color:0xc9a46a,roughness:.8});cr.add(mesh(new THREE.BoxGeometry(.46,.015,.3),wd,0,.008,0));
+    [[-1,0],[1,0]].forEach(([k])=>{cr.add(mesh(new THREE.BoxGeometry(.015,.12,.3),wd,k*.222,.06,0));});[-1,1].forEach(k=>[.03,.09].forEach(y=>cr.add(mesh(new THREE.BoxGeometry(.46,.035,.012),wd,0,y,k*.144))));
+    const r5=seeded(31);for(let i=0;i<14;i++){const lem=i%2===0,f=mesh(new THREE.IcosahedronGeometry(lem?.042:.036,1),FM({color:lem?0xf5d21f:0x6fb52c,roughness:.7}),-.18+(i%5)*.09+r5()*.02,.06+Math.floor(i/5)*.03+r5()*.02,-.09+((i*7)%3)*.09);f.scale.set(lem?1.25:1,1,1);f.rotation.y=r5()*3;cr.add(f);}
+    add(cr,-2.0,mid,SZ+.04);mark(cr,'la-maison');}
+  S2.add(tag('la-maison',-2.1,BY[2]-.07,-2.14));
   for(let i=0;i<4;i++){const m=makeSolare(.52);m.g.remove(m.cg);add(m.g,-1.0+i*.19,top,SZ+.02+(i%2)*.04);mark(m.g,'solare');}S2.add(tag('solare',-.72,BY[2]-.07,-2.14,1,true));
   await put('tadaam-growth',makeModem,.4,1.55,top,SZ+.04);S2.add(tag('tadaam-growth',1.55,BY[2]-.07,-2.14));
   
@@ -913,14 +920,12 @@ async function buildNS(){
     {const ri=mesh(new THREE.TorusGeometry(.13,.008,4,12),mt,0,.3,0);ri.rotation.x=Math.PI/2;g.add(ri);}add(g,-1.38,0,CZ-.25);}
   // the receipt by the register: who's behind the counter and what's on the shelves
   {const IT=['Creative concepting & naming','Brand & communications strategy','Strategy & creative workshops','Briefing & creative exploration','Influencer & PR','Content & production','Growth & performance','Brand experiences & activation','Copywriting & transcreation','Pitch & award support'];
-    const rt=cTex(600,1280,(x,W,H)=>{x.fillStyle='#f7f5ee';x.fillRect(0,0,W,H);x.fillStyle='#1d1d1d';x.textAlign='center';
-      x.font='600 64px "Clash Display", Arial';x.fillText('NIGELSHOP',W/2,110);x.font='400 26px "Clash Display", Arial';x.fillText('open 18:00 to 06:00',W/2,152);
-      const dash=y=>{x.font='400 26px ui-monospace, "Courier New", monospace';x.fillText('- '.repeat(22),W/2,y);};dash(200);
-      x.font='600 40px "Clash Display", Arial';x.fillText('NIGEL OOMS',W/2,262);x.font='400 26px "Clash Display", Arial';x.fillText('FREELANCE CREATIVE & STRATEGIST',W/2,302);dash(350);
-      x.textAlign='left';x.font='600 24px "Clash Display", Arial';x.fillText('ASSORTIMENT',44,404);
-      IT.forEach((t,i)=>{const y=462+i*58;x.font='600 26px ui-monospace, "Courier New", monospace';x.fillText(String(i+1).padStart(2,'0'),44,y);let f=26;x.font='600 '+f+'px "Clash Display", Arial';while(x.measureText(t.toUpperCase()).width>W-148&&f>16){f--;x.font='600 '+f+'px "Clash Display", Arial';}x.fillText(t.toUpperCase(),104,y);});
-      x.textAlign='center';dash(1060);x.font='400 26px "Clash Display", Arial';x.fillText('Cash & card accepted',W/2,1120);
-      x.font='400 22px ui-monospace, "Courier New", monospace';x.fillText(new Date().toLocaleDateString('en-GB')+'  '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),W/2,1170);
+    const rt=cTex(600,1060,(x,W,H)=>{x.fillStyle='#f7f5ee';x.fillRect(0,0,W,H);x.fillStyle='#1d1d1d';x.textAlign='center';
+      const dash=y=>{x.font='400 26px ui-monospace, "Courier New", monospace';x.fillText('- '.repeat(22),W/2,y);};
+      x.font='600 48px "Clash Display", Arial';x.fillText('NIGEL OOMS',W/2,92);x.font='400 26px "Clash Display", Arial';x.fillText('FREELANCE CREATIVE & STRATEGIST',W/2,134);dash(182);
+      x.textAlign='left';x.font='600 24px "Clash Display", Arial';x.fillText('ASSORTIMENT',44,236);
+      IT.forEach((t,i)=>{const y=294+i*58;x.font='600 26px ui-monospace, "Courier New", monospace';x.fillText(String(i+1).padStart(2,'0'),44,y);let f=26;x.font='600 '+f+'px "Clash Display", Arial';while(x.measureText(t.toUpperCase()).width>W-148&&f>16){f--;x.font='600 '+f+'px "Clash Display", Arial';}x.fillText(t.toUpperCase(),104,y);});
+      x.textAlign='center';dash(892);x.font='600 24px "Clash Display", Arial';x.fillText('GET IN TOUCH',W/2,950);x.font='400 28px "Clash Display", Arial';x.fillText('ooms.nigel@gmail.com',W/2,992);
       x.fillStyle='#e0ddd2';for(let i=0;i<W;i+=20){x.beginPath();x.moveTo(i,H);x.lineTo(i+10,H-10);x.lineTo(i+20,H);x.fill();}});
     nsReceipt=rt.image;
     const gm=new THREE.PlaneGeometry(.17,.36,1,12),ps=gm.attributes.position;for(let i=0;i<ps.count;i++){const yy=ps.getY(i);if(yy>.1){const k=(yy-.1)/.08;ps.setZ(i,k*k*.035);}}gm.computeVertexNormals();
@@ -998,9 +1003,6 @@ async function buildNS(){
         for(let a=0;a<16;a++){y.drawImage(IM.me,20+Math.cos(a/16*Math.PI*2)*9,20+Math.sin(a/16*Math.PI*2)*9,fw,fh);}y.globalCompositeOperation='source-in';y.fillStyle='#fff';y.fillRect(0,0,c.width,c.height);y.globalCompositeOperation='source-over';y.drawImage(IM.me,20,20,fw,fh);
         x.save();x.translate(108,450);x.rotate(-.07);x.shadowColor='rgba(0,0,0,.35)';x.shadowBlur=6;x.drawImage(c,-c.width/2,-c.height/2);x.restore();}
       stick(x,IM.ctv,262,455,150,112,.06,false,[120,170,420,300],'#0000ff');
-      // C·TV, a round blue sticker
-      x.save();x.translate(428,450);x.scale(.82,.82);x.rotate(.1);x.shadowColor='rgba(0,0,0,.35)';x.shadowBlur=6;x.fillStyle='#fff';x.beginPath();x.arc(0,0,92,0,Math.PI*2);x.fill();x.shadowBlur=0;x.fillStyle='#1010f0';x.beginPath();x.arc(0,0,85,0,Math.PI*2);x.fill();
-        x.fillStyle='#fff';x.textAlign='center';x.font='700 48px "Clash Display", Arial';x.fillText('C·TV',0,8);x.font='600 13px "Clash Display", Arial';x.fillText('CAMERABEWAKING',0,36);x.fillText('24/24 · 7/7',0,54);x.restore();
       x.fillStyle='#fff';x.fillRect(50,700,W-100,52);x.fillStyle='#111';x.font='600 26px "Clash Display", Arial';x.textAlign='center';x.fillText('DUW · POUSSEZ · PUSH',W/2,736);
       x.fillStyle='#fff';x.fillRect(50,800,200,70);x.fillStyle='#111';x.font='600 16px "Clash Display", Arial';x.fillText('HIER SPREEKT MEN',150,828);x.font='700 22px "Clash Display", Arial';x.fillText('NL · FR · EN',150,856);
       x.fillStyle='#1d7a46';x.fillRect(290,800,200,70);x.fillStyle='#fff';x.font='700 19px "Clash Display", Arial';x.fillText('CASH & CARDS',390,830);x.fillText('ACCEPTED',390,856);
