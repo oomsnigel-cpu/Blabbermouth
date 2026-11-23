@@ -321,7 +321,14 @@ function makeWatch(H){const g=new THREE.Group(),R=H*.34,rc=R*.56,hc=R*.22;
   [.25,-.25].forEach(a=>g.add(mesh(new THREE.BoxGeometry(rc*.12,rc*.2,hc*.5),cs,Math.cos(a)*rc*1.03,R+Math.sin(a)*rc*1.03,R+hc*.3)));
   return {g};}
 // CHARLATÁN TV: the C·TV badge, with the cyan and magenta ghosts peeking out
-function makeCharlatan(H){const g=new THREE.Group(),w=H*.95,hh=w*.5,d=w*.09,cy=H*.36;
+function makeCharlatan(H){const g=new THREE.Group(),w=H*.5,hh=w*.5,d=w*.09,cy=H*.78+hh/2;
+  // a rooftop TV antenna as the mast, the badge on top, signal going out
+  const mt=FM({color:0x8c8f96,metalness:.6,roughness:.35}),pr=H*.011;
+  g.add(mesh(new THREE.CylinderGeometry(pr,pr*1.2,H*.8,6),mt,0,H*.4,0));
+  [0,2.1,4.2].forEach(a=>g.add(rod(new THREE.Vector3(0,H*.18,0),new THREE.Vector3(Math.cos(a)*H*.17,0,Math.sin(a)*H*.17),pr*.8,mt)));
+  [[H*.6,H*.62,8],[H*.38,H*.44,6]].forEach(([y,L,n])=>{g.add(rod(new THREE.Vector3(0,y,-L*.25),new THREE.Vector3(0,y,L*.75),pr*.8,mt));
+    for(let i=0;i<n;i++){const z=-L*.2+i*L*.9/(n-1),e=L*(.55-i*.3/n);g.add(rod(new THREE.Vector3(-e/2,y,z),new THREE.Vector3(e/2,y,z),pr*.55,mt));}});
+  const waves=[0,1,2].map(i=>{const m=mesh(new THREE.TorusGeometry(w*.35,w*.018,3,14,Math.PI*.7),new THREE.MeshBasicMaterial({color:i%2?0xff00ff:0x00e5ff,transparent:true,fog:false}),0,cy+hh*.55,0);m.rotation.z=Math.PI*.15;g.add(m);return m;});
   const tex=cTex(1024,512,(x,W,Hh)=>{x.fillStyle='#ffffff';x.fillRect(0,0,W,Hh);x.lineJoin='bevel';x.lineCap='butt';x.lineWidth=46;
     const C=[[318,130],[176,130],[140,166],[140,346],[176,382],[318,382]],T=[[[452,130],[640,130]],[[546,130],[546,382]]],V=[[694,120],[694,300],[776,382],[808,382],[890,300],[890,120]];
     const draw=(col,dx,dy)=>{x.strokeStyle=col;x.fillStyle=col;const pl=pts=>{x.beginPath();pts.forEach(([px,py],i)=>i?x.lineTo(px+dx,py+dy):x.moveTo(px+dx,py+dy));x.stroke();};
@@ -331,7 +338,7 @@ function makeCharlatan(H){const g=new THREE.Group(),w=H*.95,hh=w*.5,d=w*.09,cy=H
   const sl=mesh(new THREE.BoxGeometry(w,hh,d),[wm,wm,wm,wm,fm,fm],0,cy,0);g.add(sl);
   g.add(mesh(new THREE.BoxGeometry(w*.995,hh,d*.9),GLOW(0xff00ff,.4),0,cy+hh*.045,-d*.12));
   g.add(mesh(new THREE.BoxGeometry(w*.99,hh,d*.8),GLOW(0x00e5ff,.4),0,cy+hh*.085,-d*.24));
-  return {g,anim:t=>{g.position.y=Math.sin(t*1.1)*H*.02;}};}
+  return {g,anim:t=>{waves.forEach((m,i)=>{const f=(t*.5+i/3)%1;m.scale.setScalar(.6+f*1.4);m.material.opacity=Math.sin(f*Math.PI)*.9;});}};}
 // The Quiet Record: a small low-poly Earth riding its orbit, "We are here"
 function makeQuiet(H){const g=new THREE.Group(),R=H*.55,cy=H*.42,er=R*.15;
   const orb=new THREE.Group();orb.position.y=cy;orb.rotation.x=.5;g.add(orb);
