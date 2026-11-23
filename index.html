@@ -164,7 +164,7 @@ body.incase .hint{opacity:0!important}
 </div>
 <div class="casebar" id="caseBar" hidden>
   <button type="button" class="cb cb-back" id="cbRoom">← Back to the space</button>
-  <button type="button" class="cb" id="cbText">Read as text</button>
+  
 </div>
 <footer class="mailfoot" id="mailFoot"><span>Get in touch</span><a href="mailto:ooms.nigel@gmail.com">ooms.nigel@gmail.com</a></footer>
 <div id="track"></div>
@@ -675,7 +675,7 @@ function enterCase(i,fromPop){if(i<0||i>=CASES.length)return;if(CASES[i].cv){if(
 function exitCase(fromPop){if(world!=='case')return;disposeCase();world='main';caseIdx=-1;cFocus=-1;fly=null;document.body.classList.remove('incase');caseBar.hidden=true;
   if(saved){pos.copy(saved.p);tpos.copy(saved.p);yaw=tyaw=saved.yaw;pitch=tpitch=saved.pitch;}if(!fromPop)setHash('',true);}
 document.getElementById('cbRoom').onclick=()=>exitCase();
-document.getElementById('cbText').onclick=()=>{if(caseIdx>=0)openPage(caseIdx);};
+
 
 // ---------- wall layout: the whole case readable in one view, layers at slightly different depths, scroll to move down
 const WALL=new Set(CASES.map(c=>c.id));
