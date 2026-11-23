@@ -49,6 +49,18 @@ body.ns .role{color:#fff}
 @media (max-width:640px){.nsbtn{font-size:.58rem;padding:6px 8px;margin-left:10px;white-space:nowrap}.top .role{white-space:normal!important;max-width:150px;line-height:1.3}}
 @keyframes nsg{0%{background-position:0 0}25%{background-position:-40px 20px}50%{background-position:30px -50px}75%{background-position:-20px -30px}}
 @media (prefers-reduced-motion: reduce){#nsGrain{animation:none}}
+#nsClosed{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:rgba(8,10,12,.6);padding:16px}
+#nsClosed[hidden]{display:none}
+.nsc{position:relative;background:#fff;color:#1f1b20;max-width:27rem;width:100%;padding:30px 28px 26px;border-top:10px solid #d8261c;font-family:"Clash Display",system-ui,sans-serif}
+.nsc-k{margin:0 0 10px;color:#d8261c;font-weight:600;letter-spacing:.14em;font-size:.78rem}
+.nsc h2{margin:0 0 12px;font-weight:600;font-size:clamp(1.7rem,6vw,2.2rem);line-height:1.05}
+.nsc p{margin:0 0 18px;line-height:1.45}
+.nsc label{display:block;margin-bottom:8px;font-size:.95rem}
+.nsc-r{display:flex;gap:8px;flex-wrap:wrap}
+.nsc-r input{flex:1 1 180px;min-width:0;font:inherit;padding:11px 12px;border:1.5px solid #1f1b20;border-radius:0}
+.nsc-r button{font:600 .85rem "Clash Display",system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;background:#d8261c;color:#fff;border:0;padding:12px 16px;cursor:pointer}
+.nsc-x{position:absolute;top:8px;right:10px;width:44px;height:44px;border:0;background:none;font-size:1.6rem;cursor:pointer;color:#1f1b20}
+.nsc-ok{margin:12px 0 0!important;font-size:.9rem;color:#1d7a46}
 #veil{position:fixed;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.78) 55%,rgba(255,255,255,.86));transition:opacity 1s ease}
 body.inside #veil{opacity:0}
 @media (prefers-reduced-motion: reduce){#veil{transition:none}}
@@ -147,7 +159,7 @@ body.incase .hint{opacity:0!important}
 @media (max-width:600px){.cv div{margin-left:0!important}}
 </style>
 
-<div id="veil" aria-hidden="true"></div><div id="nsGrain" aria-hidden="true"></div><canvas id="gl" aria-label="3D space with portfolio key visuals"></canvas>
+<div id="nsClosed" role="dialog" aria-modal="true" aria-labelledby="nscT" hidden><div class="nsc"><button type="button" class="nsc-x" id="nscX" aria-label="Close">×</button><p class="nsc-k">NIGELSHOP</p><h2 id="nscT">Closed.<br>Open from 18:00.</h2><p>The shop opens every night from 18:00 to 06:00, your time. Come back after six.</p><form id="nscF"><label for="nscE">Leave your email and I'll let you know when it's open.</label><div class="nsc-r"><input id="nscE" type="email" required placeholder="you@company.com" autocomplete="email"><button type="submit">Notify me</button></div><p class="nsc-ok" id="nscOk" hidden>Thanks. Your mail app opened with the request, just hit send.</p></form></div></div><div id="veil" aria-hidden="true"></div><div id="nsGrain" aria-hidden="true"></div><canvas id="gl" aria-label="3D space with portfolio key visuals"></canvas>
 <div class="cv" id="cv"><div style="margin-left:0em"><b>01</b><span>Creative concepting &amp; naming: campaign ideas, brand and product names, pitch concepts</span></div><div style="margin-left:9em"><b>02</b><span>Brand &amp; communications strategy: positioning, community mapping, touchpoint strategy, impact &amp; opportunity mapping</span></div><div style="margin-left:5em"><b>03</b><span>Strategy &amp; creative workshops: Hero-Hub-Hyper, stakeholder alignment, creative sessions</span></div><div style="margin-left:13em"><b>04</b><span>Briefing &amp; creative exploration: co-created briefs, creative territories, trend &amp; hype reports</span></div><div style="margin-left:3em"><b>05</b><span>Influencer &amp; PR: KOL playbooks, press hooks, content that drives conversation</span></div><div style="margin-left:10em"><b>06</b><span>Content &amp; production: formats, scripts, storyboards, art direction, AI-enabled production</span></div><div style="margin-left:6em"><b>07</b><span>Growth &amp; performance: growth experiments, paid social creative, funnel strategy</span></div><div style="margin-left:12em"><b>08</b><span>Brand experiences &amp; activation: pop-ups, launch events, press and KOL days</span></div><div style="margin-left:2em"><b>09</b><span>Copywriting &amp; transcreation: NL, FR &amp; EN, TV and radio adaptation</span></div><div style="margin-left:8em"><b>10</b><span>Pitch &amp; award support: new-business strategy and decks, award entries, case writing</span></div></div>
 <div class="intro" id="intro"></div>
 <div class="hint" id="hint">Drag to look around · click the floor to move · click a case to open it</div>
@@ -539,7 +551,7 @@ cvs.addEventListener('touchstart',e=>{if(e.touches.length===2){const[a,b]=e.touc
 cvs.addEventListener('touchmove',e=>{if(e.touches.length===2&&pinch){const[a,b]=e.touches,d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);walk((d-pinch)*.03);pinch=d;}},{passive:true});
 cvs.addEventListener('touchend',e=>{if(e.touches.length<2)setTimeout(()=>pinch=null,50);},{passive:true});
 const keys={};addEventListener('keydown',e=>{if(pageIdx>=0)return;if(e.key==='Escape'&&world==='case'){exitCase();return;}if(e.target&&e.target.closest&&e.target.closest('button'))return;keys[e.key.toLowerCase()]=1;if(e.key==='Enter'){if(mode==='land')enter();else if(world==='main'&&focusIdx>=0)enterCase(focusIdx);}if(e.key==='Escape'&&mode==='room'){world==='case'?exitCase():leave();}});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=0);
-{const h=document.getElementById('navHome');const go=()=>{if(NSon){nsStageT=0;nsTYaw=0;nsTPitch=-.1;return;}if(world==='case')exitCase();leave();};h.addEventListener('click',go);h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();go();}});}
+{const h=document.getElementById('navHome');const go=()=>{if(NSon){nsStageT=0;nsZoomT=0;nsTYaw=0;nsTPitch=-.1;return;}if(world==='case')exitCase();leave();};h.addEventListener('click',go);h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();go();}});}
 (document.getElementById('navCV')||{addEventListener(){}}).addEventListener('click',()=>{if(world==='case')exitCase();openPage(CASES.findIndex(c=>c.cv));});
 
 // ---------- case pages
@@ -776,7 +788,8 @@ function buildCV(i,vh,vw,D){
   wallTop=wallBot=0;CB={rw:30,rd:30,wall:true,vh};}
 function wallTo(y){wallY=Math.max(wallBot,Math.min(wallTop,y));}
 // ---------- NACHTWINKEL MODE: the same work as products in a Brussels night shop ----------
-let nsDoor=null,nsStage=0,nsStageT=0,nsVisited=false,NSon=false,NS=null,nsBuilding=null,nsYaw=0,nsPitch=-.1,nsTYaw=0,nsTPitch=-.1,nsDrag=null,nsDust=null,nsTube=null;const nsAnims=[];
+function nsIsOpen(){if(/[?&]open\b/.test(location.search))return true;const h=new Date().getHours();return h>=18||h<6;}
+let nsZoom=0,nsZoomT=0,nsPtrs=new Map(),nsPinch=null,nsDoor=null,nsStage=0,nsStageT=0,nsVisited=false,NSon=false,NS=null,nsBuilding=null,nsYaw=0,nsPitch=-.1,nsTYaw=0,nsTPitch=-.1,nsDrag=null,nsDust=null,nsTube=null;const nsAnims=[];
 const nsCam=new THREE.PerspectiveCamera(52,1,.05,60);
 const CI=id=>CASES.findIndex(c=>c.id===id);
 // what each label says: name, what I did, origin, price (= the result), unit
@@ -902,35 +915,47 @@ async function buildNS(){
       x.fillStyle='#fff';x.textAlign='center';x.font='600 40px "Clash Display", Arial';x.fillText('See it. Shoot it.',W/2,H*.8);x.fillText('Believe it.',W/2,H*.8+44);
       x.font='400 18px "Clash Display", Arial';x.fillStyle='#9fd8e6';x.fillText('GALAXY S23 · NIGHTOGRAPHY',W/2,H*.95);x.fillStyle='#fff';x.font='600 14px "Clash Display", Arial';x.fillText('SAMSUNG × LOST FREQUENCIES',W/2,30);});
     const p=add(mesh(new THREE.PlaneGeometry(.64,.9),FM({map:pt,roughness:.9})),-3.22,1.75,-2.59);p.userData.caseIdx=CI('galaxy-s23');S2.add(tag('galaxy-s23',-3.22,1.18,-2.585));}
-  // the street side: facade, NIGELSHOP lightbox, glass storefront, the door with its window markings
+  // the street side: facade, NIGELSHOP lightbox, glass storefront, the door with its window markings and case stickers
   {const FZ=4.45,fac=FM({color:0x2b2d30,roughness:.9}),alu=FM({color:0x9aa0a6,metalness:.6,roughness:.35}),
     glass=new THREE.MeshStandardMaterial({color:0x2c3a40,transparent:true,opacity:.4,roughness:.05,metalness:.1,depthWrite:false}),dglass=new THREE.MeshStandardMaterial({color:0x11181c,transparent:true,opacity:.62,roughness:.05,metalness:.1,depthWrite:false}),WY0=.55,WY1=2.45,DW=1.2,DH=2.3;
+    const IM={};await Promise.all([['tile','img/la-maison-02.webp'],['qr','panel/quiet-record_b.webp'],['s0','img/solare-s00.webp'],['s1','img/solare-s01.webp'],['s2','img/solare-s02.webp'],['ctv','panel/charlatan-tv_b.webp'],['tl','lp/logo-green.png'],['ud','img/udav-krit-00.webp'],['rc','img/la-maison-03.webp']].map(async([k,u])=>{IM[k]=await loadImg(u);}));
+    // a sticker: white die-cut border, image cover-fitted, slightly rotated; round or square
+    const stick=(x,img,cx,cy,w,h,rot,round,crop,bg)=>{if(!img)return;x.save();x.translate(cx,cy);x.rotate(rot);x.shadowColor='rgba(0,0,0,.35)';x.shadowBlur=6;x.fillStyle='#fff';x.beginPath();
+      if(round)x.arc(0,0,w/2+7,0,Math.PI*2);else x.rect(-w/2-7,-h/2-7,w+14,h+14);x.fill();x.shadowBlur=0;x.beginPath();if(round)x.arc(0,0,w/2,0,Math.PI*2);else x.rect(-w/2,-h/2,w,h);x.clip();
+      if(bg){x.fillStyle=bg;x.fillRect(-w/2,-h/2,w,h);}const c=crop||[0,0,img.width,img.height],k=(bg?Math.min(w/c[2],h/c[3])*.8:Math.max(w/c[2],h/c[3]));x.drawImage(img,c[0],c[1],c[2],c[3],-c[2]*k/2,-c[3]*k/2,c[2]*k,c[3]*k);x.restore();};
     const box=(x0,x1,y0,y1)=>add(mesh(new THREE.BoxGeometry(x1-x0,y1-y0,.14),fac),(x0+x1)/2,(y0+y1)/2,FZ);
     box(-3.7,3.7,WY1,3.1);box(-3.7,-3.3,0,WY1);box(3.3,3.7,0,WY1);box(-.95,-.6,0,WY1);box(.6,.95,0,WY1);box(-3.3,-.95,0,WY0);box(.95,3.3,0,WY0);box(-.6,.6,DH,WY1);
     [-2.125,2.125].forEach(x=>{add(mesh(new THREE.PlaneGeometry(2.35,WY1-WY0),glass),x,(WY0+WY1)/2,FZ+.02);add(mesh(new THREE.BoxGeometry(2.35,.04,.06),alu),x,WY0,FZ+.04);});
     const sg2=cTex(640,140,(x,W,H)=>{x.fillStyle='#fbfbf8';x.fillRect(0,0,W,H);x.fillStyle='#d8261c';x.font='700 96px "Clash Display", Arial, sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('NIGELSHOP',W/2,H/2+6);});
     add(mesh(new THREE.BoxGeometry(2.9,.62,.14),[fac,fac,fac,fac,new THREE.MeshBasicMaterial({map:sg2,fog:false}),fac]),0,2.78,FZ+.12);
-    // neon OPEN in the left window, name in the right window
-    const op=cTex(256,110,(x,W,H)=>{x.clearRect(0,0,W,H);x.strokeStyle='#ff3b3b';x.lineWidth=6;x.strokeRect(6,6,W-12,H-12);x.fillStyle='#ff4a4a';x.font='700 62px "Clash Display", Arial';x.textAlign='center';x.textBaseline='middle';x.fillText('OPEN',W/2,H/2+4);});
-    const opm=new THREE.MeshBasicMaterial({map:op,transparent:true,fog:false});add(mesh(new THREE.PlaneGeometry(.62,.27),opm),-2.1,1.85,FZ-.05);nsAnims.push(t=>{opm.opacity=Math.sin(t*23)>.97?.35:1;});
-    const nm=cTex(512,200,(x,W,H)=>{x.clearRect(0,0,W,H);x.fillStyle='#ffffff';x.textAlign='left';x.font='600 44px "Clash Display", Arial';x.fillText('NIGEL OOMS',10,60);x.font='400 24px "Clash Display", Arial';x.fillText('FREELANCE CREATIVE & STRATEGIST',10,104);x.fillText('MADRID · BRUSSEL',10,140);});
-    add(mesh(new THREE.PlaneGeometry(1.2,.47),new THREE.MeshBasicMaterial({map:nm,transparent:true,depthWrite:false,fog:false})),1.85,2.05,FZ+.03);
-    // the door: glass with skill titles as vinyl, a security sticker, shop stickers
+    // neon in the left window: OPEN after 18:00, CLOSED before
+    const neon=(t,c)=>cTex(320,110,(x,W,H)=>{x.clearRect(0,0,W,H);x.strokeStyle=c;x.lineWidth=6;x.strokeRect(6,6,W-12,H-12);x.fillStyle=c;x.font='700 60px "Clash Display", Arial';x.textAlign='center';x.textBaseline='middle';x.fillText(t,W/2,H/2+4);});
+    const nOpen=neon('OPEN','#ff4a4a'),nClosed=neon('CLOSED','#8a4444'),opm=new THREE.MeshBasicMaterial({map:nOpen,transparent:true,fog:false});add(mesh(new THREE.PlaneGeometry(.75,.26),opm),-2.1,1.9,FZ-.05);
+    nsAnims.push(t=>{const o=nsIsOpen();opm.map=o?nOpen:nClosed;opm.opacity=o&&Math.sin(t*23)>.97?.35:1;});
+    // window stickers: the odd sketches and visuals from the cases
+    const wl=cTex(1024,820,(x,W,H)=>{x.clearRect(0,0,W,H);stick(x,IM.s1,170,640,200,220,-.08);stick(x,IM.s2,420,690,170,170,.06);stick(x,IM.ctv,860,660,230,170,-.05,false,[120,170,420,300],'#0000ff');});
+    add(mesh(new THREE.PlaneGeometry(2.35,1.88),new THREE.MeshBasicMaterial({map:wl,transparent:true,depthWrite:false,fog:false})),-2.125,1.5,FZ+.035);
+    const nm=cTex(1024,820,(x,W,H)=>{x.clearRect(0,0,W,H);x.fillStyle='#ffffff';x.textAlign='left';x.font='600 64px "Clash Display", Arial';x.fillText('NIGEL OOMS',90,150);x.font='400 34px "Clash Display", Arial';x.fillText('FREELANCE CREATIVE & STRATEGIST',90,205);
+      stick(x,IM.ud,200,640,230,150,.05);stick(x,IM.s0,480,650,170,180,-.07);stick(x,IM.rc,780,630,150,210,.04,false,[300,200,1000,1400]);});
+    add(mesh(new THREE.PlaneGeometry(2.35,1.88),new THREE.MeshBasicMaterial({map:nm,transparent:true,depthWrite:false,fog:false})),2.125,1.5,FZ+.035);
+    // the door: skill titles as vinyl, all one size; opening hours; security; languages; cash & cards; case stickers
     const SK=['Creative concepting & naming','Brand & communications strategy','Strategy & creative workshops','Briefing & creative exploration','Influencer & PR','Content & production','Growth & performance','Brand experiences & activation','Copywriting & transcreation','Pitch & award support'];
     const dt2=cTex(540,1100,(x,W,H)=>{x.clearRect(0,0,W,H);
-      x.fillStyle='#d8261c';x.beginPath();x.arc(W-100,105,74,0,Math.PI*2);x.fill();x.fillStyle='#fff';x.textAlign='center';x.font='700 38px "Clash Display", Arial';x.fillText('OPEN',W-100,98);x.font='600 30px "Clash Display", Arial';x.fillText('24/7',W-100,134);
-      x.textAlign='left';x.fillStyle='rgba(255,255,255,.95)';x.font='600 17px "Clash Display", Arial';x.fillText('A S S O R T I M E N T',46,250);x.fillRect(46,262,190,2);
-      x.font='600 25px "Clash Display", Arial';SK.forEach((t,i)=>{x.fillStyle='rgba(255,255,255,.95)';x.fillText(String(i+1).padStart(2,'0'),46,305+i*38);x.fillText(t.toUpperCase(),96,305+i*38,360);});
-      x.fillStyle='#fff';x.fillRect(46,700,W-92,52);x.fillStyle='#111';x.font='600 26px "Clash Display", Arial';x.textAlign='center';x.fillText('DUW · POUSSEZ · PUSH',W/2,736);
-      x.fillStyle='#ffd400';x.fillRect(46,790,250,150);x.strokeStyle='#111';x.lineWidth=5;x.strokeRect(54,798,234,134);x.fillStyle='#111';x.textAlign='left';x.font='700 22px "Clash Display", Arial';x.fillText('BEVEILIGD',70,834);x.font='600 18px "Clash Display", Arial';x.fillText('C·TV CAMERABEWAKING',70,864);x.fillText('24/24 · 7/7',70,890);
-      x.fillRect(222,812,50,30);x.fillRect(208,820,16,14);x.beginPath();x.arc(272,827,9,0,Math.PI*2);x.fill();
-      x.fillStyle='#fff';x.beginPath();x.roundRect?x.roundRect(318,790,176,70,14):x.rect(318,790,176,70);x.fill();x.fillStyle='#111';x.textAlign='center';x.font='600 16px "Clash Display", Arial';x.fillText('HIER SPREEKT MEN',406,818);x.font='700 22px "Clash Display", Arial';x.fillText('NL · FR · EN',406,846);
-      x.fillStyle='#1d7a46';x.fillRect(318,876,176,64);x.fillStyle='#fff';x.font='700 18px "Clash Display", Arial';x.fillText('CASH · CARDS',406,904);x.fillText('& IDEAS',406,928);
-      x.fillStyle='rgba(255,255,255,.9)';x.font='400 15px "Clash Display", Arial';x.textAlign='left';x.fillText('Gelieve niet te roken · Merci de ne pas fumer',46,1010);x.fillText('Ingang via de deur, ideeën via de toog',46,1034);});
-    const door=new THREE.Group();door.position.set(-DW/2,0,FZ+.02);add(door,-DW/2,0,FZ+.02);
+      stick(x,IM.tile,110,120,120,120,-.12,true);
+      x.fillStyle='#d8261c';x.beginPath();x.arc(W-105,115,80,0,Math.PI*2);x.fill();x.fillStyle='#fff';x.textAlign='center';x.font='700 36px "Clash Display", Arial';x.fillText('OPEN',W-105,102);x.font='600 19px "Clash Display", Arial';x.fillText('18:00 TOT 06:00',W-105,132);x.fillText('7/7',W-105,156);
+      x.textAlign='left';x.fillStyle='rgba(255,255,255,.95)';x.font='600 16px "Clash Display", Arial';x.fillText('A S S O R T I M E N T',50,262);x.fillRect(50,274,190,2);
+      let fs=24;x.font='600 '+fs+'px "Clash Display", Arial';const mw=Math.max(...SK.map(t=>x.measureText(t.toUpperCase()).width));fs=Math.min(24,Math.floor(24*370/mw));x.font='600 '+fs+'px "Clash Display", Arial';
+      SK.forEach((t,i)=>{x.fillText(String(i+1).padStart(2,'0'),50,316+i*37);x.fillText(t.toUpperCase(),94,316+i*37);});
+      x.fillStyle='#fff';x.fillRect(50,700,W-100,52);x.fillStyle='#111';x.font='600 26px "Clash Display", Arial';x.textAlign='center';x.fillText('DUW · POUSSEZ · PUSH',W/2,736);
+      x.fillStyle='#ffd400';x.fillRect(50,790,250,150);x.strokeStyle='#111';x.lineWidth=5;x.strokeRect(58,798,234,134);x.fillStyle='#111';x.textAlign='left';x.font='700 22px "Clash Display", Arial';x.fillText('BEVEILIGD',74,834);x.font='600 18px "Clash Display", Arial';x.fillText('C·TV CAMERABEWAKING',74,864,205);x.fillText('24/24 · 7/7',74,890);
+      x.fillRect(226,812,50,30);x.fillRect(212,820,16,14);x.beginPath();x.arc(276,827,9,0,Math.PI*2);x.fill();
+      x.fillStyle='#fff';x.fillRect(318,790,172,70);x.fillStyle='#111';x.textAlign='center';x.font='600 16px "Clash Display", Arial';x.fillText('HIER SPREEKT MEN',404,818);x.font='700 22px "Clash Display", Arial';x.fillText('NL · FR · EN',404,846);
+      x.fillStyle='#1d7a46';x.fillRect(318,876,172,64);x.fillStyle='#fff';x.font='700 18px "Clash Display", Arial';x.fillText('CASH & CARDS',404,904);x.fillText('ACCEPTED',404,928);
+      stick(x,IM.qr,120,1015,110,110,0,true);stick(x,IM.tl,270,1012,130,66,.05,false,null,'#111');stick(x,IM.s2,420,1010,100,100,-.08);});
+    const door=new THREE.Group();add(door,-DW/2,0,FZ+.02);
     const st=.07;[[DW/2,st/2,DW,st],[DW/2,DH-st/2,DW,st],[st/2,DH/2,st,DH],[DW-st/2,DH/2,st,DH]].forEach(([x,y,w,h])=>door.add(mesh(new THREE.BoxGeometry(w,h,.06),alu,x,y,0)));
     door.add(mesh(new THREE.BoxGeometry(DW-2*st,.18,.05),alu,DW/2,.18,0));
-    door.add(mesh(new THREE.PlaneGeometry(DW-2*st,DH-.27-st),dglass,DW/2,(DH+.27-st)/2+.0,.0));
+    door.add(mesh(new THREE.PlaneGeometry(DW-2*st,DH-.27-st),dglass,DW/2,(DH+.27-st)/2,0));
     door.add(mesh(new THREE.PlaneGeometry(DW-2*st,DH-.27-st),new THREE.MeshBasicMaterial({map:dt2,transparent:true,depthWrite:false,fog:false}),DW/2,(DH+.27-st)/2,.012));
     door.add(mesh(new THREE.BoxGeometry(.03,.5,.03),alu,DW-.17,1.05,.07));[.85,1.25].forEach(y=>door.add(mesh(new THREE.BoxGeometry(.03,.03,.06),alu,DW-.17,y,.045)));
     nsDoor=door;
@@ -945,7 +970,9 @@ function nsTick(t,dt){const a=innerWidth/innerHeight;if(nsCam.aspect!==a){nsCam.
   const k=reduce?1:1-Math.exp(-dt*8);nsYaw+=(nsTYaw-nsYaw)*k;nsPitch+=(nsTPitch-nsPitch)*k;
   if(reduce)nsStage=nsStageT;else if(nsStage!==nsStageT){const st=dt/2.2;nsStage=nsStageT>nsStage?Math.min(nsStageT,nsStage+st):Math.max(nsStageT,nsStage-st);}
   const e=ease(Math.max(0,Math.min(1,(nsStage-.22)/.78)));if(nsDoor)nsDoor.rotation.y=-1.45*ease(Math.min(1,nsStage*1.6));
-  const dz=a<1?9.4:8.6,iz=a<1?3.9:4.1;nsCam.position.set((a<1?-.2:0)*e,1.6+.05*e,dz+(iz-dz)*e);nsCam.rotation.set(nsPitch+(a<1?-.03:0)+(1-e)*(a<1?.1:.17),nsYaw,0,'YXZ');
+  nsZoom+=(nsZoomT-nsZoom)*(reduce?1:Math.min(1,dt*4));const zz=ease(Math.max(0,Math.min(1,nsZoom)));
+  const far=a<1?9.4:8.6,near=a<1?6.6:6.9,dz=far+(near-far)*zz,dy=1.6+(1.25-1.6)*zz,dp=(a<1?.1:.17)*(1-zz)+.1*zz,iz=a<1?3.9:4.1;
+  nsCam.position.set((a<1?-.2:0)*e,dy+(1.65-dy)*e,dz+(iz-dz)*e);nsCam.rotation.set(nsPitch+(a<1?-.03:0)+(1-e)*dp,nsYaw,0,'YXZ');
   if(!reduce){nsAnims.forEach(f=>f(t,dt));if(nsDust){const p=nsDust.geometry.attributes.position;for(let i=0;i<p.count;i++){let y=p.getY(i)-dt*.03*(1+(i%5)*.3);if(y<0)y+=3;p.setY(i,y);p.setX(i,p.getX(i)+Math.sin(t*.3+i)*dt*.01);}p.needsUpdate=true;}
     if(nsTube)nsTube.intensity=.85*(Math.sin(t*37)>.985?.55:1);}}
 function nsPick(x,y){if(!NS)return null;ndc.set(x/innerWidth*2-1,-(y/innerHeight)*2+1);ray.setFromCamera(ndc,nsCam);const h=ray.intersectObjects(NS.children,true).find(h=>h.object.userData.caseIdx!==undefined&&h.object.userData.caseIdx>=0);return h?h.object.userData.caseIdx:null;}
@@ -953,14 +980,19 @@ async function setNS(on){if(on===NSon)return;const b=document.getElementById('ns
   if(on){if(world==='case')exitCase();if(!NS){b.textContent='Opening…';nsBuilding=nsBuilding||(fontsReady.then(buildNS));await nsBuilding;}if(!nsVisited){nsStage=nsStageT=0;nsVisited=true;}else{nsStage=nsStageT=1;}NSon=true;document.body.classList.add('ns');b.textContent='The space';b.setAttribute('aria-pressed','true');nsTYaw=nsYaw=0;nsTPitch=nsPitch=-.1;}
   else{NSon=false;document.body.classList.remove('ns');b.textContent='Nigelshop';b.setAttribute('aria-pressed','false');}}
 document.getElementById('nsBtn').addEventListener('click',()=>setNS(!NSon));
-addEventListener('pointerdown',e=>{if(!NSon||e.target!==cvs)return;nsDrag={x:e.clientX,y:e.clientY,yaw:nsTYaw,pitch:nsTPitch,moved:0};e.stopPropagation();},true);
-addEventListener('pointermove',e=>{if(!NSon)return;if(nsDrag){const dx=e.clientX-nsDrag.x,dy=e.clientY-nsDrag.y;nsDrag.moved=Math.max(nsDrag.moved,Math.abs(dx)+Math.abs(dy));
+function nsDoorClick(){if(nsZoomT<.6){nsZoomT=1;return;}if(!nsIsOpen()){nsClosedOpen();return;}nsStageT=1;}
+function nsClosedOpen(){const d=document.getElementById('nsClosed');d.hidden=false;setTimeout(()=>{try{document.getElementById('nscE').focus();}catch(e){}},50);}
+addEventListener('pointerdown',e=>{if(!NSon||e.target!==cvs)return;nsPtrs.set(e.pointerId,[e.clientX,e.clientY]);if(nsPtrs.size===2&&nsStageT<1){const [p1,p2]=[...nsPtrs.values()];nsPinch={d:Math.hypot(p1[0]-p2[0],p1[1]-p2[1]),z:nsZoomT};nsDrag=null;e.stopPropagation();return;}nsDrag={x:e.clientX,y:e.clientY,yaw:nsTYaw,pitch:nsTPitch,moved:0};e.stopPropagation();},true);
+addEventListener('pointermove',e=>{if(!NSon)return;if(nsPtrs.has(e.pointerId))nsPtrs.set(e.pointerId,[e.clientX,e.clientY]);if(nsPinch&&nsPtrs.size===2){const [p1,p2]=[...nsPtrs.values()];nsZoomT=Math.max(0,Math.min(1,nsPinch.z+(Math.hypot(p1[0]-p2[0],p1[1]-p2[1])-nsPinch.d)/250));e.stopPropagation();return;}if(nsDrag){const dx=e.clientX-nsDrag.x,dy=e.clientY-nsDrag.y;nsDrag.moved=Math.max(nsDrag.moved,Math.abs(dx)+Math.abs(dy));
     nsTYaw=Math.max(-.75,Math.min(.75,nsDrag.yaw+dx*.004));nsTPitch=Math.max(-.45,Math.min(.25,nsDrag.pitch+dy*.003));e.stopPropagation();}
   else if(e.target===cvs&&e.pointerType==='mouse')cvs.style.cursor=nsStageT<1||nsPick(e.clientX,e.clientY)!=null?'pointer':'grab';},true);
-addEventListener('pointerup',e=>{if(!NSon||!nsDrag)return;const d=nsDrag;nsDrag=null;e.stopPropagation();if(d.moved<6){if(nsStageT<1){nsStageT=1;return;}if(nsStage<.98)return;const i=nsPick(e.clientX,e.clientY);if(i!=null&&i>=0)openPage(i);}},true);
-addEventListener('wheel',e=>{if(NSon){e.stopPropagation();}},{capture:true,passive:true});
+addEventListener('pointerup',e=>{if(!NSon)return;nsPtrs.delete(e.pointerId);if(nsPinch){if(nsPtrs.size<2)nsPinch=null;e.stopPropagation();return;}if(!nsDrag)return;const d=nsDrag;nsDrag=null;e.stopPropagation();if(d.moved<6){if(nsStageT<1){nsDoorClick();return;}if(nsStage<.98)return;const i=nsPick(e.clientX,e.clientY);if(i!=null&&i>=0)openPage(i);}},true);
+addEventListener('wheel',e=>{if(NSon){e.stopPropagation();if(nsStageT<1&&pageIdx<0)nsZoomT=Math.max(0,Math.min(1,nsZoomT-e.deltaY*.0015));}},{capture:true,passive:true});
 if(!location.hash)setNS(true);
-addEventListener('keydown',e=>{if(NSon&&pageIdx<0&&nsStageT<1&&(e.key==='Enter'||e.key===' ')){nsStageT=1;e.preventDefault();e.stopPropagation();}},true);
+{const d=document.getElementById('nsClosed'),f=document.getElementById('nscF');document.getElementById('nscX').onclick=()=>{d.hidden=true;};d.addEventListener('click',e=>{if(e.target===d)d.hidden=true;});
+  addEventListener('keydown',e=>{if(!d.hidden&&e.key==='Escape'){d.hidden=true;e.stopPropagation();}},true);
+  f.addEventListener('submit',e=>{e.preventDefault();const m=document.getElementById('nscE').value.trim();if(!m)return;location.href='mailto:ooms.nigel@gmail.com?subject='+encodeURIComponent('Notify me when NIGELSHOP opens')+'&body='+encodeURIComponent('Hi Nigel,\n\nLet me know when NIGELSHOP is open: '+m);document.getElementById('nscOk').hidden=false;});}
+addEventListener('keydown',e=>{if(NSon&&pageIdx<0&&nsStageT<1&&document.getElementById('nsClosed').hidden&&(e.key==='Enter'||e.key===' ')){nsDoorClick();e.preventDefault();e.stopPropagation();}},true);
 // film grain for the lofi look
 {const c=document.createElement('canvas');c.width=c.height=160;const x=c.getContext('2d'),d=x.createImageData(160,160);for(let i=0;i<d.data.length;i+=4){const v=Math.random()*255;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255;}x.putImageData(d,0,0);
   document.getElementById('nsGrain').style.backgroundImage='url('+c.toDataURL()+')';}
