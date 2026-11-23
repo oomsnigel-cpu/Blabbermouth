@@ -172,7 +172,7 @@ const BACK={x:0,y:.1,z:ZF-RD+5,ry:0};const CZ=ZF-RD/2+2,spots=[];
 const RED='#0000ff';
 const OFFS=[0,170,110,250,140,60];
 function cascadeTex(title,items){
-  const W=1100,LH=30,font='500 22px "Clash Display", ui-monospace, monospace',tfont='400 40px "Clash Display", system-ui, sans-serif';
+  const W=1100,LH=30,font='500 22px "Clash Display", ui-monospace, monospace',tfont='600 40px "Clash Display", system-ui, sans-serif';
   const c=document.createElement('canvas'),g=c.getContext('2d');g.font=font;
   const rows=[];items.forEach((t,i)=>{const words=t.toUpperCase().split(' ');let ln='',lines=[];
     words.forEach(w=>{const tr=ln?ln+' '+w:w;if(g.measureText(tr).width>300&&ln){lines.push(ln);ln=w;}else ln=tr;});lines.push(ln);rows.push({n:String(i+1).padStart(2,'0'),lines,x:OFFS[i%OFFS.length]});});
@@ -181,7 +181,7 @@ function cascadeTex(title,items){
   rows.forEach(r=>{g.fillText(r.n,r.x,y);r.lines.forEach((l,j)=>g.fillText(l,r.x+62,y+j*LH));y+=r.lines.length*LH+4;});
   const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=4;return [t,W2/H,W2];
 }
-const fontsReady=(document.fonts&&document.fonts.load)?Promise.all([document.fonts.load('500 22px "Clash Display"'),document.fonts.load('400 40px "Clash Display"')]).catch(()=>{}):Promise.resolve();
+const fontsReady=(document.fonts&&document.fonts.load)?Promise.all([document.fonts.load('500 22px "Clash Display"'),document.fonts.load('600 40px "Clash Display"')]).catch(()=>{}):Promise.resolve();
 // low-poly 3D models that stand in the room instead of a flat key visual (built in code, flat-shaded on purpose)
 function lowPolyLabel(lines,w,h,bg){const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d');g.fillStyle=bg;g.fillRect(0,0,w,h);
   g.textAlign='center';g.textBaseline='middle';[w/2,0,w].forEach(x=>lines.forEach(([t,f,col,y])=>{g.font=f;g.fillStyle=col;g.fillText(t,x,y);}));const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=4;return t;}
