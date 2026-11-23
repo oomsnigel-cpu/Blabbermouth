@@ -918,7 +918,7 @@ async function buildNS(){
   // the street side: facade, NIGELSHOP lightbox, glass storefront, the door with its window markings and case stickers
   {const FZ=4.45,fac=FM({color:0x2b2d30,roughness:.9}),alu=FM({color:0x9aa0a6,metalness:.6,roughness:.35}),
     glass=new THREE.MeshStandardMaterial({color:0x2c3a40,transparent:true,opacity:.4,roughness:.05,metalness:.1,depthWrite:false}),dglass=new THREE.MeshStandardMaterial({color:0x11181c,transparent:true,opacity:.62,roughness:.05,metalness:.1,depthWrite:false}),WY0=.55,WY1=2.45,DW=1.2,DH=2.3;
-    const IM={};await Promise.all([['tile','img/la-maison-02.webp'],['qr','panel/quiet-record_b.webp'],['s0','img/solare-s00.webp'],['s1','img/solare-s01.webp'],['s2','img/solare-s02.webp'],['ctv','panel/charlatan-tv_b.webp'],['tl','lp/logo-green.png'],['ud','img/udav-krit-00.webp'],['rc','img/la-maison-03.webp']].map(async([k,u])=>{IM[k]=await loadImg(u);}));
+    const IM={};await Promise.all([['tile','img/la-maison-02.webp'],['qr','panel/quiet-record_b.webp'],['s0','img/solare-s00.webp'],['s1','img/solare-s01.webp'],['s2','img/solare-s02.webp'],['ctv','panel/charlatan-tv_b.webp'],['tl','lp/logo-green.png'],['ud','img/udav-krit-00.webp'],['rc','img/la-maison-03.webp'],['me','lp/about.webp']].map(async([k,u])=>{IM[k]=await loadImg(u);}));
     // a sticker: white die-cut border, image cover-fitted, slightly rotated; round or square
     const stick=(x,img,cx,cy,w,h,rot,round,crop,bg)=>{if(!img)return;x.save();x.translate(cx,cy);x.rotate(rot);x.shadowColor='rgba(0,0,0,.35)';x.shadowBlur=6;x.fillStyle='#fff';x.beginPath();
       if(round)x.arc(0,0,w/2+7,0,Math.PI*2);else x.rect(-w/2-7,-h/2-7,w+14,h+14);x.fill();x.shadowBlur=0;x.beginPath();if(round)x.arc(0,0,w/2,0,Math.PI*2);else x.rect(-w/2,-h/2,w,h);x.clip();
@@ -926,32 +926,41 @@ async function buildNS(){
     const box=(x0,x1,y0,y1)=>add(mesh(new THREE.BoxGeometry(x1-x0,y1-y0,.14),fac),(x0+x1)/2,(y0+y1)/2,FZ);
     box(-3.7,3.7,WY1,3.1);box(-3.7,-3.3,0,WY1);box(3.3,3.7,0,WY1);box(-.95,-.6,0,WY1);box(.6,.95,0,WY1);box(-3.3,-.95,0,WY0);box(.95,3.3,0,WY0);box(-.6,.6,DH,WY1);
     [-2.125,2.125].forEach(x=>{add(mesh(new THREE.PlaneGeometry(2.35,WY1-WY0),glass),x,(WY0+WY1)/2,FZ+.02);add(mesh(new THREE.BoxGeometry(2.35,.04,.06),alu),x,WY0,FZ+.04);});
-    const sg2=cTex(640,140,(x,W,H)=>{x.fillStyle='#fbfbf8';x.fillRect(0,0,W,H);x.fillStyle='#d8261c';x.font='700 96px "Clash Display", Arial, sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('NIGELSHOP',W/2,H/2+6);});
-    add(mesh(new THREE.BoxGeometry(2.9,.62,.14),[fac,fac,fac,fac,new THREE.MeshBasicMaterial({map:sg2,fog:false}),fac]),0,2.78,FZ+.12);
+    // the projecting box sign, like the real nachtwinkel ones: NIGEL / SHOP on both faces, hung on a bracket
+    const sg2=cTex(512,360,(x,W,H)=>{x.fillStyle='#fbfbf8';x.fillRect(0,0,W,H);x.fillStyle='#d8261c';x.font='700 150px "Clash Display", Arial, sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('NIGEL',W/2,H*.3);x.fillText('SHOP',W/2,H*.74);});
+    {const sm=new THREE.MeshBasicMaterial({map:sg2,fog:false}),fr=FM({color:0x8d9196,metalness:.4,roughness:.5}),sgn=new THREE.Group();
+      sgn.add(mesh(new THREE.BoxGeometry(.2,.92,1.3),[sm,sm,fr,fr,fr,fr],0,0,0));
+      sgn.add(mesh(new THREE.BoxGeometry(.03,.05,1.5),fr,0,.55,0));[-.55,.55].forEach(z=>sgn.add(mesh(new THREE.BoxGeometry(.015,.12,.015),fr,0,.5,z)));
+      sgn.scale.setScalar(.72);sgn.position.set(-1.0,2.72,FZ+.62);sgn.rotation.y=-.62;S2.add(sgn);
+      }
     // neon in the left window: OPEN after 18:00, CLOSED before
     const neon=(t,c)=>cTex(320,110,(x,W,H)=>{x.clearRect(0,0,W,H);x.strokeStyle=c;x.lineWidth=6;x.strokeRect(6,6,W-12,H-12);x.fillStyle=c;x.font='700 60px "Clash Display", Arial';x.textAlign='center';x.textBaseline='middle';x.fillText(t,W/2,H/2+4);});
     const nOpen=neon('OPEN','#ff4a4a'),nClosed=neon('CLOSED','#8a4444'),opm=new THREE.MeshBasicMaterial({map:nOpen,transparent:true,fog:false});add(mesh(new THREE.PlaneGeometry(.75,.26),opm),-2.1,1.9,FZ-.05);
     nsAnims.push(t=>{const o=nsIsOpen();opm.map=o?nOpen:nClosed;opm.opacity=o&&Math.sin(t*23)>.97?.35:1;});
     // window stickers: the odd sketches and visuals from the cases
-    const wl=cTex(1024,820,(x,W,H)=>{x.clearRect(0,0,W,H);stick(x,IM.s1,170,640,200,220,-.08);stick(x,IM.s2,420,690,170,170,.06);stick(x,IM.ctv,860,660,230,170,-.05,false,[120,170,420,300],'#0000ff');});
-    add(mesh(new THREE.PlaneGeometry(2.35,1.88),new THREE.MeshBasicMaterial({map:wl,transparent:true,depthWrite:false,fog:false})),-2.125,1.5,FZ+.035);
+    const SK=['Creative concepting & naming','Brand & communications strategy','Strategy & creative workshops','Briefing & creative exploration','Influencer & PR','Content & production','Growth & performance','Brand experiences & activation','Copywriting & transcreation','Pitch & award support'];
     const nm=cTex(1024,820,(x,W,H)=>{x.clearRect(0,0,W,H);x.fillStyle='#ffffff';x.textAlign='left';x.font='600 64px "Clash Display", Arial';x.fillText('NIGEL OOMS',90,150);x.font='400 34px "Clash Display", Arial';x.fillText('FREELANCE CREATIVE & STRATEGIST',90,205);
-      stick(x,IM.ud,200,640,230,150,.05);stick(x,IM.s0,480,650,170,180,-.07);stick(x,IM.rc,780,630,150,210,.04,false,[300,200,1000,1400]);});
+      x.font='600 22px "Clash Display", Arial';x.fillText('A S S O R T I M E N T',90,292);x.fillRect(90,304,260,3);
+      let fs=34;x.font='600 '+fs+'px "Clash Display", Arial';const mw=Math.max(...SK.map(t=>x.measureText(t.toUpperCase()).width));fs=Math.min(30,Math.floor(34*560/mw));x.font='600 '+fs+'px "Clash Display", Arial';
+      SK.forEach((t,i)=>{x.fillText(String(i+1).padStart(2,'0'),90,356+i*44);x.fillText(t.toUpperCase(),150,356+i*44);});});
     add(mesh(new THREE.PlaneGeometry(2.35,1.88),new THREE.MeshBasicMaterial({map:nm,transparent:true,depthWrite:false,fog:false})),2.125,1.5,FZ+.035);
     // the door: skill titles as vinyl, all one size; opening hours; security; languages; cash & cards; case stickers
-    const SK=['Creative concepting & naming','Brand & communications strategy','Strategy & creative workshops','Briefing & creative exploration','Influencer & PR','Content & production','Growth & performance','Brand experiences & activation','Copywriting & transcreation','Pitch & award support'];
     const dt2=cTex(540,1100,(x,W,H)=>{x.clearRect(0,0,W,H);
-      stick(x,IM.tile,110,120,120,120,-.12,true);
-      x.fillStyle='#d8261c';x.beginPath();x.arc(W-105,115,80,0,Math.PI*2);x.fill();x.fillStyle='#fff';x.textAlign='center';x.font='700 36px "Clash Display", Arial';x.fillText('OPEN',W-105,102);x.font='600 19px "Clash Display", Arial';x.fillText('18:00 TOT 06:00',W-105,132);x.fillText('7/7',W-105,156);
-      x.textAlign='left';x.fillStyle='rgba(255,255,255,.95)';x.font='600 16px "Clash Display", Arial';x.fillText('A S S O R T I M E N T',50,262);x.fillRect(50,274,190,2);
-      let fs=24;x.font='600 '+fs+'px "Clash Display", Arial';const mw=Math.max(...SK.map(t=>x.measureText(t.toUpperCase()).width));fs=Math.min(24,Math.floor(24*370/mw));x.font='600 '+fs+'px "Clash Display", Arial';
-      SK.forEach((t,i)=>{x.fillText(String(i+1).padStart(2,'0'),50,316+i*37);x.fillText(t.toUpperCase(),94,316+i*37);});
+      stick(x,IM.tile,105,115,120,120,-.12,true);
+      // opening hours, the classic white vinyl block
+      x.fillStyle='#fff';x.fillRect(270,40,230,250);x.fillStyle='#d8261c';x.fillRect(270,40,230,46);x.fillStyle='#fff';x.font='700 22px "Clash Display", Arial';x.textAlign='center';x.fillText('OPENINGSUREN',385,71);
+      x.fillStyle='#111';x.font='600 17px "Clash Display", Arial';['MA','DI','WO','DO','VR','ZA','ZO'].forEach((d,i)=>{x.textAlign='left';x.fillText(d,288,112+i*25);x.textAlign='right';x.fillText('18:00 - 06:00',484,112+i*25);});
+      // die-cut sticker of my face
+      if(IM.me){const fw=210,fh=fw*IM.me.height/IM.me.width,c=document.createElement('canvas');c.width=fw+40;c.height=fh+40;const y=c.getContext('2d');
+        for(let a=0;a<16;a++){y.drawImage(IM.me,20+Math.cos(a/16*Math.PI*2)*9,20+Math.sin(a/16*Math.PI*2)*9,fw,fh);}y.globalCompositeOperation='source-in';y.fillStyle='#fff';y.fillRect(0,0,c.width,c.height);y.globalCompositeOperation='source-over';y.drawImage(IM.me,20,20,fw,fh);
+        x.save();x.translate(150,470);x.rotate(-.07);x.shadowColor='rgba(0,0,0,.35)';x.shadowBlur=6;x.drawImage(c,-c.width/2,-c.height/2);x.restore();}
+      // C·TV, a round blue sticker
+      x.save();x.translate(395,455);x.rotate(.1);x.shadowColor='rgba(0,0,0,.35)';x.shadowBlur=6;x.fillStyle='#fff';x.beginPath();x.arc(0,0,92,0,Math.PI*2);x.fill();x.shadowBlur=0;x.fillStyle='#1010f0';x.beginPath();x.arc(0,0,85,0,Math.PI*2);x.fill();
+        x.fillStyle='#fff';x.textAlign='center';x.font='700 48px "Clash Display", Arial';x.fillText('C·TV',0,8);x.font='600 13px "Clash Display", Arial';x.fillText('CAMERABEWAKING',0,36);x.fillText('24/24 · 7/7',0,54);x.restore();
       x.fillStyle='#fff';x.fillRect(50,700,W-100,52);x.fillStyle='#111';x.font='600 26px "Clash Display", Arial';x.textAlign='center';x.fillText('DUW · POUSSEZ · PUSH',W/2,736);
-      x.fillStyle='#ffd400';x.fillRect(50,790,250,150);x.strokeStyle='#111';x.lineWidth=5;x.strokeRect(58,798,234,134);x.fillStyle='#111';x.textAlign='left';x.font='700 22px "Clash Display", Arial';x.fillText('BEVEILIGD',74,834);x.font='600 18px "Clash Display", Arial';x.fillText('C·TV CAMERABEWAKING',74,864,205);x.fillText('24/24 · 7/7',74,890);
-      x.fillRect(226,812,50,30);x.fillRect(212,820,16,14);x.beginPath();x.arc(276,827,9,0,Math.PI*2);x.fill();
-      x.fillStyle='#fff';x.fillRect(318,790,172,70);x.fillStyle='#111';x.textAlign='center';x.font='600 16px "Clash Display", Arial';x.fillText('HIER SPREEKT MEN',404,818);x.font='700 22px "Clash Display", Arial';x.fillText('NL · FR · EN',404,846);
-      x.fillStyle='#1d7a46';x.fillRect(318,876,172,64);x.fillStyle='#fff';x.font='700 18px "Clash Display", Arial';x.fillText('CASH & CARDS',404,904);x.fillText('ACCEPTED',404,928);
-      stick(x,IM.qr,120,1015,110,110,0,true);stick(x,IM.tl,270,1012,130,66,.05,false,null,'#111');stick(x,IM.s2,420,1010,100,100,-.08);});
+      x.fillStyle='#fff';x.fillRect(50,800,200,70);x.fillStyle='#111';x.font='600 16px "Clash Display", Arial';x.fillText('HIER SPREEKT MEN',150,828);x.font='700 22px "Clash Display", Arial';x.fillText('NL · FR · EN',150,856);
+      x.fillStyle='#1d7a46';x.fillRect(290,800,200,70);x.fillStyle='#fff';x.font='700 19px "Clash Display", Arial';x.fillText('CASH & CARDS',390,830);x.fillText('ACCEPTED',390,856);
+      stick(x,IM.qr,120,995,110,110,0,true);stick(x,IM.tl,270,992,130,66,.05,false,null,'#111');stick(x,IM.s2,420,990,100,100,-.08);});
     const door=new THREE.Group();add(door,-DW/2,0,FZ+.02);
     const st=.07;[[DW/2,st/2,DW,st],[DW/2,DH-st/2,DW,st],[st/2,DH/2,st,DH],[DW-st/2,DH/2,st,DH]].forEach(([x,y,w,h])=>door.add(mesh(new THREE.BoxGeometry(w,h,.06),alu,x,y,0)));
     door.add(mesh(new THREE.BoxGeometry(DW-2*st,.18,.05),alu,DW/2,.18,0));
