@@ -247,7 +247,7 @@ function makeSolare(H){
   const lt=new THREE.Mesh(new THREE.CylinderGeometry(66*S2,66*S2,16*S2,10),new THREE.MeshStandardMaterial(flat({color:0xf9eb8a,roughness:.7})));lw.add(lt);
   const ros=new THREE.MeshStandardMaterial(flat({color:0x4f6b3a,roughness:.8}));const st=new THREE.Mesh(new THREE.CylinderGeometry(5*S2,5*S2,420*S2,4),ros);st.position.set(-70*S2,720*S2,-40*S2);st.rotation.z=.22;cg.add(st);
   for(let i=0;i<14;i++){const lf=new THREE.Mesh(new THREE.BoxGeometry(6*S2,48*S2,10*S2),ros);const f=i/13;lf.position.set(-70*S2-Math.sin(.22)*(f-.5)*400*S2,720*S2+Math.cos(.22)*(f-.5)*400*S2,-40*S2);lf.rotation.z=.22+(i%2?.9:-.9);cg.add(lf);}
-  return {g,anim:(t,dt)=>{cg.rotation.y-=dt*.9;}};}
+  return {g,cg,anim:(t,dt)=>{cg.rotation.y-=dt*.9;}};}
 const FM=o=>new THREE.MeshStandardMaterial(Object.assign({flatShading:true,fog:false,roughness:.6},o));
 const GLOW=(c,i=.6,o={})=>new THREE.MeshStandardMaterial(Object.assign({color:c,emissive:c,emissiveIntensity:i,flatShading:true,fog:false},o));
 function cTex(w,h,draw){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');draw(x,w,h);const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=4;return t;}
@@ -834,9 +834,9 @@ async function buildNS(){
   const put=async(id,make,H,x,y,z,ry=0,s=1)=>{const m=await make(H);const g=m.g;g.scale.setScalar(s);add(g,x,y,z,ry);mark(g,id);if(m.anim&&id==='tadaam-growth')nsAnims.push(m.anim);return g;};
   const top=BY[2]+.015,mid=BY[1]+.015;
   await put('la-maison',makeCointreau,.52,-1.95,top,SZ+.02);S2.add(tag('la-maison',-1.95,BY[2]-.07,-2.14));
-  await put('solare',makeSolare,.55,-.75,top,SZ+.02);S2.add(tag('solare',-.62,BY[2]-.07,-2.14,1,true));
+  for(let i=0;i<4;i++){const m=makeSolare(.52);m.g.remove(m.cg);add(m.g,-1.0+i*.19,top,SZ+.02+(i%2)*.04);mark(m.g,'solare');}S2.add(tag('solare',-.72,BY[2]-.07,-2.14,1,true));
   await put('tadaam-growth',makeModem,.4,1.55,top,SZ+.04);S2.add(tag('tadaam-growth',1.55,BY[2]-.07,-2.14));
-  await put('tadaam',makePizza,.46,1.0,mid,SZ+.02,.25);S2.add(tag('tadaam',1.0,BY[1]-.07,-2.14,1,true));
+  
   // Watch4: the watch in its retail box
   {const g=new THREE.Group(),bw=.3,bh=.4,bd=.16,bt=cTex(256,340,(x,W,H)=>{x.fillStyle='#111';x.fillRect(0,0,W,H);x.fillStyle='#fff';x.font='600 26px "Clash Display", Arial';x.textAlign='center';x.fillText('Galaxy Watch4',W/2,H-34);x.font='400 14px "Clash Display", Arial';x.fillStyle='#aaa';x.fillText('SAMSUNG',W/2,26);});
     const dark=FM({color:0x151515});g.add(mesh(new THREE.BoxGeometry(bw,bh,bd),[dark,dark,dark,dark,FM({map:bt}),dark],0,bh/2,0));
@@ -854,11 +854,6 @@ async function buildNS(){
       x.fillStyle='#fff';x.fillRect(8,H-78,W-16,66);x.fillStyle='#000';x.font='600 12px Arial';x.fillText('WAARSCHUWING',W/2,H-58);x.font='400 11px Arial';x.fillText('één laatste job',W/2,H-40);x.fillText('kan levenslang duren',W/2,H-24);});
     const g=new THREE.Group(),bk=FM({color:0x0d0d0d}),fm=FM({map:pk});for(let i=0;i<5;i++)g.add(mesh(new THREE.BoxGeometry(.09,.14,.05),[bk,bk,bk,bk,fm,bk],i*.1,.07,0));
     add(g,-.75,mid,SZ+.05,0);mark(g,'rosie');S2.add(tag('rosie',-.55,BY[1]-.07,-2.14));}
-  // The Quiet Record: a concert poster next to the shelf
-  {const pt=cTex(400,560,(x,W,H)=>{x.fillStyle='#151a2e';x.fillRect(0,0,W,H);x.strokeStyle='#2a9c86';x.lineWidth=10;x.beginPath();x.ellipse(W/2,H*.42,150,46,-.15,0,Math.PI*2);x.stroke();
-      x.fillStyle='#2f68c8';x.beginPath();x.arc(W/2+120,H*.42-12,22,0,Math.PI*2);x.fill();x.fillStyle='#f6caa0';x.textAlign='center';x.font='600 26px "Clash Display", Arial';x.fillText('LIVE',W/2,60);
-      x.font='600 44px "Clash Display", Arial';x.fillText('THE QUIET',W/2,H*.68);x.fillText('RECORD',W/2,H*.68+48);x.font='400 18px "Clash Display", Arial';x.fillText('SLOW SLEEP STORIES · ALL NIGHT',W/2,H*.86);x.fillText('YOUTUBE · SPOTIFY',W/2,H*.86+26);});
-    const p=add(mesh(new THREE.PlaneGeometry(.64,.9),FM({map:pt,roughness:.9})),-3.22,1.75,-2.59);p.userData.caseIdx=CI('quiet-record');S2.add(tag('quiet-record',-3.22,1.18,-2.585));}
   // counter with candy, the register, the basket at the till
   const CX=.3,CZ=.85,CW=2.8,CD=.7,cw=FM({color:0xcfcdc3}),ck=FM({color:0x3a3a3a});
   add(mesh(new THREE.BoxGeometry(CW,1,CD),cw),CX,.5,CZ);add(mesh(new THREE.BoxGeometry(CW+.06,.03,CD+.06),new THREE.MeshStandardMaterial({color:0xcfe8e4,transparent:true,opacity:.55,roughness:.05})),CX,1.015,CZ);
@@ -866,24 +861,47 @@ async function buildNS(){
   {const cc=[0xd62b2b,0x6b2bd6,0x2b6bd6,0xf2c34a,0x1d1d1d,0xe96a1a,0x2bb36b],r2=seeded(9);[.62].forEach(y=>{for(let x=-.95;x<1.6;x+=.085){const h=.03+r2()*.03;add(mesh(new THREE.BoxGeometry(.07,h,.09),FM({color:cc[Math.floor(r2()*cc.length)]})),x,y+.013+h/2,CZ+CD/2+.06);}});}
   // register + terminal
   const reg=new THREE.Group();reg.add(mesh(new THREE.BoxGeometry(.42,.12,.34),ck,0,.06,0));reg.add(mesh(new THREE.BoxGeometry(.36,.06,.18),FM({color:0x555555}),0,.15,.06));
-  const scr=mesh(new THREE.BoxGeometry(.3,.2,.03),[ck,ck,ck,ck,GLOW(0x2ad18a,.6),ck],0,.3,-.1);scr.rotation.x=-.25;reg.add(scr);add(reg,1.15,1.03,CZ-.05);
-  add(mesh(new THREE.BoxGeometry(.1,.04,.18),ck),.7,1.05,CZ+.12);
+  const scr=mesh(new THREE.BoxGeometry(.3,.2,.03),[ck,ck,ck,ck,GLOW(0x2ad18a,.6),ck],0,.3,-.1);scr.rotation.x=-.25;reg.add(scr);add(reg,1.32,1.03,CZ-.05);
+  add(mesh(new THREE.BoxGeometry(.1,.04,.18),ck),1.62,1.05,CZ+.12);
   // CV: the passport photo taped to the register
   {const im=await loadImg('img/about-00.webp'),ph=cTex(160,220,(x,W,H)=>{x.fillStyle='#fff';x.fillRect(0,0,W,H);if(im)x.drawImage(im,295,62,97,138,10,10,W-20,H-30);x.fillStyle='#444';x.font='400 12px Arial';x.fillText('NIGEL · CV',12,H-6);});
-    const p=mesh(new THREE.PlaneGeometry(.12,.165),new THREE.MeshBasicMaterial({map:ph,fog:false}),.95,1.22,CZ+.13);p.rotation.set(-.05,-.15,.08);p.userData.caseIdx=CI('about');S2.add(p);
-    const tp=mesh(new THREE.PlaneGeometry(.05,.015),new THREE.MeshBasicMaterial({color:0xf5f0c8,transparent:true,opacity:.8}),.95,1.3,CZ+.135);tp.rotation.z=.08;S2.add(tp);}
-  await put('udav-krit',makeBasket,.4,-.6,1.03,CZ-.02,.2);S2.add(tag('udav-krit',-.6,.93,CZ+CD/2+.005,1,true));
-  // C·TV: a TV guide by the till
-  {const tv=cTex(256,340,(x,W,H)=>{x.fillStyle='#1010f0';x.fillRect(0,0,W,H);x.fillStyle='#fff';x.font='600 22px "Clash Display", Arial';x.fillText('TV GIDS',14,30);
-      x.fillRect(40,90,176,90);x.fillStyle='#1515ff';x.font='700 62px "Clash Display", Arial';x.textAlign='center';x.fillText('C·TV',W/2,156);x.fillStyle='#fff';x.font='400 17px "Clash Display", Arial';x.fillText('57 AFLEVERINGEN',W/2,236);x.fillText('VAN 90 SECONDEN',W/2,260);x.fillStyle='#00e5ff';x.fillText('VERTICAL ENTERTAINMENT',W/2,310);});
-    const g=new THREE.Group();g.add(mesh(new THREE.BoxGeometry(.2,.27,.01),[FM({color:0xffffff}),FM({color:0xffffff}),FM({color:0xffffff}),FM({color:0xffffff}),FM({map:tv}),FM({color:0xffffff})],0,.135,0));g.rotation.x=-.28;add(g,.2,1.03,CZ+.05,-.1);mark(g,'charlatan-tv');S2.add(tag('charlatan-tv',.2,.93,CZ+CD/2+.005));}
-  // Galaxy S23: a blister pack on the accessories stand
-  {const st=new THREE.Group(),mt=FM({color:0x8c8f96,metalness:.5,roughness:.4});st.add(mesh(new THREE.CylinderGeometry(.02,.02,1.7,6),mt,0,.85,0));st.add(mesh(new THREE.CylinderGeometry(.25,.25,.03,8),mt,0,.015,0));
-    const card=cTex(200,320,(x,W,H)=>{x.fillStyle='#e9eef5';x.fillRect(0,0,W,H);x.fillStyle='#0a0a0a';x.beginPath();x.arc(W/2,14,8,0,Math.PI*2);x.fill();x.font='600 24px "Clash Display", Arial';x.textAlign='center';x.fillText('Galaxy S23',W/2,H-40);x.font='400 13px "Clash Display", Arial';x.fillText('NIGHTOGRAPHY',W/2,H-18);});
-    const bl=new THREE.Group();bl.add(mesh(new THREE.PlaneGeometry(.24,.38),FM({map:card,side:THREE.DoubleSide})));const ph=new THREE.Group(),pw=.09;ph.add(mesh(new THREE.BoxGeometry(pw,pw*2.05,pw*.12),FM({color:0x1c1c20,metalness:.4,roughness:.35})));
-    [.7,.4,.1].forEach(y=>ph.add(mesh(new THREE.CylinderGeometry(pw*.12,pw*.12,pw*.06,7),FM({color:0x050505}),-pw*.25,pw*y,pw*.08).rotateX(Math.PI/2)));ph.position.set(0,.02,.03);bl.add(ph);
-    bl.add(mesh(new THREE.BoxGeometry(.2,.26,.05),new THREE.MeshStandardMaterial({color:0xffffff,transparent:true,opacity:.15,roughness:.05}),0,.01,.035));bl.position.set(.12,1.35,0);st.add(bl);
-    st.add(mesh(new THREE.BoxGeometry(.24,.01,.01),mt,.06,1.55,0));add(st,2.05,0,.05,-.3);mark(st,'galaxy-s23');add(tag('galaxy-s23',0,0,0),2.05+.12,1.08,.12,-.3);}
+    const p=mesh(new THREE.PlaneGeometry(.12,.165),new THREE.MeshBasicMaterial({map:ph,fog:false}),1.12,1.22,CZ+.13);p.rotation.set(-.05,-.15,.08);p.userData.caseIdx=CI('about');S2.add(p);
+    const tp=mesh(new THREE.PlaneGeometry(.05,.015),new THREE.MeshBasicMaterial({color:0xf5f0c8,transparent:true,opacity:.8}),1.12,1.3,CZ+.135);tp.rotation.z=.08;S2.add(tp);}
+  await put('udav-krit',makeBasket,.4,-.72,1.03,CZ-.02,.2);S2.add(tag('udav-krit',-.72,.93,CZ+CD/2+.005,1,true));
+  await put('tadaam',makePizza,.5,.08,1.03,CZ-.1,Math.PI-.55);S2.add(tag('tadaam',.08,.93,CZ+CD/2+.005,1,true));
+  // C·TV: the security camera hanging from the ceiling, labelled C·TV
+  {const g=new THREE.Group(),wh=FM({color:0xe8e8e3,roughness:.5}),dk=FM({color:0x222222});
+    g.add(mesh(new THREE.CylinderGeometry(.05,.05,.02,8),wh,0,0,0));g.add(mesh(new THREE.CylinderGeometry(.015,.015,.55,6),wh,0,-.275,0));
+    const head=new THREE.Group();head.position.set(0,-.58,0);head.rotation.set(-.45,0,0);g.add(head);
+    const lt=cTex(256,128,(x,W,H)=>{x.fillStyle='#e8e8e3';x.fillRect(0,0,W,H);x.fillStyle='#1515ff';x.font='700 64px "Clash Display", Arial';x.textAlign='center';x.textBaseline='middle';x.fillText('C·TV',W/2,H/2+4);});
+    const lm=FM({map:lt,roughness:.5});head.add(mesh(new THREE.BoxGeometry(.16,.14,.36),[lm,lm,wh,wh,wh,wh],0,0,0));
+    head.add(mesh(new THREE.BoxGeometry(.2,.03,.4),wh,0,.085,.02));
+    const lens=mesh(new THREE.CylinderGeometry(.05,.055,.05,8),dk,0,0,.2);lens.rotation.x=Math.PI/2;head.add(lens);
+    const led=mesh(new THREE.SphereGeometry(.012,6,4),GLOW(0xff2020,1),.05,-.04,.19);head.add(led);nsAnims.push(t=>{led.visible=Math.sin(t*3)>0;head.rotation.y=Math.sin(t*.35)*.5;});
+    add(g,2.05,3.1,-.9,-.6);mark(g,'charlatan-tv');
+    const tg=tag('charlatan-tv',0,0,0,.9);tg.position.set(2.05,2.22,-.85);tg.rotation.y=-.4;S2.add(tg);
+    S2.add(mesh(new THREE.CylinderGeometry(.002,.002,.2,3),dk,2.05,2.38,-.86));}
+  // The Quiet Record: a vintage CD with its CD-ROM on the counter, headphones hanging on a hook
+  {const cov=cTex(256,256,(x,W,H)=>{x.fillStyle='#151a2e';x.fillRect(0,0,W,H);x.strokeStyle='#2a9c86';x.lineWidth=7;x.beginPath();x.ellipse(W/2,H*.45,90,28,-.15,0,Math.PI*2);x.stroke();
+      x.fillStyle='#2f68c8';x.beginPath();x.arc(W/2+74,H*.45-8,13,0,Math.PI*2);x.fill();x.fillStyle='#f6caa0';x.textAlign='center';x.font='600 26px "Clash Display", Arial';x.fillText('THE QUIET RECORD',W/2,H*.8);x.font='400 13px "Clash Display", Arial';x.fillText('SLOW SLEEP STORIES',W/2,H*.8+22);});
+    const disc=cTex(256,256,(x,W)=>{const g2=x.createLinearGradient(0,0,W,W);g2.addColorStop(0,'#d9dde6');g2.addColorStop(.5,'#f8f2ff');g2.addColorStop(1,'#bcd6e8');x.fillStyle=g2;x.fillRect(0,0,W,W);
+      x.fillStyle='#151a2e';x.font='600 22px "Clash Display", Arial';x.textAlign='center';x.fillText('CD-ROM',W/2,70);x.font='400 14px "Clash Display", Arial';x.fillText('THE QUIET RECORD · EP.01',W/2,200);x.fillStyle='#ccc';x.beginPath();x.arc(W/2,W/2,22,0,Math.PI*2);x.fill();});
+    const g=new THREE.Group(),cl=new THREE.MeshStandardMaterial({color:0xeef4f7,transparent:true,opacity:.35,roughness:.05});
+    const jc=new THREE.Group();jc.add(mesh(new THREE.BoxGeometry(.14,.125,.012),[cl,cl,cl,cl,FM({map:cov,roughness:.2}),cl],0,.0625,0));jc.rotation.x=-.35;jc.position.set(-.06,0,0);g.add(jc);
+    const cd=mesh(new THREE.CylinderGeometry(.06,.06,.003,20),[FM({color:0xd9dde6,metalness:.6,roughness:.2}),FM({map:disc,metalness:.4,roughness:.25}),FM({color:0xd9dde6})],.1,.004,.05);g.add(cd);nsAnims.push((t)=>{cd.rotation.y=t*.4;});
+    // hook with headphones
+    const mt=FM({color:0x8c8f96,metalness:.5,roughness:.4}),hp=FM({color:0x1d1d1d,roughness:.7});
+    g.add(mesh(new THREE.BoxGeometry(.03,.42,.03),mt,.26,.21,-.05));g.add(mesh(new THREE.BoxGeometry(.03,.03,.16),mt,.26,.41,.03));
+    const ph=new THREE.Group();ph.position.set(.26,.39,.1);const band=mesh(new THREE.TorusGeometry(.065,.01,4,10,Math.PI),hp);band.rotation.y=Math.PI/2;ph.add(band);
+    [-1,1].forEach(sz=>{const cup=mesh(new THREE.CylinderGeometry(.035,.035,.03,8),hp,0,0,sz*.065);cup.rotation.x=Math.PI/2;cup.position.y=-.005;ph.add(cup);});ph.rotation.z=Math.PI;ph.position.y=.33;ph.scale.setScalar(1.5);g.add(ph);
+    nsAnims.push(t=>{ph.rotation.x=Math.sin(t*.8)*.08;});
+    add(g,.62,1.03,CZ-.02,-.2);mark(g,'quiet-record');S2.add(tag('quiet-record',.66,.93,CZ+CD/2+.005,.95));}
+  // Galaxy S23: a poster ad with Lost Frequencies
+  {const im=await loadImg('img/galaxy-s23-04.webp'),pt=cTex(400,560,(x,W,H)=>{x.fillStyle='#04080a';x.fillRect(0,0,W,H);if(im){const h=H*.72,w=h*im.width/im.height;x.drawImage(im,(W-w)/2+40,0,w,h);}
+      const gr=x.createLinearGradient(0,H*.45,0,H*.75);gr.addColorStop(0,'rgba(4,8,10,0)');gr.addColorStop(1,'rgba(4,8,10,1)');x.fillStyle=gr;x.fillRect(0,H*.45,W,H*.3);
+      x.fillStyle='#fff';x.textAlign='center';x.font='600 40px "Clash Display", Arial';x.fillText('See it. Shoot it.',W/2,H*.8);x.fillText('Believe it.',W/2,H*.8+44);
+      x.font='400 18px "Clash Display", Arial';x.fillStyle='#9fd8e6';x.fillText('GALAXY S23 · NIGHTOGRAPHY',W/2,H*.95);x.fillStyle='#fff';x.font='600 14px "Clash Display", Arial';x.fillText('SAMSUNG × LOST FREQUENCIES',W/2,30);});
+    const p=add(mesh(new THREE.PlaneGeometry(.64,.9),FM({map:pt,roughness:.9})),-3.22,1.75,-2.59);p.userData.caseIdx=CI('galaxy-s23');S2.add(tag('galaxy-s23',-3.22,1.18,-2.585));}
   // lofi dust
   {const N=420,pos=new Float32Array(N*3),r3=seeded(17);for(let i=0;i<N;i++){pos[i*3]=(r3()-.5)*7;pos[i*3+1]=r3()*3;pos[i*3+2]=-2.4+r3()*5.6;}
     const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(pos,3));nsDust=new THREE.Points(geo,new THREE.PointsMaterial({color:0xfff6e0,size:.014,transparent:true,opacity:.7,depthWrite:false}));S2.add(nsDust);}
@@ -895,7 +913,7 @@ function nsTick(t,dt){const a=innerWidth/innerHeight;if(nsCam.aspect!==a){nsCam.
     if(nsTube)nsTube.intensity=.85*(Math.sin(t*37)>.985?.55:1);}}
 function nsPick(x,y){if(!NS)return null;ndc.set(x/innerWidth*2-1,-(y/innerHeight)*2+1);ray.setFromCamera(ndc,nsCam);const h=ray.intersectObjects(NS.children,true).find(h=>h.object.userData.caseIdx!==undefined&&h.object.userData.caseIdx>=0);return h?h.object.userData.caseIdx:null;}
 async function setNS(on){if(on===NSon)return;const b=document.getElementById('nsBtn');
-  if(on){if(world==='case')exitCase();if(!NS){b.textContent='Opening…';nsBuilding=nsBuilding||(fontsReady.then(buildNS));await nsBuilding;}NSon=true;document.body.classList.add('ns');b.textContent='✕ Nachtwinkel';b.setAttribute('aria-pressed','true');nsTYaw=nsYaw=0;nsTPitch=nsPitch=-.1;}
+  if(on){if(world==='case')exitCase();if(!NS){b.textContent='Opening…';nsBuilding=nsBuilding||(fontsReady.then(buildNS));await nsBuilding;}NSon=true;document.body.classList.add('ns');b.textContent='The space';b.setAttribute('aria-pressed','true');nsTYaw=nsYaw=0;nsTPitch=nsPitch=-.1;}
   else{NSon=false;document.body.classList.remove('ns');b.textContent='Nachtwinkel';b.setAttribute('aria-pressed','false');}}
 document.getElementById('nsBtn').addEventListener('click',()=>setNS(!NSon));
 addEventListener('pointerdown',e=>{if(!NSon||e.target!==cvs)return;nsDrag={x:e.clientX,y:e.clientY,yaw:nsTYaw,pitch:nsTPitch,moved:0};e.stopPropagation();},true);
@@ -904,7 +922,7 @@ addEventListener('pointermove',e=>{if(!NSon)return;if(nsDrag){const dx=e.clientX
   else if(e.target===cvs&&e.pointerType==='mouse')cvs.style.cursor=nsPick(e.clientX,e.clientY)!=null?'pointer':'grab';},true);
 addEventListener('pointerup',e=>{if(!NSon||!nsDrag)return;const d=nsDrag;nsDrag=null;e.stopPropagation();if(d.moved<6){const i=nsPick(e.clientX,e.clientY);if(i!=null&&i>=0)openPage(i);}},true);
 addEventListener('wheel',e=>{if(NSon){e.stopPropagation();}},{capture:true,passive:true});
-addEventListener('keydown',e=>{if(NSon&&pageIdx<0&&e.key==='Escape'){setNS(false);e.stopPropagation();}},true);
+if(!location.hash)setNS(true);
 // film grain for the lofi look
 {const c=document.createElement('canvas');c.width=c.height=160;const x=c.getContext('2d'),d=x.createImageData(160,160);for(let i=0;i<d.data.length;i+=4){const v=Math.random()*255;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255;}x.putImageData(d,0,0);
   document.getElementById('nsGrain').style.backgroundImage='url('+c.toDataURL()+')';}
