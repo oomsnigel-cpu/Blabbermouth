@@ -997,7 +997,7 @@ async function buildNS(){
       x.fillStyle='#fff';x.fillRect(50,700,W-100,52);x.fillStyle='#111';x.font='600 26px "Clash Display", Arial';x.textAlign='center';x.fillText('DUW · POUSSEZ · PUSH',W/2,736);
       x.fillStyle='#fff';x.fillRect(50,800,200,70);x.fillStyle='#111';x.font='600 16px "Clash Display", Arial';x.fillText('HIER SPREEKT MEN',150,828);x.font='700 22px "Clash Display", Arial';x.fillText('NL · FR · EN',150,856);
       x.fillStyle='#1d7a46';x.fillRect(290,800,200,70);x.fillStyle='#fff';x.font='700 19px "Clash Display", Arial';x.fillText('CASH & CARDS',390,830);x.fillText('ACCEPTED',390,856);
-      stick(x,IM.qr,120,995,110,110,0,true);stick(x,IM.tl,270,992,130,66,.05,false,null,'#111');stick(x,IM.s2,420,990,100,100,-.08);});
+      stick(x,IM.qr,120,995,110,110,0,true);stick(x,IM.s2,420,990,100,100,-.08);});
     const door=new THREE.Group();add(door,-DW/2,0,FZ+.02);
     const st=.07;[[DW/2,st/2,DW,st],[DW/2,DH-st/2,DW,st],[st/2,DH/2,st,DH],[DW-st/2,DH/2,st,DH]].forEach(([x,y,w,h])=>door.add(mesh(new THREE.BoxGeometry(w,h,.06),alu,x,y,0)));
     door.add(mesh(new THREE.BoxGeometry(DW-2*st,.18,.05),alu,DW/2,.18,0));
