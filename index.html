@@ -51,6 +51,9 @@ body.ns .role{color:#fff}
 @media (prefers-reduced-motion: reduce){#nsGrain{animation:none}}
 #nsClosed{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:rgba(8,10,12,.6);padding:16px}
 #nsClosed[hidden]{display:none}
+#nsRcpt{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:rgba(8,10,12,.6);padding:16px;cursor:zoom-out}
+#nsRcpt[hidden]{display:none}
+#nsRcpt img{display:block;max-height:88vh;max-width:min(92vw,380px);height:auto;box-shadow:0 18px 50px rgba(0,0,0,.45)}
 .nsc{position:relative;background:#fff;color:#1f1b20;max-width:27rem;width:100%;padding:30px 28px 26px;border-top:10px solid #d8261c;font-family:"Clash Display",system-ui,sans-serif}
 .nsc-k{margin:0 0 10px;color:#d8261c;font-weight:600;letter-spacing:.14em;font-size:.78rem}
 .nsc h2{margin:0 0 12px;font-weight:600;font-size:clamp(1.7rem,6vw,2.2rem);line-height:1.05}
@@ -118,8 +121,8 @@ body.paged #gl{visibility:hidden}
 .pg-hero{display:block;width:100%;height:auto;max-height:min(70vh,640px);object-fit:contain;background:#f3f1ee}
 .pg-in{padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));max-width:760px;margin:0 auto}
 .pg-in .pg-credit{margin:14px 0 0}.pg-in .pg-line{margin:28px 0 6px;font:500 .74rem "Clash Display",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:#6f6870}
-.pg-name{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(2.6rem,7vw,4.4rem);line-height:1;letter-spacing:0;text-wrap:balance}
-.pg-in .pg-idea{margin:14px 0 0;font-size:1.2rem;line-height:1.45;max-width:38rem}
+.pg-name{margin:0;font-family:var(--display);font-weight:600;font-size:clamp(2.6rem,7vw,4.4rem);line-height:1;letter-spacing:0;text-wrap:balance}
+.pg-in .pg-idea{margin:14px 0 0;font-weight:600;font-size:1.2rem;line-height:1.45;max-width:38rem}
 .pg-in .pg-q{margin:36px 0 8px;font-family:var(--display);font-weight:400;font-size:clamp(1.6rem,4vw,2.3rem);line-height:1.1;text-wrap:balance;color:#1f1b20}
 .lbl{display:block;font:500 .78rem "Clash Display",ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:#0000ff;margin:30px 0 8px}
 .pg-in p{margin:0 0 12px;font-size:1rem;line-height:1.6;max-width:65ch}
@@ -159,7 +162,7 @@ body.incase .hint{opacity:0!important}
 @media (max-width:600px){.cv div{margin-left:0!important}}
 </style>
 
-<div id="nsClosed" role="dialog" aria-modal="true" aria-labelledby="nscT" hidden><div class="nsc"><button type="button" class="nsc-x" id="nscX" aria-label="Close">×</button><p class="nsc-k">NIGELSHOP</p><h2 id="nscT">Closed.<br>Open from 18:00.</h2><p>The shop opens every night from 18:00 to 06:00, your time. Come back after six.</p><form id="nscF"><label for="nscE">Leave your email and I'll let you know when it's open.</label><div class="nsc-r"><input id="nscE" type="email" required placeholder="you@company.com" autocomplete="email"><button type="submit">Notify me</button></div><p class="nsc-ok" id="nscOk" hidden>Thanks. Your mail app opened with the request, just hit send.</p></form></div></div><div id="veil" aria-hidden="true"></div><div id="nsGrain" aria-hidden="true"></div><canvas id="gl" aria-label="3D space with portfolio key visuals"></canvas>
+<div id="nsClosed" role="dialog" aria-modal="true" aria-labelledby="nscT" hidden><div class="nsc"><button type="button" class="nsc-x" id="nscX" aria-label="Close">×</button><p class="nsc-k">NIGELSHOP</p><h2 id="nscT">Closed.<br>Open from 18:00.</h2><p>The shop opens every night from 18:00 to 06:00, your time. Come back after six.</p><form id="nscF"><label for="nscE">Leave your email and I'll let you know when it's open.</label><div class="nsc-r"><input id="nscE" type="email" required placeholder="you@company.com" autocomplete="email"><button type="submit">Notify me</button></div><p class="nsc-ok" id="nscOk" hidden>Thanks. Your mail app opened with the request, just hit send.</p></form></div></div><div id="nsRcpt" role="dialog" aria-modal="true" aria-label="Receipt: Nigel Ooms, freelance creative and strategist, and the assortiment" tabindex="-1" hidden><img alt="NIGELSHOP receipt. Nigel Ooms, freelance creative &amp; strategist. Assortiment: 01 Creative concepting &amp; naming, 02 Brand &amp; communications strategy, 03 Strategy &amp; creative workshops, 04 Briefing &amp; creative exploration, 05 Influencer &amp; PR, 06 Content &amp; production, 07 Growth &amp; performance, 08 Brand experiences &amp; activation, 09 Copywriting &amp; transcreation, 10 Pitch &amp; award support."></div><div id="veil" aria-hidden="true"></div><div id="nsGrain" aria-hidden="true"></div><canvas id="gl" aria-label="3D space with portfolio key visuals"></canvas>
 <div class="cv" id="cv"><div style="margin-left:0"><b></b><span>Freelance creative &amp; strategist</span></div><div style="margin-left:0em"><b>01</b><span>Creative concepting &amp; naming</span></div><div style="margin-left:9em"><b>02</b><span>Brand &amp; communications strategy</span></div><div style="margin-left:5em"><b>03</b><span>Strategy &amp; creative workshops</span></div><div style="margin-left:13em"><b>04</b><span>Briefing &amp; creative exploration</span></div><div style="margin-left:3em"><b>05</b><span>Influencer &amp; PR</span></div><div style="margin-left:10em"><b>06</b><span>Content &amp; production</span></div><div style="margin-left:6em"><b>07</b><span>Growth &amp; performance</span></div><div style="margin-left:12em"><b>08</b><span>Brand experiences &amp; activation</span></div><div style="margin-left:2em"><b>09</b><span>Copywriting &amp; transcreation</span></div><div style="margin-left:8em"><b>10</b><span>Pitch &amp; award support</span></div></div>
 <div class="intro" id="intro"></div>
 <div class="hint" id="hint">Drag to look around · click the floor to move · click a case to open it</div>
@@ -602,7 +605,7 @@ addEventListener('popstate',()=>{const id=location.hash.slice(1),i=CASES.findInd
 
 // ---------- case rooms: each case is its own white box, info and media scattered through it
 const INK='#1f1b20',BLUE='#0000ff',MUTE='#6f6870';
-const caseFonts=(document.fonts&&document.fonts.load)?Promise.all(['400 110px "Clash Display"','italic 400 54px "Clash Display"','400 32px "Clash Display"','600 40px "Clash Display"','500 26px "Clash Display"'].map(f=>document.fonts.load(f))).catch(()=>{}):Promise.resolve();
+const caseFonts=(document.fonts&&document.fonts.load)?Promise.all(['600 110px "Clash Display"','600 32px "Clash Display"','italic 400 54px "Clash Display"','400 32px "Clash Display"','600 40px "Clash Display"','500 26px "Clash Display"'].map(f=>document.fonts.load(f))).catch(()=>{}):Promise.resolve();
 function wrapLines(g,text,max){const out=[];String(text).split('\n').forEach(par=>{let ln='';par.split(' ').forEach(w=>{const t=ln?ln+' '+w:w;if(g.measureText(t).width>max&&ln){out.push(ln);ln=w;}else ln=t;});out.push(ln);});return out;}
 function textBlock(spec){
   const c=document.createElement('canvas'),g=c.getContext('2d'),W=spec.w||900,ops=[];let y=6,maxW=0;
@@ -611,9 +614,10 @@ function textBlock(spec){
     if(p.t==='gap')y+=p.h;
     else if(p.t==='label')add('500 26px "Clash Display", ui-monospace, monospace',BLUE,p.s.toUpperCase(),40);
     else if(p.t==='line')add('500 24px "Clash Display", ui-monospace, monospace',MUTE,p.s.toUpperCase(),34);
-    else if(p.t==='name')add('400 110px "Clash Display", system-ui, sans-serif',INK,p.s,116);
+    else if(p.t==='name')add('600 110px "Clash Display", system-ui, sans-serif',INK,p.s,116);
     else if(p.t==='brand')add('400 72px "Clash Display", system-ui, sans-serif',INK,p.s,80);
     else if(p.t==='q')add('400 58px "Clash Display", system-ui, sans-serif',INK,p.s,66);
+    else if(p.t==='idea')add('600 32px "Clash Display", system-ui, sans-serif',INK,p.s,46);
     else if(p.t==='body')add('400 32px "Clash Display", system-ui, sans-serif',INK,p.s,46);
     else if(p.t==='big')add('600 40px "Clash Display", system-ui, sans-serif',INK,p.s,54);
     else if(p.t==='li'){add('400 32px "Clash Display", system-ui, sans-serif',INK,'–',46);y-=46;add(p.b?'600 34px "Clash Display", system-ui, sans-serif':'400 32px "Clash Display", system-ui, sans-serif',INK,p.s,p.b?48:46,W-40,36);}
@@ -624,7 +628,7 @@ function textBlock(spec){
   const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=4;return {tex:t,pw:c.width,ph:c.height};}
 function blocksFor(k,i){
   const B=[],n=CASES[(i+1)%CASES.length];
-  B.push({id:'title',parts:[{t:'line',s:k.line},{t:'gap',h:8},{t:'name',s:k.name}].concat(k.idea?[{t:'gap',h:12},{t:'body',s:k.idea}]:[]).concat(k.credit?[{t:'gap',h:14},{t:'line',s:k.credit}]:[]),w:900});
+  B.push({id:'title',parts:[{t:'line',s:k.line},{t:'gap',h:8},{t:'name',s:k.name}].concat(k.idea?[{t:'gap',h:12},{t:'idea',s:k.idea}]:[]).concat(k.credit?[{t:'gap',h:14},{t:'line',s:k.credit}]:[]),w:900});
   if(k.question)B.push({parts:[{t:'label',s:'The question'},{t:'q',s:k.question}],w:820});
   k.sections.forEach(([l,v])=>{const parts=[{t:'label',s:l}];
     if(Array.isArray(v)){if(l==='About me')v.forEach((p,j)=>{if(j)parts.push({t:'gap',h:16});parts.push({t:'body',s:p});});else v.forEach(x=>parts.push({t:'li',s:x,b:l==='Results'}));}
@@ -790,7 +794,7 @@ function buildCV(i,vh,vw,D){
 function wallTo(y){wallY=Math.max(wallBot,Math.min(wallTop,y));}
 // ---------- NACHTWINKEL MODE: the same work as products in a Brussels night shop ----------
 function nsIsOpen(){if(/[?&]open\b/.test(location.search))return true;const h=new Date().getHours();return h>=18||h<6;}
-let nsFX=0,nsFXT=0,nsReturn=false,nsZoom=0,nsZoomT=0,nsPtrs=new Map(),nsPinch=null,nsDoor=null,nsStage=0,nsStageT=0,nsVisited=false,NSon=false,NS=null,nsBuilding=null,nsYaw=0,nsPitch=-.1,nsTYaw=0,nsTPitch=-.1,nsDrag=null,nsDust=null,nsTube=null;const nsAnims=[];
+let nsReceipt=null,nsCase=null,nsFX=0,nsFXT=0,nsReturn=false,nsZoom=0,nsZoomT=0,nsPtrs=new Map(),nsPinch=null,nsDoor=null,nsStage=0,nsStageT=0,nsVisited=false,NSon=false,NS=null,nsBuilding=null,nsYaw=0,nsPitch=-.1,nsTYaw=0,nsTPitch=-.1,nsDrag=null,nsDust=null,nsTube=null;const nsAnims=[];
 const nsCam=new THREE.PerspectiveCamera(52,1,.05,60);
 const CI=id=>CASES.findIndex(c=>c.id===id);
 // what each label says: name, what I did, origin, price (= the result), unit
@@ -842,7 +846,7 @@ async function buildNS(){
   const BY=[.7,1.3,1.9,2.45];BY.forEach(y=>{add(mesh(new THREE.BoxGeometry(SW,.03,.45),board),SC,y,SZ);add(mesh(new THREE.BoxGeometry(SW,.05,.012),edge),SC,y-.005,-2.148);});
   // fillers, sparse: a night shop at 2am
   const r=seeded(4),cols=[0x2d5a2a,0x6b2a14,0x1d3c6b,0xd7c9a0,0x3a1f10,0x8b1d22,0x5d6b2a];
-  [[.3,1.9],[.5,1.9],[.95,1.9],[2.2,1.9],[2.45,1.9],[2.7,1.9],[1.8,1.3],[2.05,1.3],[2.6,1.3],[-2.5,.7],[-2.2,.7],[-1.3,.7],[.4,.7],[.7,.7],[2.4,.7]].forEach(([x,y],i)=>add(bottle(cols[i%cols.length],.34+r()*.16,.045+r()*.015),x,y+.015,SZ+.02));
+  [[.3,1.9],[.5,1.9],[.95,1.9],[2.2,1.9],[2.45,1.9],[2.7,1.9],[1.8,1.3],[2.05,1.3],[2.6,1.3],[-2.5,.7],[-2.2,.7],[-1.3,.7],[2.4,.7]].forEach(([x,y],i)=>add(bottle(cols[i%cols.length],.34+r()*.16,.045+r()*.015),x,y+.015,SZ+.02));
   for(let i=0;i<4;i++)add(mesh(new THREE.BoxGeometry(.34,.11,.18),FM({color:[0x1f4fa8,0xe9e6df,0xc23b22,0x1f4fa8][i]})),[-2.4,-2.04,2.2,2.56][i],2.45+.07,SZ);
   // the work, as products
   const put=async(id,make,H,x,y,z,ry=0,s=1)=>{const m=await make(H);const g=m.g;g.scale.setScalar(s);add(g,x,y,z,ry);mark(g,id);if(m.anim&&id==='tadaam-growth')nsAnims.push(m.anim);return g;};
@@ -851,18 +855,31 @@ async function buildNS(){
   for(let i=0;i<4;i++){const m=makeSolare(.52);m.g.remove(m.cg);add(m.g,-1.0+i*.19,top,SZ+.02+(i%2)*.04);mark(m.g,'solare');}S2.add(tag('solare',-.72,BY[2]-.07,-2.14,1,true));
   await put('tadaam-growth',makeModem,.4,1.55,top,SZ+.04);S2.add(tag('tadaam-growth',1.55,BY[2]-.07,-2.14));
   
-  // Watch4: the watch in its retail box
-  {const g=new THREE.Group(),bw=.3,bh=.4,bd=.16,bt=cTex(256,340,(x,W,H)=>{x.fillStyle='#111';x.fillRect(0,0,W,H);x.fillStyle='#fff';x.font='600 26px "Clash Display", Arial';x.textAlign='center';x.fillText('Galaxy Watch4',W/2,H-34);x.font='400 14px "Clash Display", Arial';x.fillStyle='#aaa';x.fillText('SAMSUNG',W/2,26);});
-    const dark=FM({color:0x151515});g.add(mesh(new THREE.BoxGeometry(bw,bh,bd),[dark,dark,dark,dark,FM({map:bt}),dark],0,bh/2,0));
-    const w=makeWatch(.3);w.g.scale.setScalar(.8);w.g.position.set(0,bh*.28,bd/2+.01);w.g.rotation.y=0;g.add(w.g);
-    g.add(mesh(new THREE.BoxGeometry(bw*.92,bh*.62,.005),new THREE.MeshStandardMaterial({color:0xddeeff,transparent:true,opacity:.18,roughness:.05}),0,bh*.56,bd/2+.12));
-    add(g,-2.25,mid,SZ+.02,.12);mark(g,'galaxy-watch4');S2.add(tag('galaxy-watch4',-2.25,BY[1]-.07,-2.14));}
-  // Editfest: a DVD between two fillers
-  {const im=await loadImg('lp/editfest.webp'),cv=cTex(256,360,(x,W,H)=>{x.fillStyle='#14110c';x.fillRect(0,0,W,H);if(im){const h=H*.66,w=h*im.width/im.height;x.drawImage(im,(W-w)/2,H*.2,w,h);}
-      x.fillStyle='#f2c34a';x.font='600 34px "Clash Display", Arial';x.textAlign='center';x.fillText('EDITFEST',W/2,42);x.fillStyle='#fff';x.font='400 14px "Clash Display", Arial';x.fillText('AN EXPERIMENT IN EDITING',W/2,66);});
-    const g=new THREE.Group(),bk=FM({color:0x111111});g.add(mesh(new THREE.BoxGeometry(.19,.27,.02),[bk,bk,bk,bk,FM({map:cv}),bk],0,.135,0));g.rotation.z=.06;add(g,-1.45,mid,SZ+.08,0);mark(g,'editfest');
-    [-1.72,-1.66,-1.2].forEach((x,i)=>add(mesh(new THREE.BoxGeometry(.02,.27,.19),FM({color:[0x2a3d8f,0x8f2a2a,0x2a2a2a][i]})),x,mid+.135,SZ));
-    S2.add(tag('editfest',-1.45,BY[1]-.07,-2.14));}
+  // Editfest: on a small TV with rabbit ears on the bottom shelf, next to crisps and an ashtray
+  {const im=await loadImg('lp/editfest.webp'),scrT=cTex(320,240,(x,W,H)=>{x.fillStyle='#0b0d10';x.fillRect(0,0,W,H);if(im){const s=Math.max(W/im.width,H/im.height),w=im.width*s,h=im.height*s;x.drawImage(im,(W-w)/2,(H-h)/2,w,h);}
+      x.fillStyle='rgba(0,0,0,.18)';for(let y=0;y<H;y+=3)x.fillRect(0,y,W,1);x.fillStyle='#f2c34a';x.font='600 26px "Clash Display", Arial';x.fillText('EDITFEST',14,H-16);});
+    const g=new THREE.Group(),sh=FM({color:0x2a2622,roughness:.6}),tw=.38,th=.27,td=.28,sm=new THREE.MeshBasicMaterial({map:scrT,fog:false});
+    g.add(mesh(new THREE.BoxGeometry(tw,th,td),sh,0,th/2,0));g.add(mesh(new THREE.BoxGeometry(tw*.7,th*.7,.02),sm,-.035,th/2+.005,td/2+.002));
+    g.add(mesh(new THREE.BoxGeometry(tw*.18,th*.7,.01),FM({color:0x3a3430}),tw*.38,th/2,td/2+.003));
+    [.07,.13].forEach(y=>{const k=mesh(new THREE.CylinderGeometry(.016,.016,.02,10),FM({color:0x999999}),tw*.38,y,td/2+.01);k.rotation.x=Math.PI/2;g.add(k);});
+    g.add(mesh(new THREE.SphereGeometry(.035,8,6,0,Math.PI*2,0,Math.PI/2),sh,0,th,0));
+    [-1,1].forEach(k=>{const a=mesh(new THREE.CylinderGeometry(.004,.004,.34,5),FM({color:0xbbbbbb,metalness:.6,roughness:.3}),0,0,0);a.position.set(k*.08,th+.15,0);a.rotation.z=-k*.55;g.add(a);});
+    add(g,1.05,BY[0]+.015,SZ+.04,-.12);mark(g,'editfest');S2.add(tag('editfest',1.05,BY[0]-.07,-2.14));
+    nsAnims.push(t=>{sm.color.setScalar(Math.sin(t*31)>.96?.8:1);});
+    // open bag of crisps
+    {const bag=cTex(128,160,(x,W,H)=>{x.fillStyle='#e8352b';x.fillRect(0,0,W,H);x.fillStyle='#f2c34a';x.beginPath();x.arc(W/2,H*.58,34,0,Math.PI*2);x.fill();x.fillStyle='#fff';x.font='700 24px Arial';x.textAlign='center';x.fillText('CHIPS',W/2,36);x.fillStyle='#c4271f';x.font='700 15px Arial';x.fillText('PAPRIKA',W/2,H*.62);});
+      const c=new THREE.Group(),bm=FM({map:bag,roughness:.35}),bs=FM({color:0xd32f27,roughness:.35});
+      const geo=new THREE.BoxGeometry(.17,.21,.07,3,3,1),pp=geo.attributes.position;for(let i=0;i<pp.count;i++){const y=pp.getY(i),x=pp.getX(i);pp.setZ(i,pp.getZ(i)*(1-Math.max(0,y)/.3)*(1-Math.abs(x)*1.5)+ (y>.09?Math.sin(x*40)*.012:0));}geo.computeVertexNormals();
+      c.add(mesh(geo,[bs,bs,bs,bs,bm,bs],0,.105,0));
+      for(let i=0;i<5;i++){const ch=mesh(new THREE.CircleGeometry(.025,6),FM({color:0xf0c86a,side:THREE.DoubleSide}),-.12+i*.035,.004+(i%2)*.003,.08+(i%3)*.02);ch.rotation.set(-Math.PI/2+.2*(i%2),0,i);c.add(ch);}
+      c.rotation.z=.12;add(c,.68,BY[0]+.015,SZ+.08,.25);}
+    // ashtray with two butts
+    {const t=new THREE.Group(),glass=new THREE.MeshStandardMaterial({color:0xb8d4d0,transparent:true,opacity:.7,roughness:.1});
+      t.add(mesh(new THREE.CylinderGeometry(.075,.065,.035,10,1,true),glass,0,.0175,0));t.add(mesh(new THREE.CylinderGeometry(.065,.065,.008,10),glass,0,.004,0));
+      t.add(mesh(new THREE.CylinderGeometry(.06,.06,.004,10),FM({color:0x8c8880}),0,.01,0));
+      [[-.02,.01,.4],[.025,-.015,-.9]].forEach(([x,z,r])=>{const b=new THREE.Group();b.add(mesh(new THREE.CylinderGeometry(.007,.007,.035,6),FM({color:0xd9a35a}),0,0,0));b.add(mesh(new THREE.CylinderGeometry(.007,.007,.02,6),FM({color:0xf4f1ea}),0,.027,0));b.add(mesh(new THREE.CylinderGeometry(.0072,.0072,.004,6),FM({color:0x333333}),0,.039,0));
+        b.rotation.set(Math.PI/2-.25,r,0);b.position.set(x,.03,z);t.add(b);});
+      add(t,1.42,BY[0]+.015,SZ+.1);}}
   // ROSIE: cigarette packs behind the counter
   {const pk=cTex(128,200,(x,W,H)=>{x.fillStyle='#0d0d0d';x.fillRect(0,0,W,H);x.fillStyle='#ff4fd8';x.font='700 30px "Clash Display", Arial';x.textAlign='center';x.fillText('ROSIE',W/2,58);
       x.fillStyle='#fff';x.fillRect(8,H-78,W-16,66);x.fillStyle='#000';x.font='600 12px Arial';x.fillText('WAARSCHUWING',W/2,H-58);x.font='400 11px Arial';x.fillText('één laatste job',W/2,H-40);x.fillText('kan levenslang duren',W/2,H-24);});
@@ -870,19 +887,56 @@ async function buildNS(){
     add(g,-.75,mid,SZ+.05,0);mark(g,'rosie');S2.add(tag('rosie',-.55,BY[1]-.07,-2.14));}
   // counter with candy, the register, the basket at the till
   const CX=.3,CZ=.85,CW=2.8,CD=.7,cw=FM({color:0xcfcdc3}),ck=FM({color:0x3a3a3a});
-  add(mesh(new THREE.BoxGeometry(CW,1,CD),cw),CX,.5,CZ);add(mesh(new THREE.BoxGeometry(CW+.06,.03,CD+.06),new THREE.MeshStandardMaterial({color:0xcfe8e4,transparent:true,opacity:.55,roughness:.05})),CX,1.015,CZ);
+  {const XL=CX-CW/2,XS=.35,XR=CX+CW/2,lw=XS-XL,rw=XR-XS,rx=(XS+XR)/2,G0=.66,G1=.96,FZc=CZ+CD/2;
+    add(mesh(new THREE.BoxGeometry(lw,1,CD),cw),XL+lw/2,.5,CZ);
+    // the display under the till: Watch4 between colourful boxes, behind glass
+    add(mesh(new THREE.BoxGeometry(rw,G0,CD),cw),rx,G0/2,CZ);add(mesh(new THREE.BoxGeometry(rw,1-G1,CD),cw),rx,(1+G1)/2,CZ);
+    add(mesh(new THREE.BoxGeometry(.04,G1-G0,CD),cw),XR-.02,(G0+G1)/2,CZ);add(mesh(new THREE.BoxGeometry(rw,G1-G0,.03),FM({color:0xf4f2ec})),rx,(G0+G1)/2,CZ-CD/2+.015);
+    add(mesh(new THREE.BoxGeometry(rw-.06,.008,CD-.04),FM({color:0xf4f2ec})),rx,G0+.004,CZ);
+    add(mesh(new THREE.BoxGeometry(rw-.08,.012,.02),GLOW(0xfff6e0,.9)),rx,G1-.012,FZc-.06);
+    {const pal=[0xff4fd8,0x2bd6c8,0xf2c34a,0x2b6bd6,0xff7a2b,0x7ad62b,0xd62b2b,0x8a4bff],r3=seeded(21);let x=XS+.05;
+      while(x<XR-.1){const w=.08+r3()*.1,h=.08+r3()*.16,d=.07+r3()*.06;add(mesh(new THREE.BoxGeometry(w,h,d),FM({color:pal[Math.floor(r3()*pal.length)]})),x+w/2,G0+.008+h/2,CZ-CD/2+.04+d/2+r3()*.08,(r3()-.5)*.2);
+        if(h<.15&&r3()>.4){const h2=.05+r3()*.06;add(mesh(new THREE.BoxGeometry(w*.8,h2,d*.8),FM({color:pal[Math.floor(r3()*pal.length)]})),x+w/2,G0+.008+h+h2/2,CZ-CD/2+.06+d/2,(r3()-.5)*.3);}
+        x+=w+.015;}
+      [[XS+.16,.18],[XR-.2,-.15]].forEach(([xx,ry])=>{const w=.1,h=.07;add(mesh(new THREE.BoxGeometry(w,h,.1),FM({color:pal[Math.floor(r3()*pal.length)]})),xx,G0+.008+h/2,FZc-.16,ry);});}
+    add(mesh(new THREE.PlaneGeometry(rw-.04,G1-G0),new THREE.MeshStandardMaterial({color:0xddeeff,transparent:true,opacity:.14,roughness:.05,depthWrite:false})),rx,(G0+G1)/2,FZc+.003);
+    nsCase={x:rx,y:G0+.008,z:FZc-.2};}add(mesh(new THREE.BoxGeometry(CW+.06,.03,CD+.06),new THREE.MeshStandardMaterial({color:0xcfe8e4,transparent:true,opacity:.55,roughness:.05})),CX,1.015,CZ);
   [.62].forEach(y=>add(mesh(new THREE.BoxGeometry(CW-.1,.025,.12),cw),CX,y,CZ+CD/2+.06));
   {const cc=[0xd62b2b,0x6b2bd6,0x2b6bd6,0xf2c34a,0x1d1d1d,0xe96a1a,0x2bb36b],r2=seeded(9);[.62].forEach(y=>{for(let x=-.95;x<1.6;x+=.085){const h=.03+r2()*.03;add(mesh(new THREE.BoxGeometry(.07,h,.09),FM({color:cc[Math.floor(r2()*cc.length)]})),x,y+.013+h/2,CZ+CD/2+.06);}});}
   // register + terminal
   const reg=new THREE.Group();reg.add(mesh(new THREE.BoxGeometry(.42,.12,.34),ck,0,.06,0));reg.add(mesh(new THREE.BoxGeometry(.36,.06,.18),FM({color:0x555555}),0,.15,.06));
   const scr=mesh(new THREE.BoxGeometry(.3,.2,.03),[ck,ck,ck,ck,GLOW(0x2ad18a,.6),ck],0,.3,-.1);scr.rotation.x=-.25;reg.add(scr);add(reg,1.32,1.03,CZ-.05);
   add(mesh(new THREE.BoxGeometry(.1,.04,.18),ck),1.62,1.05,CZ+.12);
+  // a small high stool behind the counter
+  {const g=new THREE.Group(),mt=FM({color:0x9aa0a6,metalness:.5,roughness:.4});g.add(mesh(new THREE.CylinderGeometry(.16,.15,.06,12),FM({color:0x8b1d22,roughness:.5}),0,.78,0));
+    [0,1,2,3].forEach(i=>{const a=i*Math.PI/2+Math.PI/4,l=mesh(new THREE.CylinderGeometry(.012,.012,.8,6),mt,Math.cos(a)*.11,.38,Math.sin(a)*.11);l.rotation.set(Math.sin(a)*.12,0,-Math.cos(a)*.12);g.add(l);});
+    {const ri=mesh(new THREE.TorusGeometry(.13,.008,4,12),mt,0,.3,0);ri.rotation.x=Math.PI/2;g.add(ri);}add(g,-1.38,0,CZ-.25);}
+  // the receipt by the register: who's behind the counter and what's on the shelves
+  {const IT=['Creative concepting & naming','Brand & communications strategy','Strategy & creative workshops','Briefing & creative exploration','Influencer & PR','Content & production','Growth & performance','Brand experiences & activation','Copywriting & transcreation','Pitch & award support'];
+    const rt=cTex(600,1280,(x,W,H)=>{x.fillStyle='#f7f5ee';x.fillRect(0,0,W,H);x.fillStyle='#1d1d1d';x.textAlign='center';
+      x.font='600 64px "Clash Display", Arial';x.fillText('NIGELSHOP',W/2,110);x.font='400 26px "Clash Display", Arial';x.fillText('open 18:00 to 06:00',W/2,152);
+      const dash=y=>{x.font='400 26px ui-monospace, "Courier New", monospace';x.fillText('- '.repeat(22),W/2,y);};dash(200);
+      x.font='600 40px "Clash Display", Arial';x.fillText('NIGEL OOMS',W/2,262);x.font='400 26px "Clash Display", Arial';x.fillText('FREELANCE CREATIVE & STRATEGIST',W/2,302);dash(350);
+      x.textAlign='left';x.font='600 24px "Clash Display", Arial';x.fillText('ASSORTIMENT',44,404);
+      IT.forEach((t,i)=>{const y=462+i*58;x.font='600 26px ui-monospace, "Courier New", monospace';x.fillText(String(i+1).padStart(2,'0'),44,y);let f=26;x.font='600 '+f+'px "Clash Display", Arial';while(x.measureText(t.toUpperCase()).width>W-148&&f>16){f--;x.font='600 '+f+'px "Clash Display", Arial';}x.fillText(t.toUpperCase(),104,y);});
+      x.textAlign='center';dash(1060);x.font='400 26px "Clash Display", Arial';x.fillText('Cash & card accepted',W/2,1120);
+      x.font='400 22px ui-monospace, "Courier New", monospace';x.fillText(new Date().toLocaleDateString('en-GB')+'  '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),W/2,1170);
+      x.fillStyle='#e0ddd2';for(let i=0;i<W;i+=20){x.beginPath();x.moveTo(i,H);x.lineTo(i+10,H-10);x.lineTo(i+20,H);x.fill();}});
+    nsReceipt=rt.image;
+    const gm=new THREE.PlaneGeometry(.17,.36,1,12),ps=gm.attributes.position;for(let i=0;i<ps.count;i++){const yy=ps.getY(i);if(yy>.1){const k=(yy-.1)/.08;ps.setZ(i,k*k*.035);}}gm.computeVertexNormals();
+    const r=mesh(gm,new THREE.MeshBasicMaterial({map:rt,side:THREE.DoubleSide,fog:false}),.88,1.036,CZ+.12);r.rotation.set(-Math.PI/2+.35,0,.22);r.userData.nsRcpt=1;S2.add(r);}
   // CV: the passport photo taped to the register
   {const im=await loadImg('img/about-00.webp'),ph=cTex(160,220,(x,W,H)=>{x.fillStyle='#fff';x.fillRect(0,0,W,H);if(im)x.drawImage(im,295,62,97,138,10,10,W-20,H-30);x.fillStyle='#444';x.font='400 12px Arial';x.fillText('NIGEL · CV',12,H-6);});
     const p=mesh(new THREE.PlaneGeometry(.12,.165),new THREE.MeshBasicMaterial({map:ph,fog:false}),1.12,1.22,CZ+.13);p.rotation.set(-.05,-.15,.08);p.userData.caseIdx=CI('about');S2.add(p);
     const tp=mesh(new THREE.PlaneGeometry(.05,.015),new THREE.MeshBasicMaterial({color:0xf5f0c8,transparent:true,opacity:.8}),1.12,1.3,CZ+.135);tp.rotation.z=.08;S2.add(tp);}
   await put('udav-krit',makeBasket,.4,-.72,1.03,CZ-.02,.2);S2.add(tag('udav-krit',-.72,.93,CZ+CD/2+.005,1,true));
   {const m=await makePizza(.5,-1.15);add(m.g,.08,1.03,CZ-.08,-.2);mark(m.g,'tadaam');}S2.add(tag('tadaam',.08,.93,CZ+CD/2+.005,1,true));
+  // Watch4: the watch in its retail box
+  {const g=new THREE.Group(),bw=.3,bh=.4,bd=.16,bt=cTex(256,340,(x,W,H)=>{x.fillStyle='#111';x.fillRect(0,0,W,H);x.fillStyle='#fff';x.font='600 26px "Clash Display", Arial';x.textAlign='center';x.fillText('Galaxy Watch4',W/2,H-34);x.font='400 14px "Clash Display", Arial';x.fillStyle='#aaa';x.fillText('SAMSUNG',W/2,26);});
+    const dark=FM({color:0x151515});g.add(mesh(new THREE.BoxGeometry(bw,bh,bd),[dark,dark,dark,dark,FM({map:bt}),dark],0,bh/2,0));
+    const w=makeWatch(.3);w.g.scale.setScalar(.8);w.g.position.set(0,bh*.28,bd/2+.01);w.g.rotation.y=0;g.add(w.g);
+    g.add(mesh(new THREE.BoxGeometry(bw*.92,bh*.62,.005),new THREE.MeshStandardMaterial({color:0xddeeff,transparent:true,opacity:.18,roughness:.05}),0,bh*.56,bd/2+.12));
+    g.scale.setScalar(.6);add(g,nsCase.x+.05,nsCase.y,nsCase.z,-.08);mark(g,'galaxy-watch4');S2.add(tag('galaxy-watch4',nsCase.x+.5,.745,.85+.35+.006,.7));}
   // C·TV: the security camera hanging from the ceiling, labelled C·TV
   {const g=new THREE.Group(),wh=FM({color:0xe8e8e3,roughness:.5}),dk=FM({color:0x222222});
     g.add(mesh(new THREE.CylinderGeometry(.05,.05,.02,8),wh,0,0,0));g.add(mesh(new THREE.CylinderGeometry(.015,.015,.55,6),wh,0,-.275,0));
@@ -929,13 +983,7 @@ async function buildNS(){
     const neon=(t,c)=>cTex(320,110,(x,W,H)=>{x.clearRect(0,0,W,H);x.strokeStyle=c;x.lineWidth=6;x.strokeRect(6,6,W-12,H-12);x.fillStyle=c;x.font='700 60px "Clash Display", Arial';x.textAlign='center';x.textBaseline='middle';x.fillText(t,W/2,H/2+4);});
     const nOpen=neon('OPEN','#ff4a4a'),nClosed=neon('CLOSED','#8a4444'),opm=new THREE.MeshBasicMaterial({map:nOpen,transparent:true,fog:false});add(mesh(new THREE.PlaneGeometry(.75,.26),opm),-2.1,1.9,FZ-.05);
     nsAnims.push(t=>{const o=nsIsOpen();opm.map=o?nOpen:nClosed;opm.opacity=o&&Math.sin(t*23)>.97?.35:1;});
-    // window stickers: the odd sketches and visuals from the cases
     const SK=['Creative concepting & naming','Brand & communications strategy','Strategy & creative workshops','Briefing & creative exploration','Influencer & PR','Content & production','Growth & performance','Brand experiences & activation','Copywriting & transcreation','Pitch & award support'];
-    const nm=cTex(1024,820,(x,W,H)=>{x.clearRect(0,0,W,H);x.fillStyle='#ffffff';x.textAlign='left';x.font='600 64px "Clash Display", Arial';x.fillText('NIGEL OOMS',90,150);x.font='400 34px "Clash Display", Arial';x.fillText('FREELANCE CREATIVE & STRATEGIST',90,205);
-      x.font='600 22px "Clash Display", Arial';x.fillText('A S S O R T I M E N T',90,292);x.fillRect(90,304,260,3);
-      let fs=34;x.font='600 '+fs+'px "Clash Display", Arial';const mw=Math.max(...SK.map(t=>x.measureText(t.toUpperCase()).width));fs=Math.min(30,Math.floor(34*560/mw));x.font='600 '+fs+'px "Clash Display", Arial';
-      SK.forEach((t,i)=>{x.fillText(String(i+1).padStart(2,'0'),90,356+i*44);x.fillText(t.toUpperCase(),150,356+i*44);});});
-    {const w=add(mesh(new THREE.PlaneGeometry(2.35,1.88),new THREE.MeshBasicMaterial({map:nm,transparent:true,depthWrite:false,fog:false})),2.125,1.5,FZ+.035);w.userData.nsWin=1;}
     // inside, above the door: the green exit sign
     {const ex=cTex(512,128,(x,W,H)=>{x.fillStyle='#0d7a3c';x.fillRect(0,0,W,H);x.fillStyle='#fff';x.font='700 44px "Clash Display", Arial';x.textAlign='center';x.textBaseline='middle';x.fillText('UITGANG · EXIT',W/2,H/2+3);});
       const m=add(mesh(new THREE.BoxGeometry(.8,.2,.06),[FM({color:0xeeeeee}),FM({color:0xeeeeee}),FM({color:0xeeeeee}),FM({color:0xeeeeee}),FM({color:0xeeeeee}),new THREE.MeshBasicMaterial({map:ex,fog:false})]),0,2.48,FZ-.12);m.userData.nsExit=1;}
@@ -985,20 +1033,22 @@ function nsTick(t,dt){const a=innerWidth/innerHeight;if(nsCam.aspect!==a){nsCam.
   nsCam.position.set((a<1?-.2:0)*e+nsFX*zz*(1-e),dy+(1.65-dy)*e,dz+(iz-dz)*e);nsCam.rotation.set(nsPitch+(a<1?-.03:0)+(1-e)*dp,nsYaw,0,'YXZ');
   if(!reduce){nsAnims.forEach(f=>f(t,dt));if(nsDust){const p=nsDust.geometry.attributes.position;for(let i=0;i<p.count;i++){let y=p.getY(i)-dt*.03*(1+(i%5)*.3);if(y<0)y+=3;p.setY(i,y);p.setX(i,p.getX(i)+Math.sin(t*.3+i)*dt*.01);}p.needsUpdate=true;}
     if(nsTube)nsTube.intensity=.85*(Math.sin(t*37)>.985?.55:1);}}
-function nsHit(x,y){if(!NS)return null;ndc.set(x/innerWidth*2-1,-(y/innerHeight)*2+1);ray.setFromCamera(ndc,nsCam);const h=ray.intersectObjects(NS.children,true).find(h=>{const u=h.object.userData;return (u.caseIdx!==undefined&&u.caseIdx>=0)||u.nsExit||u.nsWin;});return h?h.object.userData:null;}
+function nsHit(x,y){if(!NS)return null;ndc.set(x/innerWidth*2-1,-(y/innerHeight)*2+1);ray.setFromCamera(ndc,nsCam);const h=ray.intersectObjects(NS.children,true).find(h=>{const u=h.object.userData;return (u.caseIdx!==undefined&&u.caseIdx>=0)||u.nsExit||u.nsWin||u.nsRcpt;});return h?h.object.userData:null;}
 function nsPick(x,y){const u=nsHit(x,y);return u&&u.caseIdx!==undefined&&u.caseIdx>=0?u.caseIdx:null;}
 async function setNS(on){if(on===NSon)return;const b=document.getElementById('nsBtn');
   if(on){if(world==='case')exitCase();if(!NS){b.textContent='Opening…';nsBuilding=nsBuilding||(fontsReady.then(buildNS));await nsBuilding;}if(!nsVisited){nsStage=nsStageT=0;nsVisited=true;}else{nsStage=nsStageT=1;}NSon=true;document.body.classList.add('ns');b.textContent='The space';b.setAttribute('aria-pressed','true');nsTYaw=nsYaw=0;nsTPitch=nsPitch=-.1;}
   else{NSon=false;document.body.classList.remove('ns');b.textContent='Nigelshop';b.setAttribute('aria-pressed','false');}}
 document.getElementById('nsBtn').addEventListener('click',()=>setNS(!NSon));
 function nsOpenCase(i){if(CASES[i].cv){openPage(i);return;}nsReturn=true;document.getElementById('cbRoom').textContent='← Back to the shop';setNS(false);enterCase(i);}
-function nsDoorClick(u){if(u&&u.nsWin&&nsFXT===0){nsFXT=2.125;nsZoomT=1;return;}if(nsZoomT<.6||nsFXT!==0){nsFXT=0;nsZoomT=1;return;}if(!nsIsOpen()){nsClosedOpen();return;}nsStageT=1;}
+function nsDoorClick(u){if(nsZoomT<.6||nsFXT!==0){nsFXT=0;nsZoomT=1;return;}if(!nsIsOpen()){nsClosedOpen();return;}nsStageT=1;}
+function nsRcptOpen(){if(!nsReceipt)return;const d=document.getElementById('nsRcpt');d.querySelector('img').src=nsReceipt.toDataURL('image/png');d.hidden=false;setTimeout(()=>{try{d.focus();}catch(e){}},50);}
+{const d=document.getElementById('nsRcpt');d.addEventListener('click',()=>{d.hidden=true;});addEventListener('keydown',e=>{if(e.key==='Escape'&&!d.hidden)d.hidden=true;});}
 function nsClosedOpen(){const d=document.getElementById('nsClosed');d.hidden=false;setTimeout(()=>{try{document.getElementById('nscE').focus();}catch(e){}},50);}
 addEventListener('pointerdown',e=>{if(!NSon||e.target!==cvs)return;nsPtrs.set(e.pointerId,[e.clientX,e.clientY]);if(nsPtrs.size===2&&nsStageT<1){const [p1,p2]=[...nsPtrs.values()];nsPinch={d:Math.hypot(p1[0]-p2[0],p1[1]-p2[1]),z:nsZoomT};nsDrag=null;e.stopPropagation();return;}nsDrag={x:e.clientX,y:e.clientY,yaw:nsTYaw,pitch:nsTPitch,moved:0};e.stopPropagation();},true);
 addEventListener('pointermove',e=>{if(!NSon)return;if(nsPtrs.has(e.pointerId))nsPtrs.set(e.pointerId,[e.clientX,e.clientY]);if(nsPinch&&nsPtrs.size===2){const [p1,p2]=[...nsPtrs.values()];nsZoomT=Math.max(0,Math.min(1,nsPinch.z+(Math.hypot(p1[0]-p2[0],p1[1]-p2[1])-nsPinch.d)/250));e.stopPropagation();return;}if(nsDrag){const dx=e.clientX-nsDrag.x,dy=e.clientY-nsDrag.y;nsDrag.moved=Math.max(nsDrag.moved,Math.abs(dx)+Math.abs(dy));
     nsTYaw=nsStage>=.98?nsDrag.yaw+dx*.004:Math.max(-.75,Math.min(.75,nsDrag.yaw+dx*.004));nsTPitch=Math.max(-.45,Math.min(.25,nsDrag.pitch+dy*.003));e.stopPropagation();}
   else if(e.target===cvs&&e.pointerType==='mouse')cvs.style.cursor=nsStageT<1||nsHit(e.clientX,e.clientY)?'pointer':'grab';},true);
-addEventListener('pointerup',e=>{if(!NSon)return;nsPtrs.delete(e.pointerId);if(nsPinch){if(nsPtrs.size<2)nsPinch=null;e.stopPropagation();return;}if(!nsDrag)return;const d=nsDrag;nsDrag=null;e.stopPropagation();if(d.moved<6){const u=nsHit(e.clientX,e.clientY);if(nsStageT<1){nsDoorClick(u);return;}if(nsStage<.98)return;if(u&&u.nsExit){nsYaw=Math.atan2(Math.sin(nsYaw),Math.cos(nsYaw));nsTYaw=0;nsTPitch=-.1;nsZoomT=0;nsFXT=0;nsStageT=0;return;}if(u&&u.caseIdx>=0)nsOpenCase(u.caseIdx);}},true);
+addEventListener('pointerup',e=>{if(!NSon)return;nsPtrs.delete(e.pointerId);if(nsPinch){if(nsPtrs.size<2)nsPinch=null;e.stopPropagation();return;}if(!nsDrag)return;const d=nsDrag;nsDrag=null;e.stopPropagation();if(d.moved<6){const u=nsHit(e.clientX,e.clientY);if(nsStageT<1){nsDoorClick(u);return;}if(nsStage<.98)return;if(u&&u.nsExit){nsYaw=Math.atan2(Math.sin(nsYaw),Math.cos(nsYaw));nsTYaw=0;nsTPitch=-.1;nsZoomT=0;nsFXT=0;nsStageT=0;return;}if(u&&u.nsRcpt){nsRcptOpen();return;}if(u&&u.caseIdx>=0)nsOpenCase(u.caseIdx);}},true);
 addEventListener('wheel',e=>{if(NSon){e.stopPropagation();if(nsStageT<1&&pageIdx<0)nsZoomT=Math.max(0,Math.min(1,nsZoomT-e.deltaY*.0015));}},{capture:true,passive:true});
 if(!location.hash)setNS(true);else{nsReturn=true;nsVisited=true;document.getElementById('cbRoom').textContent='← Back to the shop';}
 {const d=document.getElementById('nsClosed'),f=document.getElementById('nscF');document.getElementById('nscX').onclick=()=>{d.hidden=true;};d.addEventListener('click',e=>{if(e.target===d)d.hidden=true;});
