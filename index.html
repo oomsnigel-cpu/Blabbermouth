@@ -340,7 +340,7 @@ function makeCharlatan(H){const g=new THREE.Group(),r=H*.3,cy=H*.5,tb=r*.024,blu
   const end=cu.getPointAt(1),tan=cu.getTangentAt(1),hd=mesh(new THREE.OctahedronGeometry(r*.13),FM({color:0xdfe4ff,emissive:0x222244}),end.x,end.y,end.z);hd.scale.set(1,.65,1.8);hd.lookAt(end.clone().add(tan));sn.add(hd);
   const tg=rod(end.clone().addScaledVector(tan,r*.15),end.clone().addScaledVector(tan,r*.32),r*.012,new THREE.MeshBasicMaterial({color:0xff2a2a,fog:false}));sn.add(tg);
   return {g};}
-// The Quiet Record: a small low-poly Earth riding its orbit, "We are here"
+// The Quiet Record: a small low-poly Earth orbiting around the case text
 function makeQuiet(H){const g=new THREE.Group(),R=H*.55,cy=H*.42,er=R*.15;
   const orb=new THREE.Group();orb.position.y=cy;orb.rotation.x=.5;g.add(orb);
   const ring=mesh(new THREE.TorusGeometry(R,R*.075,4,30),FM({color:0x2a9c86,emissive:0x0d3a31,emissiveIntensity:.3,roughness:.5}));ring.rotation.x=Math.PI/2;ring.scale.z=.6;orb.add(ring);
@@ -348,10 +348,8 @@ function makeQuiet(H){const g=new THREE.Group(),R=H*.55,cy=H*.42,er=R*.15;
   for(let i=0;i<n;i+=3){C.setHex(pal[Math.floor(r()*pal.length)]).convertSRGBToLinear();for(let k=0;k<3;k++)col.push(C.r,C.g,C.b);}
   geo.setAttribute('color',new THREE.Float32BufferAttribute(col,3));
   const ep=new THREE.Group();orb.add(ep);const earth=mesh(geo,FM({vertexColors:true,roughness:.7}),0,er*.55,0);ep.add(earth);
-  const lt=cTex(512,256,(x,W,Hh)=>{x.clearRect(0,0,W,Hh);x.fillStyle='#151a2e';x.textAlign='center';x.textBaseline='middle';x.font='600 64px "Clash Display", Arial, sans-serif';
-    const sp=(t,y)=>{const ch=t.split(''),ws=ch.map(c=>x.measureText(c).width+14),tw=ws.reduce((a,b)=>a+b,0);let px=W/2-tw/2;ch.forEach((c,i)=>{x.fillText(c,px+ws[i]/2,y);px+=ws[i];});};sp('We are',86);sp('here',170);});
-  const lab=new THREE.Sprite(new THREE.SpriteMaterial({map:lt,transparent:true,depthWrite:false,fog:false}));lab.scale.set(R*.95,R*.475,1);orb.add(lab);
-  return {g,spin:false,anim:t=>{const a=t*.22;ep.position.set(Math.cos(a)*R,0,Math.sin(a)*R);earth.rotation.y=t*.8;orb.rotation.y=Math.sin(t*.15)*.2;}};}
+
+  return {g,spin:false,cy,anim:t=>{const a=t*.22;ep.position.set(Math.cos(a)*R,0,Math.sin(a)*R);earth.rotation.y=t*.8;orb.rotation.y=Math.sin(t*.15)*.2;}};}
 // EDITFEST: the runner on an edit timeline, playhead moving
 async function makeEdit(H){const g=new THREE.Group(),tlh=H*.05,p=await lowPolyPhoto('lp/editfest.webp',H*.9,{cols:18,depth:.3,gain:.9});p.g.position.y=tlh*1.6;g.add(p.g);
   const tw=Math.max(p.w*1.5,H*.7);g.add(mesh(new THREE.BoxGeometry(tw,tlh,tlh*1.6),FM({color:0x222225}),0,tlh/2,0));
@@ -403,7 +401,9 @@ const TXL={
   'la-maison':(M,h,tw,th)=>[.62+tw/2,h/2+.35-th/2,-.15,-.75,1],
   'udav-krit':(M,h,tw,th)=>[0,h/2+th*.2,-.75,0,1.1],
   'tadaam':(M,h,tw,th)=>[.25-tw/2,h/2-th/2+.15,-.25,.75,1],
-  'about':(M,h,tw,th)=>[.15+tw/2,h*.125,0,-.8,1]};
+  'about':(M,h,tw,th)=>[.15+tw/2,h*.125,0,-.8,1],
+  'quiet-record':(M,h,tw,th)=>{const sc=Math.min(1,2.2/tw);return [0,M.cy-h/2,0,0,sc];},
+  'editfest':(M,h,tw,th)=>[.15+tw/2,h*.15,0,-.6,1]};
 const MODELS={solare:makeSolare,modem:makeModem,pizza:makePizza,basket:makeBasket,beam:makeBeam,watch:makeWatch,charlatan:makeCharlatan,rosie:makeRosie,quiet:makeQuiet,edit:makeEdit,face:makeFace,cointreau:makeCointreau};
 const items=[];
 CASES.forEach(async(k,i)=>{
