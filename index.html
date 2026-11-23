@@ -332,17 +332,18 @@ function makeCharlatan(H){const g=new THREE.Group(),w=H*.95,hh=w*.5,d=w*.09,cy=H
   g.add(mesh(new THREE.BoxGeometry(w*.995,hh,d*.9),GLOW(0xff00ff,.4),0,cy+hh*.045,-d*.12));
   g.add(mesh(new THREE.BoxGeometry(w*.99,hh,d*.8),GLOW(0x00e5ff,.4),0,cy+hh*.085,-d*.24));
   return {g,anim:t=>{g.position.y=Math.sin(t*1.1)*H*.02;}};}
-// The Quiet Record: a waveform drawn as a constellation on the night-blue record, sound rings drifting out
-function makeQuiet(H){const g=new THREE.Group(),R=H*.45,cy=H*.5,z0=R*.04;
-  const disc=mesh(new THREE.CylinderGeometry(R,R,R*.06,14),FM({color:0x151a2e,roughness:.9}),0,cy,0);disc.rotation.x=Math.PI/2;g.add(disc);
-  const peach=GLOW(0xf6caa0,.7),N=11,pts=[];
-  for(let i=0;i<N;i++){const u=i/(N-1),x=(u-.5)*R*1.5,amp=Math.sin(u*Math.PI)*R*.55*(.45+.55*Math.abs(Math.sin(i*1.7)));pts.push(new THREE.Vector3(x,cy+(i%2?1:-1)*amp,z0+R*.03));}
-  const stars=pts.map(p=>{const m=mesh(new THREE.OctahedronGeometry(R*.045),GLOW(0xf6caa0,.7),p.x,p.y,p.z);g.add(m);return m;});
-  for(let i=0;i<N-1;i++)g.add(rod(pts[i],pts[i+1],R*.008,peach));
-  const r=seeded(11),dust=GLOW(0xf6caa0,.5);for(let i=0;i<26;i++){const a=r()*Math.PI*2,d=Math.sqrt(r())*R*.92;g.add(mesh(new THREE.OctahedronGeometry(R*(.008+r()*.012)),dust,Math.cos(a)*d,cy+Math.sin(a)*d,z0+R*.01));}
-  const rings=[0,1,2].map(()=>{const m=mesh(new THREE.TorusGeometry(R*.5,R*.008,3,28),new THREE.MeshBasicMaterial({color:0xf6caa0,transparent:true,fog:false}),0,cy,z0+R*.02);g.add(m);return m;});
-  return {g,spin:false,anim:t=>{g.rotation.y=Math.sin(t*.4)*.4;rings.forEach((m,i)=>{const f=(t*.25+i/3)%1;m.scale.setScalar(.25+f*1.65);m.material.opacity=Math.sin(f*Math.PI)*.8;m.visible=f*1.9<1.7;});
-    stars.forEach((m,i)=>m.material.emissiveIntensity=.5+.4*Math.sin(t*2+i*1.9));}};}
+// The Quiet Record: a small low-poly Earth riding its orbit, "We are here"
+function makeQuiet(H){const g=new THREE.Group(),R=H*.55,cy=H*.42,er=R*.15;
+  const orb=new THREE.Group();orb.position.y=cy;orb.rotation.x=.5;g.add(orb);
+  const ring=mesh(new THREE.TorusGeometry(R,R*.075,4,30),FM({color:0x2a9c86,emissive:0x0d3a31,emissiveIntensity:.3,roughness:.5}));ring.rotation.x=Math.PI/2;ring.scale.z=.6;orb.add(ring);
+  const geo=new THREE.IcosahedronGeometry(er,1),n=geo.attributes.position.count,col=[],C=new THREE.Color(),r=seeded(21),pal=[0x2f68c8,0x2f68c8,0x2f68c8,0x2f68c8,0x3b78d8,0x3b78d8,0x6cc04a,0x6cc04a,0xf2a03a,0xe94b3c];
+  for(let i=0;i<n;i+=3){C.setHex(pal[Math.floor(r()*pal.length)]).convertSRGBToLinear();for(let k=0;k<3;k++)col.push(C.r,C.g,C.b);}
+  geo.setAttribute('color',new THREE.Float32BufferAttribute(col,3));
+  const ep=new THREE.Group();orb.add(ep);const earth=mesh(geo,FM({vertexColors:true,roughness:.7}),0,er*.55,0);ep.add(earth);
+  const lt=cTex(512,256,(x,W,Hh)=>{x.clearRect(0,0,W,Hh);x.fillStyle='#151a2e';x.textAlign='center';x.textBaseline='middle';x.font='600 64px "Familjen Grotesk", Arial, sans-serif';
+    const sp=(t,y)=>{const ch=t.split(''),ws=ch.map(c=>x.measureText(c).width+14),tw=ws.reduce((a,b)=>a+b,0);let px=W/2-tw/2;ch.forEach((c,i)=>{x.fillText(c,px+ws[i]/2,y);px+=ws[i];});};sp('We are',86);sp('here',170);});
+  const lab=new THREE.Sprite(new THREE.SpriteMaterial({map:lt,transparent:true,depthWrite:false,fog:false}));lab.scale.set(R*.62,R*.31,1);lab.position.set(0,-er*1.3,0);ep.add(lab);
+  return {g,spin:false,anim:t=>{const a=t*.22;ep.position.set(Math.cos(a)*R,0,Math.sin(a)*R);earth.rotation.y=t*.8;orb.rotation.y=Math.sin(t*.15)*.2;}};}
 // EDITFEST: the runner on an edit timeline, playhead moving
 async function makeEdit(H){const g=new THREE.Group(),tlh=H*.05,p=await lowPolyPhoto('lp/editfest.webp',H*.9,{cols:18,depth:.3,gain:.9});p.g.position.y=tlh*1.6;g.add(p.g);
   const tw=Math.max(p.w*1.5,H*.7);g.add(mesh(new THREE.BoxGeometry(tw,tlh,tlh*1.6),FM({color:0x222225}),0,tlh/2,0));
