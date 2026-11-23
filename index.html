@@ -396,6 +396,14 @@ function makeCointreau(H){const g=new THREE.Group(),bw=H*.21,bh=H*.62,sh=H*.07,n
   const wd=mesh(pacman(.11*u,1/6,.035*u),FM({color:0x8cc63f}),.25*u,.37*u,0);wd.rotation.set(Math.PI/2,0,.4);mg.add(wd);
   [[0xf28a1a,H*.1,bw*2.2,H*.1,bw*1.6],[0x9ccc2a,H*.075,-bw*3.5,H*.075,-bw*.4],[0xf5d21f,H*.07,bw*3.6,H*.07,bw*1.2]].forEach(([c,r,x,y,z])=>g.add(mesh(new THREE.IcosahedronGeometry(r,1),FM({color:c,roughness:.7}),x,y,z)));
   return {g};}
+// where each case's text sits against its 3D model, so the two read as one piece: [x, y, z, shift model x, scale] in the model's frame
+const TXL={
+  'galaxy-s23':(M,h,tw,th)=>{const sc=Math.min(1,1.9/tw);return [0,h/2-th*sc/2-.05,-.25,0,sc];},
+  'solare':(M,h,tw,th)=>[.42+tw/2,h/2-.2-th/2,0,-.55,1],
+  'la-maison':(M,h,tw,th)=>[.62+tw/2,h/2+.35-th/2,-.15,-.75,1],
+  'udav-krit':(M,h,tw,th)=>[0,h/2+th*.2,-.75,0,1.1],
+  'tadaam':(M,h,tw,th)=>[.25-tw/2,h/2-th/2+.15,-.25,.75,1],
+  'about':(M,h,tw,th)=>[.15+tw/2,h*.125,0,-.8,1]};
 const MODELS={solare:makeSolare,modem:makeModem,pizza:makePizza,basket:makeBasket,beam:makeBeam,watch:makeWatch,charlatan:makeCharlatan,rosie:makeRosie,quiet:makeQuiet,edit:makeEdit,face:makeFace,cointreau:makeCointreau};
 const items=[];
 CASES.forEach(async(k,i)=>{
@@ -404,7 +412,7 @@ CASES.forEach(async(k,i)=>{
   if(k.vid&&!k.model){const v=document.createElement('video');v.src=k.vid;v.muted=true;v.loop=true;v.playsInline=true;v.setAttribute('playsinline','');v.autoplay=true;v.play().catch(()=>{});
     tex=new THREE.VideoTexture(v);tex.encoding=THREE.sRGBEncoding;ar=k.var||384/480;k.video=v;}
   else if(!k.model){[tex,ar]=await texFromImg(A[k.img+'_b']);if(A[k.img+'_f'])[front]=await texFromImg(A[k.img+'_f']);}
-  let model=null;if(k.model&&MODELS[k.model]){model=await MODELS[k.model](k.mh||2.7);if(!model.w){const bb=new THREE.Box3().setFromObject(model.g);model.w=Math.max(bb.max.x-bb.min.x,bb.max.z-bb.min.z);model.h=bb.max.y;}ar=model.w/model.h;}
+  let model=null;if(k.model&&MODELS[k.model]){model=await MODELS[k.model](k.mh||2.7);{const bb=new THREE.Box3().setFromObject(model.g);model.x0=bb.min.x;model.x1=bb.max.x;if(!model.w){model.w=Math.max(bb.max.x-bb.min.x,bb.max.z-bb.min.z);model.h=bb.max.y;}}ar=model.w/model.h;}
   const h=model?model.h:k.h,w=h*ar,y=s.y+h/2-.6;
   const m=new THREE.Group();m.position.y=y;grp.add(m);
   if(model){model.g.position.y=-h/2;m.add(model.g);}
@@ -416,11 +424,12 @@ CASES.forEach(async(k,i)=>{
     fm.position.z=G;fm.scale.setScalar((D-G)/D);m.add(fm);}
   }
   const sh=new THREE.Mesh(new THREE.PlaneGeometry(w*.9,.9),new THREE.MeshBasicMaterial({map:shadowTex,transparent:true,depthWrite:false}));sh.rotation.x=-Math.PI/2;sh.position.set(0,FL+.01,.3);grp.add(sh);
-  let txH=0;{await fontsReady;if(k.cascade){const [tt,tar,px]=cascadeTex(k.title,k.cascade);const tw=px/240,th=tw/tar;
+  let txH=0,fc=null;{await fontsReady;if(k.cascade){const [tt,tar,px]=cascadeTex(k.title,k.cascade);const tw=px/240,th=tw/tar;
     const tm=new THREE.Mesh(new THREE.PlaneGeometry(tw,th),new THREE.MeshBasicMaterial({map:tt,transparent:true,depthWrite:false,side:THREE.DoubleSide,fog:false}));
-    if(model){tm.position.set(0,h/2+th/2+.35,.1);txH=th+.35;}else if(k.fixed)tm.position.set(-w/2-tw/2-.35,h/2-th/2,.1);else tm.position.set(-w/2+tw/2-.25,h/2-th/2-.2,.3);m.add(tm);}}
+    if(model){const L=TXL[k.id];let [tx,ty,tz,mx,sc]=L?L(model,h,tw,th):[0,h/2+th/2+.35,.1,0,1];tm.scale.setScalar(sc);tm.position.set(tx,ty,tz);model.g.position.x+=mx;
+      const a0=Math.min(model.x0+mx,tx-tw*sc/2),a1=Math.max(model.x1+mx,tx+tw*sc/2),b0=Math.min(-h/2,ty-th*sc/2),b1=Math.max(h/2,ty+th*sc/2);fc={cx:(a0+a1)/2,cy:(b0+b1)/2,W:a1-a0,H:b1-b0};}else if(k.fixed)tm.position.set(-w/2-tw/2-.35,h/2-th/2,.1);else tm.position.set(-w/2+tw/2-.25,h/2-th/2-.2,.3);m.add(tm);}}
   m.traverse(o=>{if(o.isMesh)o.userData.caseIdx=i;});
-  items[i]={grp,m,base:y,k,w,h,txH,spin:model&&model.spin!==false&&model.g,anim:model&&model.anim};
+  items[i]={grp,m,base:y,k,w,h,txH,fc,spin:model&&model.spin!==false&&model.g,anim:model&&model.anim};
 });
 // logo painted on the far end wall
 const LOGO_Y=.55,LOGO_Z=ZF+4;
@@ -458,8 +467,8 @@ function flyTo(p,y,pt,dur){fly={a:pos.clone(),b:p.clone(),ya:yaw,yb:y,pa:pitch,p
 function enter(){mode='room';document.body.classList.add('inside');flyTo(ENTRY.p,ENTRY.yaw,ENTRY.pitch,1.8);}
 function leave(){focusIdx=-1;mode='land';document.body.classList.remove('inside');flyTo(LAND.p,LAND.yaw,LAND.pitch,1.6);}
 function goCase(i){const it=items[i];if(!it){setTimeout(()=>goCase(i),300);return;}const g=it.grp,n=new THREE.Vector3(Math.sin(g.rotation.y),0,Math.cos(g.rotation.y));
-  const tx=it.txH||0,c=new THREE.Vector3(g.position.x-(it.k.fixed&&!tx?1.7:0),it.base+tx/2,g.position.z),d=Math.max(it.w,it.h+tx)*1.15+2.2+(it.k.fixed&&!tx?1.5:0);
-  const p=c.clone().addScaledVector(n,d);p.y=it.base*.4+.3+tx*.3;clampPos(p);
+  const f=it.fc;let c,d;if(f){c=it.m.localToWorld(new THREE.Vector3(f.cx,f.cy,0));d=Math.max(f.W*.8,f.H)*1.15+2.2;}else{c=new THREE.Vector3(g.position.x-(it.k.fixed?1.7:0),it.base,g.position.z);d=Math.max(it.w,it.h)*1.15+2.2+(it.k.fixed?1.5:0);}
+  const p=c.clone().addScaledVector(n,d);p.y=c.y*.4+.3;clampPos(p);
   const y=Math.atan2(-(c.x-p.x),-(c.z-p.z)),pt=Math.atan2(c.y-p.y,Math.hypot(c.x-p.x,c.z-p.z));flyTo(p,y,pt,1.4);fly.onDone=()=>{focusIdx=i;};focusIdx=-1;}
 // click on the floor to walk there, then turn towards the middle of the room so the cases around are in view
 const floorP=new THREE.Plane(new THREE.Vector3(0,1,0),-FL),hitP=new THREE.Vector3();
