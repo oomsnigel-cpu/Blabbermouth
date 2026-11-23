@@ -255,7 +255,7 @@ async function makePizza(H){const g=new THREE.Group(),a=H*.8,bh=a*.13,t=a*.025,l
   g.add(mesh(new THREE.BoxGeometry(a,t,a),blk,0,t/2,0));
   [a/2,-a/2].forEach(z=>g.add(mesh(new THREE.BoxGeometry(a,bh,t),blk,0,bh/2,z)));[a/2,-a/2].forEach(x=>g.add(mesh(new THREE.BoxGeometry(t,bh,a),blk,x,bh/2,0)));
   const hinge=new THREE.Group();hinge.position.set(0,bh,-a/2);hinge.rotation.x=-1.75;g.add(hinge);
-  hinge.add(mesh(new THREE.BoxGeometry(a,t,a),[blk,blk,li,lm,blk,blk],0,0,a/2));
+  hinge.add(mesh(new THREE.BoxGeometry(a,t,a),[blk,blk,FM({map:cTex(512,512,(x,W)=>{x.translate(W,W);x.rotate(Math.PI);x.drawImage(lt.image,0,0);}),roughness:.75}),blk,blk,blk],0,0,a/2));
   const pr=a*.42,ph=a*.04,pie=new THREE.Group();pie.position.y=t;pie.rotation.y=.5;g.add(pie);
   pie.add(mesh(pacman(pr,7/8,ph),FM({color:0xd49a55})));pie.add(mesh(pacman(pr*.86,7/8,ph*.5),FM({color:0xf2c34a}),0,ph,0));
   const pep=FM({color:0xb3322a}),r=seeded(3);for(let i=0;i<9;i++){const an=r()*Math.PI*2*.8+.15,rr=pr*(.25+r()*.5);pie.add(mesh(new THREE.CylinderGeometry(pr*.11,pr*.11,ph*.3,7),pep,Math.cos(an)*rr,ph*1.6,-Math.sin(an)*rr));}
@@ -266,7 +266,7 @@ async function makePizza(H){const g=new THREE.Group(),a=H*.8,bh=a*.13,t=a*.025,l
 // Udäv Krit: the two products in a red Kruidvat basket
 async function makeBasket(H){const g=new THREE.Group(),L=H*1.25,Dp=L*.6,bh=L*.36,b=L*.022,red=FM({color:0xa50d0b,roughness:.55});
   const lab=cTex(512,256,(x,W,Hh)=>{x.fillStyle='#d6201f';x.fillRect(0,0,W,Hh);x.strokeStyle='#fff';x.lineWidth=8;const r=26;x.beginPath();x.moveTo(40+r,70);x.arcTo(W-40,70,W-40,Hh-70,r);x.arcTo(W-40,Hh-70,40,Hh-70,r);x.arcTo(40,Hh-70,40,70,r);x.arcTo(40,70,W-40,70,r);x.stroke();
-    x.fillStyle='#fff';x.font='700 82px "Clash Display", Arial, sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('Kruidvat',W/2,Hh/2+4);});
+    x.fillStyle='#fff';x.font='400 80px "Clash Display", Arial, sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('Udäv Krit',W/2,Hh/2+4);});
   const lm=FM({map:lab,roughness:.55});
   g.add(mesh(new THREE.BoxGeometry(L,b,Dp),red,0,b/2,0));
   const wall=(len,n,label)=>{const w=new THREE.Group();w.add(mesh(new THREE.BoxGeometry(len+b*2,b*1.6,b*1.8),red,0,bh,0));w.add(mesh(new THREE.BoxGeometry(len,b,b),red,0,bh*.5,0));
@@ -413,11 +413,11 @@ CASES.forEach(async(k,i)=>{
     fm.position.z=G;fm.scale.setScalar((D-G)/D);m.add(fm);}
   }
   const sh=new THREE.Mesh(new THREE.PlaneGeometry(w*.9,.9),new THREE.MeshBasicMaterial({map:shadowTex,transparent:true,depthWrite:false}));sh.rotation.x=-Math.PI/2;sh.position.set(0,FL+.01,.3);grp.add(sh);
-  {await fontsReady;if(k.cascade){const [tt,tar,px]=cascadeTex(k.title,k.cascade);const tw=px/240,th=tw/tar;
+  let txH=0;{await fontsReady;if(k.cascade){const [tt,tar,px]=cascadeTex(k.title,k.cascade);const tw=px/240,th=tw/tar;
     const tm=new THREE.Mesh(new THREE.PlaneGeometry(tw,th),new THREE.MeshBasicMaterial({map:tt,transparent:true,depthWrite:false,side:THREE.DoubleSide,fog:false}));
-    if(k.fixed||model)tm.position.set(-w/2-tw/2-.35,h/2-th/2,.1);else tm.position.set(-w/2+tw/2-.25,h/2-th/2-.2,.3);m.add(tm);}}
+    if(model){tm.position.set(0,h/2+th/2+.35,.1);txH=th+.35;}else if(k.fixed)tm.position.set(-w/2-tw/2-.35,h/2-th/2,.1);else tm.position.set(-w/2+tw/2-.25,h/2-th/2-.2,.3);m.add(tm);}}
   m.traverse(o=>{if(o.isMesh)o.userData.caseIdx=i;});
-  items[i]={grp,m,base:y,k,w,h,spin:model&&model.spin!==false&&model.g,anim:model&&model.anim};
+  items[i]={grp,m,base:y,k,w,h,txH,spin:model&&model.spin!==false&&model.g,anim:model&&model.anim};
 });
 // logo painted on the far end wall
 const LOGO_Y=.55,LOGO_Z=ZF+4;
@@ -455,8 +455,8 @@ function flyTo(p,y,pt,dur){fly={a:pos.clone(),b:p.clone(),ya:yaw,yb:y,pa:pitch,p
 function enter(){mode='room';document.body.classList.add('inside');flyTo(ENTRY.p,ENTRY.yaw,ENTRY.pitch,1.8);}
 function leave(){focusIdx=-1;mode='land';document.body.classList.remove('inside');flyTo(LAND.p,LAND.yaw,LAND.pitch,1.6);}
 function goCase(i){const it=items[i];if(!it){setTimeout(()=>goCase(i),300);return;}const g=it.grp,n=new THREE.Vector3(Math.sin(g.rotation.y),0,Math.cos(g.rotation.y));
-  const c=new THREE.Vector3(g.position.x-(it.k.fixed?1.7:0),it.base,g.position.z),d=Math.max(it.w,it.h)*1.15+2.2+(it.k.fixed?1.5:0);
-  const p=c.clone().addScaledVector(n,d);p.y=it.base*.4+.3;clampPos(p);
+  const tx=it.txH||0,c=new THREE.Vector3(g.position.x-(it.k.fixed&&!tx?1.7:0),it.base+tx/2,g.position.z),d=Math.max(it.w,it.h+tx)*1.15+2.2+(it.k.fixed&&!tx?1.5:0);
+  const p=c.clone().addScaledVector(n,d);p.y=it.base*.4+.3+tx*.3;clampPos(p);
   const y=Math.atan2(-(c.x-p.x),-(c.z-p.z)),pt=Math.atan2(c.y-p.y,Math.hypot(c.x-p.x,c.z-p.z));flyTo(p,y,pt,1.4);fly.onDone=()=>{focusIdx=i;};focusIdx=-1;}
 // click on the floor to walk there, then turn towards the middle of the room so the cases around are in view
 const floorP=new THREE.Plane(new THREE.Vector3(0,1,0),-FL),hitP=new THREE.Vector3();
@@ -618,7 +618,7 @@ function flyToC(j){const o=cObjs[j];if(!o)return;if(o.wall){wallTo(o.base);cFocu
   const c=new THREE.Vector3(g.position.x,o.base,g.position.z),d=Math.max(o.w*.85,o.h)*1.05+1.6,p=c.clone().addScaledVector(nrm,d);p.y=o.base*.5+.2;clampPos(p);
   const y=Math.atan2(-(c.x-p.x),-(c.z-p.z)),pt=Math.atan2(c.y-p.y,Math.hypot(c.x-p.x,c.z-p.z));flyTo(p,y,pt,1.1);fly.onDone=()=>{cFocus=j;};cFocus=-1;}
 const caseBar=document.getElementById('caseBar');
-function enterCase(i,fromPop){if(i<0||i>=CASES.length)return;if(pageIdx>=0)closePage(true);
+function enterCase(i,fromPop){if(i<0||i>=CASES.length)return;if(CASES[i].cv){if(world==='case')exitCase(true);openPage(i);return;}if(pageIdx>=0)closePage(true);
   if(world!=='case')saved={p:pos.clone(),yaw:tyaw,pitch:tpitch};
   world='case';caseIdx=i;mode='room';document.body.classList.add('inside','incase');focusIdx=-1;cFocus=-1;fly=null;
   disposeCase();caseFonts.then(()=>{if(caseIdx===i&&world==='case'){WALL.has(CASES[i].id)?buildWall(i):buildCase(i);if(CB.wall){wallTo(wallTop);pos.set(0,wallY,ZF-2);tpos.copy(pos);yaw=tyaw=0;pitch=tpitch=0;}}});pos.set(0,.45,ZF-.8);tpos.copy(pos);yaw=tyaw=0;pitch=tpitch=-.02;
