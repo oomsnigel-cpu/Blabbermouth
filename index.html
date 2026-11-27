@@ -829,7 +829,7 @@ function buildCV(i,vh,vw,D){
 function wallTo(y){wallY=Math.max(wallBot,Math.min(wallTop,y));}
 // ---------- NACHTWINKEL MODE: the same work as products in a Brussels night shop ----------
 function nsIsOpen(){return true;}
-let nsTabs=[],nsReceipt=null,nsPoster=null,nsCase=null,nsFX=0,nsFXT=0,nsReturn=false,nsZoom=0,nsZoomT=0,nsPtrs=new Map(),nsPinch=null,nsDoor=null,nsStage=0,nsStageT=0,nsVisited=false,NSon=false,NS=null,nsBuilding=null,nsYaw=0,nsPitch=-.1,nsTYaw=0,nsTPitch=-.1,nsDrag=null,nsDust=null,nsTube=null;const nsAnims=[];
+let nsBoard=null,nsTabs=[],nsReceipt=null,nsPoster=null,nsCase=null,nsFX=0,nsFXT=0,nsReturn=false,nsZoom=0,nsZoomT=0,nsPtrs=new Map(),nsPinch=null,nsDoor=null,nsStage=0,nsStageT=0,nsVisited=false,NSon=false,NS=null,nsBuilding=null,nsYaw=0,nsPitch=-.1,nsTYaw=0,nsTPitch=-.1,nsDrag=null,nsDust=null,nsTube=null;const nsAnims=[];
 const nsCam=new THREE.PerspectiveCamera(52,1,.05,60);
 const CI=id=>CASES.findIndex(c=>c.id===id);
 // what each label says: name, what I did, origin, price (= the result), unit
@@ -863,7 +863,7 @@ function bottle(c,h,r){const g=new THREE.Group(),m=FM({color:c,roughness:.25,met
 // BLABBERMOUTH: the shop's house brand. Placeholder art for every fake product, label and sticker;
 // a finished design dropped in lp/bb/<name>.png (and listed in BB_FILES) replaces the placeholder.
 const BB={red:'#d8261c',cream:'#fbfbf8',ink:'#1d1d1d',yel:'#f2c34a'},BB_FILES=[];
-const BB_SIZES={'logo':[600,200],'soda-cola':[512,128],'soda-orange':[512,128],'soda-lemon':[512,128],'soda-tonic':[512,128],'beer-can':[512,256],'wrapper':[256,128],'telco-banner':[1024,256],'beer-panel':[1024,256],'top-strip':[1024,128],'sticker-sim':[256,256],'sticker-logo':[256,256]};
+const BB_SIZES={'logo':[600,200],'soda-cola':[512,128],'soda-orange':[512,128],'soda-lemon':[512,128],'soda-tonic':[512,128],'beer-can':[512,256],'wrapper':[256,128],'telco-banner':[1024,256],'beer-panel':[1024,256],'sandwich-board':[300,420],'top-strip':[1024,128],'sticker-sim':[256,256],'sticker-logo':[256,256]};
 function bbWord(x,cx,cy,size,col){x.save();x.fillStyle=col||BB.red;x.font='700 '+size+'px "Clash Display", Arial';x.textAlign='center';x.textBaseline='middle';x.fillText('BLABBERMOUTH',cx,cy);x.restore();}
 const BB_DRAW={
   'logo':(x,W,H)=>{x.fillStyle=BB.cream;x.fillRect(0,0,W,H);bbWord(x,W/2,H/2,64);},
@@ -872,6 +872,7 @@ const BB_DRAW={
   'wrapper':(x,W,H)=>{x.fillStyle=BB.yel;x.fillRect(0,0,W,H);bbWord(x,W/2,H/2,22);x.fillStyle=BB.red;for(let i=0;i<W;i+=16){x.fillRect(i,0,8,10);x.fillRect(i+8,H-10,8,10);}},
   'telco-banner':(x,W,H)=>{x.fillStyle=BB.cream;x.fillRect(0,0,W,H);x.fillStyle=BB.red;x.fillRect(0,0,W,58);x.fillStyle=BB.cream;x.font='700 40px "Clash Display", Arial';x.textAlign='center';x.textBaseline='middle';x.fillText('RECHARGE · HERLADEN · RECARGAS',W/2,31);bbWord(x,W/2,135,86);x.fillStyle=BB.ink;x.font='600 34px "Clash Display", Arial';x.fillText('MOBILE · call home for less',W/2,210);},
   'beer-panel':(x,W,H)=>{x.fillStyle=BB.cream;x.fillRect(0,0,W,H);x.fillStyle=BB.red;x.fillRect(0,0,W,16);x.fillRect(0,H-16,W,16);x.fillStyle=BB.ink;x.beginPath();x.arc(120,H/2,82,0,Math.PI*2);x.fill();x.fillStyle=BB.yel;x.font='700 90px "Clash Display", Arial';x.textAlign='center';x.textBaseline='middle';x.fillText('B',120,H/2+6);bbWord(x,W/2+110,H/2-6,78,BB.ink);x.fillStyle=BB.red;x.font='600 30px "Clash Display", Arial';x.fillText('PILS',W/2+110,H/2+58);},
+  'sandwich-board':(x,W,H)=>{x.fillStyle=BB.red;x.fillRect(0,0,W,H);x.fillStyle=BB.cream;x.fillRect(14,14,W-28,H-28);bbWord(x,W/2,60,30);x.fillStyle=BB.ink;x.font='700 64px "Clash Display", Arial';x.textAlign='center';x.fillText('IJS',W/2,190);x.font='600 30px "Clash Display", Arial';x.fillText('GLACE · ICE',W/2,240);x.fillStyle=BB.yel;x.beginPath();x.moveTo(W/2-40,280);x.lineTo(W/2+40,280);x.lineTo(W/2,380);x.fill();x.fillStyle=BB.red;x.beginPath();x.arc(W/2,272,38,Math.PI,0);x.fill();},
   'top-strip':(x,W,H)=>{x.fillStyle=BB.red;x.fillRect(0,0,W,H);for(let i=0;i<3;i++){bbWord(x,W*(i+.5)/3,H/2,30,BB.cream);x.fillStyle=BB.cream;x.beginPath();x.arc(W*(i+1)/3,H/2,5,0,Math.PI*2);x.fill();}},
   'sticker-sim':(x,W,H)=>{x.fillStyle=BB.yel;x.beginPath();x.arc(W/2,H/2,W/2-4,0,Math.PI*2);x.fill();x.fillStyle=BB.ink;x.font='700 74px "Clash Display", Arial';x.textAlign='center';x.textBaseline='middle';x.fillText('SIM',W/2,H/2-14);x.font='600 22px "Clash Display", Arial';x.fillText('CARDS HERE',W/2,H/2+44);},
   'sticker-logo':(x,W,H)=>{x.fillStyle=BB.red;x.beginPath();x.arc(W/2,H/2,W/2-4,0,Math.PI*2);x.fill();x.fillStyle=BB.cream;x.font='700 150px "Clash Display", Arial';x.textAlign='center';x.textBaseline='middle';x.fillText('B',W/2,H/2+8);}};
@@ -1051,7 +1052,11 @@ async function buildNS(){
       [[-1.3],[1.3]].forEach(([x])=>{add(mesh(new THREE.PlaneGeometry(1.5,1.2),shm),x,4.45,FZ+.075);add(mesh(new THREE.BoxGeometry(1.62,.08,.12),FM({color:0x6a625a})),x,3.82,FZ+.1);});
       add(mesh(new THREE.BoxGeometry(.12,.3,.12),GLOW(0xffe2b0,1)),0,3.75,FZ+.13);
       add(mesh(new THREE.BoxGeometry(5.0,.06,.2),FM({color:0x8d9196,metalness:.4,roughness:.5})),0,3.12,FZ+.12);}
-    [[-7,-2.5,BRICK2,5.8],[2.5,7,BRICK2,5.6]].forEach(([a,b,cv,h])=>{const m=add(mesh(new THREE.BoxGeometry(b-a,h,.3),brickM(cv,b-a,h)),(a+b)/2,h/2,FZ-.05);m.userData.nsExit=1;});
+    [[-7,-2.5,BRICK,5.8],[2.5,7,BRICK2,5.6]].forEach(([a,b,cv,h])=>{const m=add(mesh(new THREE.BoxGeometry(b-a,h,.3),brickM(cv,b-a,h)),(a+b)/2,h/2,FZ-.05);m.userData.nsExit=1;});
+    {const shT=(n)=>cTex(128,256,(x,W,H)=>{x.fillStyle='#cfc4a8';x.fillRect(0,0,W,H);x.fillStyle='#b3a88c';for(let y=0;y<H;y+=n)x.fillRect(0,y,W,2);}),shA=FM({map:shT(8),roughness:.8,emissive:0x1e1a12}),gar=FM({map:shT(16),roughness:.7,color:0xe8e6e0}),sill=FM({color:0x8a8580});
+      const shutter=(x,y,w,h,m)=>{add(mesh(new THREE.PlaneGeometry(w,h),m||shA),x,y,FZ+.105);add(mesh(new THREE.BoxGeometry(w+.1,.1,.12),sill),x,y+h/2+.05,FZ+.13);add(mesh(new THREE.BoxGeometry(w+.12,.05,.16),sill),x,y-h/2-.02,FZ+.13);};
+      shutter(-4.4,1.35,2.1,1.9);shutter(-6.2,1.1,.9,2.2);shutter(-4.6,4.4,2.2,1.3);shutter(-6.3,4.4,.9,1.2);
+      shutter(3.6,1.05,2.0,2.1,gar);shutter(5.4,1.1,.85,2.2,FM({color:0x6d675e}));shutter(3.6,4.25,1.1,1.2);shutter(5.4,4.25,.9,1.2);}
     [-1.525,1.525].forEach(x=>{add(mesh(new THREE.PlaneGeometry(1.15,WY1-WY0),glass),x,(WY0+WY1)/2,FZ+.02).userData.nsExit=1;add(mesh(new THREE.BoxGeometry(1.15,.04,.06),alu),x,WY0,FZ+.04);});
     // the projecting box sign, like the real nachtwinkel ones: NIGEL / SHOP on both faces, hung on a bracket
     const sg2=cTex(512,360,(x,W,H)=>{x.fillStyle='#fbfbf8';x.fillRect(0,0,W,H);x.fillStyle='#d8261c';x.font='700 150px "Clash Display", Arial, sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('NIGEL',W/2,H*.3);x.fillText('SHOP',W/2,H*.74);});
@@ -1121,6 +1126,12 @@ async function buildNS(){
       add(mesh(new THREE.PlaneGeometry(.2,.2),gm(bbTex('sticker-sim'))),1.95,2.08,FZ+.031);add(mesh(new THREE.PlaneGeometry(.16,.16),gm(bbTex('sticker-logo'))),-1.07,2.1,FZ+.031);
       const ledge=FM({color:0xe8e4d8});const kinds=['cola','orange','lemon','tonic','cola','orange'];
       [[.88,.5],[1.46,.46]].forEach(([y,h],row)=>{add(mesh(new THREE.BoxGeometry(1.15,.03,.26),ledge),1.525,y,FZ-.2);kinds.forEach((k,i)=>add(bbSoda(kinds[(i+row*2)%kinds.length],h),1.06+i*.185,y+.015,FZ-.2));});}
+    // a sandwich board on the pavement; click it and it falls over (click again to put it back)
+    {const bm=new THREE.MeshBasicMaterial({map:bbTex('sandwich-board'),fog:false}),fr=FM({color:0xd8261c,roughness:.6}),H=.8,W=.52,a=.2,Hc=H*Math.cos(a),Fz=H*Math.sin(a);
+      const sb=new THREE.Group();[-1,1].forEach(k=>{const p=new THREE.Group();p.position.y=Hc;p.rotation.x=k*a;p.add(mesh(new THREE.BoxGeometry(W,H,.02),[fr,fr,fr,fr,k<0?bm:fr,k<0?fr:bm],0,-H/2,0));sb.add(p);});
+      sb.position.z=-Fz;const piv=new THREE.Group();piv.add(sb);add(piv,-1.0,0,FZ+1.0+Fz,.15);
+      piv.traverse(o=>{o.userData.nsBoard=1;});nsBoard={t:0,down:0};
+      nsAnims.push((t,dt)=>{const b=nsBoard;b.t+=((b.down?1:0)-b.t)*Math.min(1,dt*(b.down?4:3));const k=b.t,ease=k*k*(3-2*k);piv.rotation.x=(Math.PI/2-a)*ease;});}
     // the pavement: a crumpled candy wrapper, a crushed can of beer, a few cigarette butts
     {const wr=new THREE.PlaneGeometry(.16,.08,6,3),wp=wr.attributes.position,r9=seeded(9);for(let i=0;i<wp.count;i++)wp.setZ(i,(r9()-.5)*.025);wr.computeVertexNormals();
       const w=add(mesh(wr,FM({map:bbTex('wrapper'),side:THREE.DoubleSide,roughness:.4})),-.35,.012,FZ+.75);w.rotation.set(-Math.PI/2+.1,0,.6);
@@ -1150,14 +1161,14 @@ function nsTick(t,dt){const a=innerWidth/innerHeight;if(nsCam.aspect!==a){nsCam.
   const ox=(a<1?.9:1.5)*(1-zz)*(1-e);nsCam.position.set((a<1?-.2:0)*e+nsFX*zz*(1-e)+ox,dy+(1.65-dy)*e,dz+(iz-dz)*e);nsCam.rotation.set(nsPitch+(a<1?-.03:0)+(1-e)*dp,nsYaw+ox*.1,0,'YXZ');
   if(!reduce){nsAnims.forEach(f=>f(t,dt));if(nsDust){const p=nsDust.geometry.attributes.position;for(let i=0;i<p.count;i++){let y=p.getY(i)-dt*.03*(1+(i%5)*.3);if(y<0)y+=3;p.setY(i,y);p.setX(i,p.getX(i)+Math.sin(t*.3+i)*dt*.01);}p.needsUpdate=true;}
     if(nsTube)nsTube.intensity=.85*(Math.sin(t*37)>.985?.55:1);}}
-function nsHit(x,y){if(!NS)return null;ndc.set(x/innerWidth*2-1,-(y/innerHeight)*2+1);ray.setFromCamera(ndc,nsCam);const h=ray.intersectObjects(NS.children,true).find(h=>{const u=h.object.userData;return (u.caseIdx!==undefined&&u.caseIdx>=0&&nsStageT>=1)||u.nsExit||u.nsWin||u.nsRcpt||(u.nsBack&&nsStageT>=1)||((u.nsTab>=0||u.nsTear)&&nsStageT<1)||(u.nsPad&&nsStageT<1)||(u.nsPoster&&nsStageT<1&&!nsIsOpen());});return h?h.object.userData:null;}
+function nsHit(x,y){if(!NS)return null;ndc.set(x/innerWidth*2-1,-(y/innerHeight)*2+1);ray.setFromCamera(ndc,nsCam);const h=ray.intersectObjects(NS.children,true).find(h=>{const u=h.object.userData;return (u.caseIdx!==undefined&&u.caseIdx>=0&&nsStageT>=1)||u.nsExit||u.nsWin||u.nsRcpt||(u.nsBack&&nsStageT>=1)||((u.nsTab>=0||u.nsTear||u.nsBoard)&&nsStageT<1)||(u.nsPad&&nsStageT<1)||(u.nsPoster&&nsStageT<1&&!nsIsOpen());});return h?h.object.userData:null;}
 function nsPick(x,y){const u=nsHit(x,y);return u&&u.caseIdx!==undefined&&u.caseIdx>=0?u.caseIdx:null;}
 async function setNS(on){if(on===NSon)return;const b=document.getElementById('nsBtn');
   if(on){if(world==='case')exitCase();if(!NS){b.textContent='Opening…';nsBuilding=nsBuilding||(fontsReady.then(buildNS));await nsBuilding;}if(!nsVisited){nsStage=nsStageT=0;nsVisited=true;}else{nsStage=nsStageT=1;}NSon=true;document.body.classList.add('ns');b.textContent='';b.setAttribute('aria-pressed','true');nsTYaw=nsYaw=0;nsTPitch=nsPitch=-.1;}
   else{NSon=false;document.body.classList.remove('ns');b.textContent='← Back to the shop';b.setAttribute('aria-pressed','false');}}
 document.getElementById('nsBtn').addEventListener('click',()=>setNS(!NSon));
 function nsOpenCase(i){if(CASES[i].cv){openPage(i);return;}nsReturn=true;document.getElementById('cbRoom').textContent='← Back to the shop';setNS(false);enterCase(i);}
-function nsDoorClick(u){if(u&&(u.nsTab>=0||u.nsTear)){nsTear(u.nsTab);return;}if(u&&u.nsPoster){nsShow(nsPoster,'ooms.nigel@gmail.com');return;}if(u&&(u.nsPad||u.nsDoorObj)){nsFXT=0;nsZoomT=1;padShow();return;}if(nsZoomT>.5||nsFXT!==0){nsFXT=0;nsZoomT=0;return;}nsZoomT=1;}
+function nsDoorClick(u){if(u&&u.nsBoard&&nsBoard){nsBoard.down=nsBoard.down?0:1;return;}if(u&&(u.nsTab>=0||u.nsTear)){nsTear(u.nsTab);return;}if(u&&u.nsPoster){nsShow(nsPoster,'ooms.nigel@gmail.com');return;}if(u&&(u.nsPad||u.nsDoorObj)){nsFXT=0;nsZoomT=1;padShow();return;}if(nsZoomT>.5||nsFXT!==0){nsFXT=0;nsZoomT=0;return;}nsZoomT=1;}
 function nsTear(i){let b=nsTabs[i];if(!b||b.t0)b=nsTabs.find(x=>!x.t0);if(b){b.t0=performance.now()/1000;b.vx=(Math.random()-.5);}
   const plain=()=>{const a=document.createElement('a');a.href='lp/nigel-ooms-cv.pdf';a.download='Nigel-Ooms-CV.pdf';document.body.appendChild(a);a.click();a.remove();};
   const cvBlob=fetch('lp/nigel-ooms-cv.pdf').then(r=>r.ok?r.blob():null).catch(()=>null);
