@@ -1104,7 +1104,10 @@ document.getElementById('nsBtn').addEventListener('click',()=>setNS(!NSon));
 function nsOpenCase(i){if(CASES[i].cv){openPage(i);return;}nsReturn=true;document.getElementById('cbRoom').textContent='← Back to the shop';setNS(false);enterCase(i);}
 function nsDoorClick(u){if(u&&(u.nsTab>=0||u.nsTear)){nsTear(u.nsTab);return;}if(u&&u.nsPoster){nsShow(nsPoster,'ooms.nigel@gmail.com');return;}if(u&&(u.nsPad||u.nsDoorObj)){nsFXT=0;nsZoomT=1;padShow();return;}if(nsZoomT>.5||nsFXT!==0){nsFXT=0;nsZoomT=0;return;}nsZoomT=1;}
 function nsTear(i){let b=nsTabs[i];if(!b||b.t0)b=nsTabs.find(x=>!x.t0);if(b){b.t0=performance.now()/1000;b.vx=(Math.random()-.5);}
-  setTimeout(()=>{const a=document.createElement('a');a.href='lp/nigel-ooms-cv.pdf';a.download='Nigel-Ooms-CV.pdf';document.body.appendChild(a);a.click();a.remove();},b?450:0);}
+  const plain=()=>{const a=document.createElement('a');a.href='lp/nigel-ooms-cv.pdf';a.download='Nigel-Ooms-CV.pdf';document.body.appendChild(a);a.click();a.remove();};
+  const cvBlob=fetch('lp/nigel-ooms-cv.pdf').then(r=>r.ok?r.blob():null).catch(()=>null);
+  if(window.claude&&typeof window.claude.use==='function'){Promise.all([window.claude.use('downloads'),cvBlob]).then(([d,bl])=>{if(d&&bl)return d.save({filename:'Nigel-Ooms-CV.pdf',data:bl}).catch(()=>{});plain();}).catch(plain);}
+  else setTimeout(plain,b?450:0);}
 let padV='';const padD=()=>document.getElementById('nsPadD'),padEl=()=>document.getElementById('nsPad');
 function padShow(){const d=padEl(),o=nsIsOpen();padV='';d.hidden=false;d.classList.toggle('dead',!o);d.classList.remove('ok','bad');padD().textContent=o?'ENTER CODE':'';
   document.getElementById('nsPadN').textContent=o?'Enter the code you received.':"The lock doesn't respond. The shop opens at 18:00.";setTimeout(()=>{try{d.querySelector('.pad-k button').focus();}catch(e){}},50);}
