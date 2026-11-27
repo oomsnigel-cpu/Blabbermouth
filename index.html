@@ -3,6 +3,9 @@
 /* all controls: square corners, Clash Display only */
 button,input,select,textarea,.cb,.sb,.nsbtn,.opencase,.snd,.pg-cta,.rc-a,a.pg-cta,.nav button,#nsPad .pad,#nsPad .pad-d,#nsPad .pad-k button,#nsPad .pad-x{border-radius:0!important}
 button,input,select,textarea{font-family:"Clash Display",system-ui,sans-serif}
+
+.sheet.sheet-full{width:100%;box-shadow:none;overflow-x:hidden}
+.sheet-full .cvdoc{max-width:1280px;margin:0 auto}
 </style></head><body>
 <title>Nigel Ooms Case Space</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -621,7 +624,7 @@ function render(i){if(CASES[i].cv){pageEl.innerHTML=CV_HTML;sheet.scrollTop=0;re
   sheet.scrollTop=0;}
 let vio=null;
 function setHash(id,replace){try{const u=location.pathname+location.search+(id?'#'+id:'');replace?history.replaceState({c:id},'',u):history.pushState({c:id},'',u);}catch(e){}}
-function openPage(i,swap){if(i<0||i>=CASES.length)return;const was=pageIdx>=0;pageIdx=i;render(i);
+function openPage(i,swap){if(i<0||i>=CASES.length)return;const was=pageIdx>=0;pageIdx=i;render(i);sheet.classList.toggle('sheet-full',!!CASES[i].cv);
   wrap.hidden=false;document.body.classList.add('paged');openBtn.hidden=true;
   if(!was)sheet.focus({preventScroll:true});}
 function closePage(fromPop){if(pageIdx<0)return;pageIdx=-1;wrap.hidden=true;document.body.classList.remove('paged');
