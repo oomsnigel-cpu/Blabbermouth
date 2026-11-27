@@ -812,7 +812,7 @@ function buildCV(i,vh,vw,D){
   wallTop=wallBot=0;CB={rw:30,rd:30,wall:true,vh};}
 function wallTo(y){wallY=Math.max(wallBot,Math.min(wallTop,y));}
 // ---------- NACHTWINKEL MODE: the same work as products in a Brussels night shop ----------
-function nsIsOpen(){if(/[?&]open\b/.test(location.search))return true;const h=new Date().getHours();return h>=18||h<6;}
+function nsIsOpen(){return true;}
 let nsTabs=[],nsReceipt=null,nsPoster=null,nsCase=null,nsFX=0,nsFXT=0,nsReturn=false,nsZoom=0,nsZoomT=0,nsPtrs=new Map(),nsPinch=null,nsDoor=null,nsStage=0,nsStageT=0,nsVisited=false,NSon=false,NS=null,nsBuilding=null,nsYaw=0,nsPitch=-.1,nsTYaw=0,nsTPitch=-.1,nsDrag=null,nsDust=null,nsTube=null;const nsAnims=[];
 const nsCam=new THREE.PerspectiveCamera(52,1,.05,60);
 const CI=id=>CASES.findIndex(c=>c.id===id);
