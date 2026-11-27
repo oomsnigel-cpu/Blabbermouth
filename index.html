@@ -1213,7 +1213,7 @@ async function setNS(on){if(on===NSon)return;const b=document.getElementById('ns
   else{NSon=false;document.body.classList.remove('ns');b.textContent='← Back to the shop';b.setAttribute('aria-pressed','false');if(mode==='land'){mode='room';document.body.classList.add('inside');pos.copy(ENTRY.p);tpos.copy(ENTRY.p);yaw=tyaw=ENTRY.yaw;pitch=tpitch=ENTRY.pitch;fly=null;}if(innerWidth<innerHeight&&world==='main')roomStep(0,true);}}
 // phones: step through the cases one by one instead of wandering an empty room
 let roomI=0;function roomOrder(){return items.map((it,i)=>it?i:-1).filter(i=>i>=0&&!(CASES[i]&&CASES[i].cv)).sort((a,b)=>{const A=items[a].grp.position,B=items[b].grp.position;return Math.atan2(A.x,-(A.z+15))-Math.atan2(B.x,-(B.z+15));});}
-function roomStep(d,reset){const o=roomOrder();if(!o.length){setTimeout(()=>roomStep(d,reset),300);return;}roomI=reset?Math.floor(o.length/2):(roomI+d+o.length)%o.length;goCase(o[roomI]);}
+function roomStep(d,reset){const o=roomOrder();if(!o.length){setTimeout(()=>roomStep(d,reset),300);return;}roomI=reset?Math.max(0,o.findIndex(i=>CASES[i].id==='solare')):(roomI+d+o.length)%o.length;goCase(o[roomI]);}
 {const n=document.getElementById('roomNav');n.querySelector('.rn-p').addEventListener('click',()=>roomStep(-1));n.querySelector('.rn-n').addEventListener('click',()=>roomStep(1));}
 document.getElementById('nsBtn').addEventListener('click',()=>setNS(!NSon));
 function nsOpenCase(i){document.body.classList.add('booted');if(CASES[i].cv){openPage(i);return;}nsReturn=true;document.getElementById('cbRoom').textContent='← Back to the shop';setNS(false);enterCase(i);}
