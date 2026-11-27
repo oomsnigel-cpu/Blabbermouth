@@ -1011,7 +1011,7 @@ async function buildNS(){
     {const sm=new THREE.MeshBasicMaterial({map:sg2,fog:false}),fr=FM({color:0x8d9196,metalness:.4,roughness:.5}),sgn=new THREE.Group();
       sgn.add(mesh(new THREE.BoxGeometry(.2,.92,1.3),[sm,sm,fr,fr,fr,fr],0,0,0));
       sgn.add(mesh(new THREE.BoxGeometry(.03,.05,1.5),fr,0,.55,0));[-.55,.55].forEach(z=>sgn.add(mesh(new THREE.BoxGeometry(.015,.12,.015),fr,0,.5,z)));
-      sgn.scale.setScalar(.72);sgn.position.set(-1.0,2.72,FZ+.62);sgn.rotation.y=-.62;S2.add(sgn);
+      sgn.scale.setScalar(.72);sgn.position.set(-1.0,2.72,FZ+.25);sgn.rotation.y=-Math.PI/2;S2.add(sgn);
       }
     // neon in the left window: OPEN after 18:00, CLOSED before
     const neon=(t,c)=>cTex(320,110,(x,W,H)=>{x.clearRect(0,0,W,H);x.strokeStyle=c;x.lineWidth=6;x.strokeRect(6,6,W-12,H-12);x.fillStyle=c;x.font='700 60px "Clash Display", Arial';x.textAlign='center';x.textBaseline='middle';x.fillText(t,W/2,H/2+4);});
@@ -1033,9 +1033,9 @@ async function buildNS(){
         x.save();x.translate(108,450);x.rotate(-.07);x.shadowColor='rgba(0,0,0,.35)';x.shadowBlur=6;x.drawImage(c,-c.width/2,-c.height/2);x.restore();}
       stick(x,IM.ctv,262,455,150,112,.06,false,[120,170,420,300],'#0000ff');
       x.fillStyle='#fff';x.fillRect(50,700,W-100,52);x.fillStyle='#111';x.font='600 26px "Clash Display", Arial';x.textAlign='center';x.fillText('DUW · POUSSEZ · PUSH',W/2,736);
-      x.fillStyle='#fff';x.fillRect(50,800,200,70);x.fillStyle='#111';x.font='600 16px "Clash Display", Arial';x.fillText('HIER SPREEKT MEN',150,828);x.font='700 22px "Clash Display", Arial';x.fillText('NL · FR · EN',150,856);
+      x.fillStyle='#fff';x.fillRect(50,800,200,70);x.fillStyle='#111';x.font='600 16px "Clash Display", Arial';x.fillText('HIER SPREEKT MEN',150,828);x.font='700 22px "Clash Display", Arial';x.fillText('NL · FR · EN · ES',150,856);
       x.fillStyle='#1d7a46';x.fillRect(290,800,200,70);x.fillStyle='#fff';x.font='700 19px "Clash Display", Arial';x.fillText('CASH & CARDS',390,830);x.fillText('ACCEPTED',390,856);
-      stick(x,IM.qr,120,995,110,110,0,true);stick(x,IM.s2,420,990,100,100,-.08);});
+      stick(x,IM.qr,120,995,110,110,0,true);});
     const door=new THREE.Group();add(door,-DW/2,0,FZ+.02);
     const st=.07;[[DW/2,st/2,DW,st],[DW/2,DH-st/2,DW,st],[st/2,DH/2,st,DH],[DW-st/2,DH/2,st,DH]].forEach(([x,y,w,h])=>door.add(mesh(new THREE.BoxGeometry(w,h,.06),alu,x,y,0)));
     door.add(mesh(new THREE.BoxGeometry(DW-2*st,.18,.05),alu,DW/2,.18,0));
@@ -1058,9 +1058,8 @@ async function buildNS(){
 }
     // a tear-off poster on the left window: tear a tab, get the CV (no portfolio)
     {const PW=.46,PH=.65,TH=.22,NT=6,px=-1.5,py=1.5,pz=FZ+.032,RED='#d8261c';
-      const pt=cTex(690,975,(x,W,H)=>{x.fillStyle='#fff';x.fillRect(0,0,W,H);});
+      const pt=cTex(690,975,(x,W,H)=>{x.fillStyle='#fbfbf8';x.fillRect(0,0,W,H);x.fillStyle='#1d1d1d';x.textAlign='center';x.font='600 150px "Clash Display", Arial';['FREELANCER','WANTED'].forEach((t,i)=>{let f=170;x.font='600 '+f+'px "Clash Display", Arial';while(x.measureText(t).width>W-70&&f>40){f-=4;x.font='600 '+f+'px "Clash Display", Arial';}x.fillText(t,W/2,420+i*200);});});
       const pm=new THREE.MeshBasicMaterial({map:pt,fog:false}),poster=add(mesh(new THREE.PlaneGeometry(PW,PH),pm),px,py,pz);poster.userData.nsTear=1;
-      loadImg('lp/cv-mini.webp').then(im=>{if(!im)return;const c=pt.image,x=c.getContext('2d');x.drawImage(im,0,0,c.width,c.height);pt.needsUpdate=true;});
       const tt=cTex(80,240,(x,W,H)=>{x.fillStyle='#fbfbf8';x.fillRect(0,0,W,H);x.save();x.translate(W/2+8,H/2);x.rotate(-Math.PI/2);x.fillStyle=RED;x.textAlign='center';x.font='600 24px "Clash Display", Arial';x.fillText('NIGEL OOMS CV ↓',0,0);x.restore();x.fillStyle='#bbb';for(let y=0;y<H;y+=10)x.fillRect(0,y,2,5);});
       const tw=PW/NT;nsTabs=[];
       for(let i=0;i<NT;i++){const g=new THREE.Group(),m=new THREE.MeshBasicMaterial({map:tt,transparent:true,fog:false}),pl=mesh(new THREE.PlaneGeometry(tw-.006,TH),m,0,-TH/2,0);pl.userData.nsTab=i;g.add(pl);
