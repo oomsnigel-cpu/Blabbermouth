@@ -1057,11 +1057,10 @@ async function buildNS(){
       add(g,-.775,1.05,FZ+.13);
 }
     // a tear-off poster on the left window: tear a tab, get the CV (no portfolio)
-    {const PW=.5,PH=.56,TH=.22,NT=6,px=-1.5,py=1.4,pz=FZ+.032,RED='#d8261c';
-      const pt=cTex(560,620,(x,W,H)=>{x.fillStyle='#fbfbf8';x.fillRect(0,0,W,H);x.fillStyle='#1d1d1d';x.textAlign='center';x.font='600 92px "Clash Display", Arial';x.font='600 120px "Clash Display", Arial';x.fillText('CV',W/2,H-56);
-          x.font='400 26px "Clash Display", Arial';x.fillText('Tear one off',W/2,H-18);});
+    {const PW=.46,PH=.65,TH=.22,NT=6,px=-1.5,py=1.5,pz=FZ+.032,RED='#d8261c';
+      const pt=cTex(690,975,(x,W,H)=>{x.fillStyle='#fff';x.fillRect(0,0,W,H);});
       const pm=new THREE.MeshBasicMaterial({map:pt,fog:false}),poster=add(mesh(new THREE.PlaneGeometry(PW,PH),pm),px,py,pz);poster.userData.nsTear=1;
-      loadImg('lp/about.webp').then(im=>{if(!im)return;const c=pt.image,x=c.getContext('2d'),s=Math.min(380/im.width,430/im.height),w=im.width*s,h=im.height*s;x.drawImage(im,(c.width-w)/2,30+(430-h),w,h);pt.needsUpdate=true;});
+      loadImg('lp/cv-mini.webp').then(im=>{if(!im)return;const c=pt.image,x=c.getContext('2d');x.drawImage(im,0,0,c.width,c.height);pt.needsUpdate=true;});
       const tt=cTex(80,240,(x,W,H)=>{x.fillStyle='#fbfbf8';x.fillRect(0,0,W,H);x.save();x.translate(W/2+8,H/2);x.rotate(-Math.PI/2);x.fillStyle=RED;x.textAlign='center';x.font='600 24px "Clash Display", Arial';x.fillText('NIGEL OOMS CV ↓',0,0);x.restore();x.fillStyle='#bbb';for(let y=0;y<H;y+=10)x.fillRect(0,y,2,5);});
       const tw=PW/NT;nsTabs=[];
       for(let i=0;i<NT;i++){const g=new THREE.Group(),m=new THREE.MeshBasicMaterial({map:tt,transparent:true,fog:false}),pl=mesh(new THREE.PlaneGeometry(tw-.006,TH),m,0,-TH/2,0);pl.userData.nsTab=i;g.add(pl);
