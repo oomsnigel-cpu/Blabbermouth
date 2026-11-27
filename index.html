@@ -891,17 +891,24 @@ async function buildNS(){
   const wall=FM({color:0x8f9a8a,roughness:.95});add(mesh(new THREE.PlaneGeometry(5.0,3.1),wall),0,1.55,-2.62);
   [-2.5,2.5].forEach(x=>{const w=add(mesh(new THREE.PlaneGeometry(7.1,3.1),wall),x,1.55,.9);w.rotation.y=x<0?Math.PI/2:-Math.PI/2;});
   const ce=add(mesh(new THREE.PlaneGeometry(5.0,7.1),FM({color:0x3c403b})),0,3.1,.9);ce.rotation.x=Math.PI/2;
-  // the back room: a PRIVÉ door ajar in the back corner, white light behind it, leads to the white case space
-  {const DX=1.98,DWb=.64,DHb=2.02,WZ=-2.615,fr=FM({color:0x55585a,roughness:.6}),g=new THREE.Group();
-    const wl=mesh(new THREE.PlaneGeometry(DWb,DHb),GLOW(0xffffff,1),DX,DHb/2,WZ);S2.add(wl);
-    [[DX-DWb/2-.025,DHb/2,.05,DHb+.05],[DX+DWb/2+.025,DHb/2,.05,DHb+.05],[DX,DHb+.025,DWb+.1,.05]].forEach(([x,y,w,h])=>S2.add(mesh(new THREE.BoxGeometry(w,h,.06),fr,x,y,WZ+.02)));
-    const sg=cTex(256,96,(x,W,H)=>{x.fillStyle='#fbfbf8';x.fillRect(0,0,W,H);x.fillStyle='#d8261c';x.font='600 54px "Clash Display", Arial';x.textAlign='center';x.textBaseline='middle';x.fillText('PRIVÉ',W/2,H/2+3);});
-    const pn=FM({color:0x9aa39a,roughness:.7});g.add(mesh(new THREE.BoxGeometry(DWb,DHb-.02,.04),pn,-DWb/2,DHb/2,0));
-    g.add(mesh(new THREE.PlaneGeometry(.3,.11),new THREE.MeshBasicMaterial({map:sg,fog:false}),-DWb/2,1.6,.021));
-    g.add(mesh(new THREE.BoxGeometry(.1,.02,.04),FM({color:0xc9ccd0,metalness:.6,roughness:.3}),-DWb+.08,1.02,.04));
-    g.position.set(DX+DWb/2,0,WZ+.03);g.rotation.y=1.05;S2.add(g);
-    const hit=mesh(new THREE.BoxGeometry(DWb+.5,DHb+.25,.7),new THREE.MeshBasicMaterial({visible:false}),DX-.05,(DHb+.25)/2,WZ+.36);S2.add(hit);
-    [wl,g,hit].forEach(o=>o.traverse(m=>{m.userData.nsBack=1;}));}
+  // the fridge on the right wall: white inside, stocked with the house brand; it leads to the white case space
+  {const FX=2.5,FD=.62,FW=1.25,FH=2.05,FZc=-.35,x0=FX-FD,g=new THREE.Group(),body=FM({color:0xd9dcdf,roughness:.5,metalness:.2});
+    const t=.05;g.add(mesh(new THREE.BoxGeometry(t,FH,FW),body,FX-t/2,FH/2,FZc));[-1,1].forEach(k=>g.add(mesh(new THREE.BoxGeometry(FD,FH,t),body,FX-FD/2,FH/2,FZc+k*(FW/2-t/2))));
+    g.add(mesh(new THREE.BoxGeometry(FD,.3,FW),body,FX-FD/2,FH-.15,FZc));g.add(mesh(new THREE.BoxGeometry(FD,.22,FW),body,FX-FD/2,.11,FZc));
+    const inner=mesh(new THREE.PlaneGeometry(FW-.1,FH-.52),GLOW(0xffffff,1),FX-t-.005,.22+(FH-.52)/2,FZc);inner.rotation.y=-Math.PI/2;g.add(inner);
+    [-1,1].forEach(k=>{const sd=mesh(new THREE.PlaneGeometry(FD-.06,FH-.52),GLOW(0xf2f6f8,1),FX-FD/2,.22+(FH-.52)/2,FZc+k*(FW/2-t-.003));sd.rotation.y=k>0?Math.PI:0;g.add(sd);});
+    const hd=cTex(512,96,(x,W,H)=>{x.fillStyle=BB.red;x.fillRect(0,0,W,H);bbWord(x,W/2,H/2+3,52,BB.cream);});
+    const hdr=mesh(new THREE.PlaneGeometry(FW-.06,.22),new THREE.MeshBasicMaterial({map:hd,fog:false}),x0-.005,FH-.14,FZc);hdr.rotation.y=-Math.PI/2;g.add(hdr);
+    const sh=FM({color:0xf4f4f2});[.24,.66,1.06,1.42].forEach((y,row)=>{g.add(mesh(new THREE.BoxGeometry(FD-.12,.02,FW-.12),sh,FX-FD/2,y,FZc));
+      const kinds=['cola','orange','lemon','tonic'];for(let i=0;i<5;i++){const z=FZc-FW/2+.17+i*.225;
+        if(row===3){const can=new THREE.Group();can.add(mesh(new THREE.CylinderGeometry(.035,.035,.12,12,1,true),FM({map:bbTex('beer-can'),side:THREE.DoubleSide,metalness:.4,roughness:.35}),0,.06,0));can.add(mesh(new THREE.CylinderGeometry(.035,.035,.008,12),FM({color:0xb8bcc0,metalness:.6}),0,.12,0));[-.05,.05].forEach(o=>{const c2=can.clone();c2.position.set(x0+.12+o*1.6,y+.01,z+o);g.add(c2);});}
+        else{const b=bbSoda(kinds[(i+row)%4],.3);b.position.set(x0+.14,y+.01,z);b.rotation.y=Math.PI/2;g.add(b);}}});
+    const gl=new THREE.MeshStandardMaterial({color:0xdde8ee,transparent:true,opacity:.18,roughness:.05,depthWrite:false});
+    const door=mesh(new THREE.PlaneGeometry(FW-.04,FH-.34),gl,x0-.02,FH/2-.07,FZc);door.rotation.y=-Math.PI/2;g.add(door);
+    [[FZc-FW/2+.02],[FZc+FW/2-.02]].forEach(([z])=>g.add(mesh(new THREE.BoxGeometry(.04,FH-.3,.04),body,x0-.02,FH/2-.07,z)));
+    g.add(mesh(new THREE.BoxGeometry(.03,.5,.03),FM({color:0x8d9196,metalness:.6}),x0-.05,1.1,FZc+FW/2-.1));
+    S2.add(g);const fl=new THREE.PointLight(0xf4fbff,.35,2.5);fl.position.set(x0-.3,1.2,FZc);S2.add(fl);
+    g.traverse(m=>{m.userData.nsBack=1;});}
   // the TL in the middle of the ceiling, flickering
   {const g=new THREE.Group(),hs=FM({color:0xd9dbd6,roughness:.6}),L=1.25,tm=new THREE.MeshBasicMaterial({color:0xeafff2,fog:false});
     g.add(mesh(new THREE.BoxGeometry(L,.05,.22),hs,0,0,0));
@@ -1020,7 +1027,7 @@ async function buildNS(){
   {const im=await loadImg('img/galaxy-s23-04.webp'),pt=cTex(400,560,(x,W,H)=>{x.fillStyle='#04080a';x.fillRect(0,0,W,H);if(im){const h=H*.72,w=h*im.width/im.height;x.drawImage(im,(W-w)/2+40,0,w,h);}
       const gr=x.createLinearGradient(0,H*.45,0,H*.75);gr.addColorStop(0,'rgba(4,8,10,0)');gr.addColorStop(1,'rgba(4,8,10,1)');x.fillStyle=gr;x.fillRect(0,H*.45,W,H*.3);
       x.fillStyle='#fff';x.textAlign='center';x.font='600 44px "Clash Display", Arial';x.fillText('Galaxy S23',W/2,H*.82);x.font='400 34px "Clash Display", Arial';x.fillText('x Lost Frequencies',W/2,H*.82+46);});
-    const p=add(mesh(new THREE.PlaneGeometry(.64,.9),FM({map:pt,roughness:.9})),2.48,1.75,-.6,-Math.PI/2);p.userData.caseIdx=CI('galaxy-s23');const tg=tag('galaxy-s23',0,0,0);tg.position.set(2.48,1.18,-.6);tg.rotation.y=-Math.PI/2;S2.add(tg);}
+    const p=add(mesh(new THREE.PlaneGeometry(.64,.9),FM({map:pt,roughness:.9})),1.95,1.75,-2.59);p.userData.caseIdx=CI('galaxy-s23');S2.add(tag('galaxy-s23',1.95,1.18,-2.585));}
   // the street side: facade, NIGELSHOP lightbox, glass storefront, the door with its window markings and case stickers
   {const brickC=(base,seedN)=>{const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d'),r=seeded(seedN);x.fillStyle='#8f8a82';x.fillRect(0,0,512,512);
       const bh=512/13,bw=512/4.7;for(let row=0;row<13;row++){const off=row%2?bw/2:0;for(let i=-1;i<6;i++){const v=.82+r()*.3,[R,G,B]=base;x.fillStyle=`rgb(${R*v|0},${G*v|0},${B*v|0})`;x.fillRect(i*bw+off+3,row*bh+3,bw-6,bh-6);}}return c;};
