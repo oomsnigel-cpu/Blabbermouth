@@ -1147,12 +1147,6 @@ async function buildNS(){
       add(mesh(new THREE.PlaneGeometry(.2,.2),gm(bbTex('sticker-sim'))),1.95,2.08,FZ+.031);add(mesh(new THREE.PlaneGeometry(.16,.16),gm(bbTex('sticker-logo'))),-1.07,2.1,FZ+.031);
       const ledge=FM({color:0xe8e4d8});const kinds=['cola','orange','lemon','tonic','cola','orange'];
       [[.88,.5],[1.46,.46]].forEach(([y,h],row)=>{add(mesh(new THREE.BoxGeometry(1.15,.03,.26),ledge),1.525,y,FZ-.2);kinds.forEach((k,i)=>add(bbSoda(kinds[(i+row*2)%kinds.length],h),1.06+i*.185,y+.015,FZ-.2));});}
-    // a sandwich board on the pavement; click it and it falls over (click again to put it back)
-    {const bm=new THREE.MeshBasicMaterial({map:bbTex('sandwich-board'),fog:false}),fr=FM({color:0xd8261c,roughness:.6}),H=.8,W=.52,a=.2,Hc=H*Math.cos(a),Fz=H*Math.sin(a);
-      const sb=new THREE.Group();[-1,1].forEach(k=>{const p=new THREE.Group();p.position.y=Hc;p.rotation.x=k*a;p.add(mesh(new THREE.BoxGeometry(W,H,.02),[fr,fr,fr,fr,k<0?bm:fr,k<0?fr:bm],0,-H/2,0));sb.add(p);});
-      sb.position.z=-Fz;const piv=new THREE.Group();piv.add(sb);add(piv,-1.0,0,FZ+1.0+Fz,.15);
-      piv.traverse(o=>{o.userData.nsBoard=1;});nsBoard={t:0,down:0};
-      nsAnims.push((t,dt)=>{const b=nsBoard;b.t+=((b.down?1:0)-b.t)*Math.min(1,dt*(b.down?4:3));const k=b.t,ease=k*k*(3-2*k);piv.rotation.x=(Math.PI/2-a)*ease;});}
     // the pavement: a crumpled candy wrapper, a crushed can of beer, a few cigarette butts
     {const wr=new THREE.PlaneGeometry(.16,.08,6,3),wp=wr.attributes.position,r9=seeded(9);for(let i=0;i<wp.count;i++)wp.setZ(i,(r9()-.5)*.025);wr.computeVertexNormals();
       const w=add(mesh(wr,FM({map:bbTex('wrapper'),side:THREE.DoubleSide,roughness:.4})),-.35,.012,FZ+.75);w.rotation.set(-Math.PI/2+.1,0,.6);
