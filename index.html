@@ -863,14 +863,15 @@ function bottle(c,h,r){const g=new THREE.Group(),m=FM({color:c,roughness:.25,met
 // BLABBERMOUTH: the shop's house brand. Placeholder art for every fake product, label and sticker;
 // a finished design dropped in lp/bb/<name>.png (and listed in BB_FILES) replaces the placeholder.
 const BB={red:'#d8261c',cream:'#fbfbf8',ink:'#1d1d1d',yel:'#f2c34a'},BB_FILES=[];
-const BB_SIZES={'logo':[600,200],'soda-cola':[512,128],'soda-orange':[512,128],'soda-lemon':[512,128],'soda-tonic':[512,128],'beer-can':[512,256],'wrapper':[256,128],'telco-banner':[1024,256],'beer-panel':[1024,256],'sandwich-board':[300,420],'top-strip':[1024,128],'sticker-sim':[256,256],'sticker-logo':[256,256]};
+const BB_SIZES={'logo':[600,200],'soda-cola':[512,128],'soda-orange':[512,128],'soda-lemon':[512,128],'soda-tonic':[512,128],'beer-can':[512,256],'wrapper':[256,128],'fridge-header':[512,104],'beer-panel':[1024,256],'sandwich-board':[300,420],'top-strip':[1024,128],'sticker-sim':[256,256],'sticker-logo':[256,256]};
 function bbWord(x,cx,cy,size,col){x.save();x.fillStyle=col||BB.red;x.font='700 '+size+'px "Clash Display", Arial';x.textAlign='center';x.textBaseline='middle';x.fillText('BLABBERMOUTH',cx,cy);x.restore();}
 const BB_DRAW={
   'logo':(x,W,H)=>{x.fillStyle=BB.cream;x.fillRect(0,0,W,H);bbWord(x,W/2,H/2,64);},
   'soda':(c,f)=>(x,W,H)=>{x.fillStyle=c;x.fillRect(0,0,W,H);x.fillStyle=BB.cream;x.fillRect(0,H*.18,W,H*.64);bbWord(x,W*.3,H/2,34);bbWord(x,W*.8,H/2,34);x.fillStyle=BB.ink;x.font='600 22px "Clash Display", Arial';x.textAlign='center';x.fillText(f,W*.55,H*.58);},
   'beer-can':(x,W,H)=>{x.fillStyle='#c9ccd0';x.fillRect(0,0,W,H);x.fillStyle=BB.ink;x.fillRect(0,H*.25,W,H*.5);bbWord(x,W*.3,H/2,40,BB.yel);x.fillStyle=BB.yel;x.font='600 30px "Clash Display", Arial';x.textAlign='center';x.fillText('PILS',W*.78,H/2+10);},
   'wrapper':(x,W,H)=>{x.fillStyle=BB.yel;x.fillRect(0,0,W,H);bbWord(x,W/2,H/2,22);x.fillStyle=BB.red;for(let i=0;i<W;i+=16){x.fillRect(i,0,8,10);x.fillRect(i+8,H-10,8,10);}},
-  'telco-banner':(x,W,H)=>{x.fillStyle=BB.cream;x.fillRect(0,0,W,H);x.fillStyle=BB.red;x.fillRect(0,0,W,58);x.fillStyle=BB.cream;x.font='700 40px "Clash Display", Arial';x.textAlign='center';x.textBaseline='middle';x.fillText('RECHARGE · HERLADEN · RECARGAS',W/2,31);bbWord(x,W/2,135,86);x.fillStyle=BB.ink;x.font='600 34px "Clash Display", Arial';x.fillText('MOBILE · call home for less',W/2,210);},
+  'fridge-header':(x,W,H)=>{x.fillStyle=BB.red;x.fillRect(0,0,W,H);bbWord(x,W/2,H/2+3,50,BB.cream);},
+  'telco-banner-unused':(x,W,H)=>{x.fillStyle=BB.cream;x.fillRect(0,0,W,H);x.fillStyle=BB.red;x.fillRect(0,0,W,58);x.fillStyle=BB.cream;x.font='700 40px "Clash Display", Arial';x.textAlign='center';x.textBaseline='middle';x.fillText('RECHARGE · HERLADEN · RECARGAS',W/2,31);bbWord(x,W/2,135,86);x.fillStyle=BB.ink;x.font='600 34px "Clash Display", Arial';x.fillText('MOBILE · call home for less',W/2,210);},
   'beer-panel':(x,W,H)=>{x.fillStyle=BB.cream;x.fillRect(0,0,W,H);x.fillStyle=BB.red;x.fillRect(0,0,W,16);x.fillRect(0,H-16,W,16);x.fillStyle=BB.ink;x.beginPath();x.arc(120,H/2,82,0,Math.PI*2);x.fill();x.fillStyle=BB.yel;x.font='700 90px "Clash Display", Arial';x.textAlign='center';x.textBaseline='middle';x.fillText('B',120,H/2+6);bbWord(x,W/2+110,H/2-6,78,BB.ink);x.fillStyle=BB.red;x.font='600 30px "Clash Display", Arial';x.fillText('PILS',W/2+110,H/2+58);},
   'sandwich-board':(x,W,H)=>{x.fillStyle=BB.red;x.fillRect(0,0,W,H);x.fillStyle=BB.cream;x.fillRect(14,14,W-28,H-28);bbWord(x,W/2,60,30);x.fillStyle=BB.ink;x.font='700 64px "Clash Display", Arial';x.textAlign='center';x.fillText('IJS',W/2,190);x.font='600 30px "Clash Display", Arial';x.fillText('GLACE · ICE',W/2,240);x.fillStyle=BB.yel;x.beginPath();x.moveTo(W/2-40,280);x.lineTo(W/2+40,280);x.lineTo(W/2,380);x.fill();x.fillStyle=BB.red;x.beginPath();x.arc(W/2,272,38,Math.PI,0);x.fill();},
   'top-strip':(x,W,H)=>{x.fillStyle=BB.red;x.fillRect(0,0,W,H);for(let i=0;i<3;i++){bbWord(x,W*(i+.5)/3,H/2,30,BB.cream);x.fillStyle=BB.cream;x.beginPath();x.arc(W*(i+1)/3,H/2,5,0,Math.PI*2);x.fill();}},
@@ -898,7 +899,7 @@ async function buildNS(){
     g.add(mesh(new THREE.BoxGeometry(FD,.3,FW),body,FX-FD/2,FH-.15,FZc));g.add(mesh(new THREE.BoxGeometry(FD,.22,FW),body,FX-FD/2,.11,FZc));
     const inner=mesh(new THREE.PlaneGeometry(FW-.1,FH-.52),GLOW(0xffffff,1),FX-t-.005,.22+(FH-.52)/2,FZc);inner.rotation.y=-Math.PI/2;g.add(inner);
     [-1,1].forEach(k=>{const sd=mesh(new THREE.PlaneGeometry(FD-.06,FH-.52),GLOW(0xf2f6f8,1),FX-FD/2,.22+(FH-.52)/2,FZc+k*(FW/2-t-.003));sd.rotation.y=k>0?Math.PI:0;g.add(sd);});
-    const hd=cTex(512,104,(x,W,H)=>{x.fillStyle=BB.red;x.fillRect(0,0,W,H);bbWord(x,W/2,H/2+3,50,BB.cream);});
+    const hd=bbTex('fridge-header');
     const hdr=mesh(new THREE.PlaneGeometry(FW-.06,.16),new THREE.MeshBasicMaterial({map:hd,fog:false}),x0-.005,FH-.14,FZc);hdr.rotation.y=-Math.PI/2;g.add(hdr);
     const sh=FM({color:0xf4f4f2}),kinds=['cola','orange','lemon','tonic'],cm=bbTex('beer-can');
     const can=(x,y,z,k)=>{const c=new THREE.Group();c.add(mesh(new THREE.CylinderGeometry(.032,.032,.115,10,1,true),k?FM({color:{cola:0x8b1d22,orange:0xff7a2b,lemon:0xd8c23a,tonic:0x2b6bd6}[k],metalness:.4,roughness:.35}):FM({map:cm,side:THREE.DoubleSide,metalness:.4,roughness:.35}),0,.058,0));c.add(mesh(new THREE.CylinderGeometry(.032,.032,.006,10),FM({color:0xb8bcc0,metalness:.6}),0,.118,0));c.position.set(x,y,z);g.add(c);};
@@ -1121,7 +1122,7 @@ async function buildNS(){
         g.position.set(px-PW/2+tw*(i+.5),py-PH/2,pz+.001);g.rotation.z=(seeded(i+5)()-.5)*.06;S2.add(g);nsTabs.push({g,m,t0:0,vx:0});}
       nsAnims.push(()=>{const now=performance.now()/1000;nsTabs.forEach(b=>{if(!b.t0||!b.g.visible)return;const k=now-b.t0;b.g.rotation.x=Math.min(k*4,1.1);b.g.position.y=py-PH/2-Math.max(0,k-.25)**2*2.2;b.g.position.x+=b.vx*.01;b.g.rotation.z+=b.vx*.04;b.g.position.z=pz+.001+Math.min(k,.5)*.25;b.m.opacity=Math.max(0,1-Math.max(0,k-.5)*1.6);if(k>1.2)b.g.visible=false;});});}
     // the windows: BLABBERMOUTH house brand, phone cards and sodas, like every night shop
-    {const gm=t=>new THREE.MeshBasicMaterial({map:t,transparent:true,fog:false}),ts=bbTex('top-strip'),bn=bbTex('telco-banner');
+    {const gm=t=>new THREE.MeshBasicMaterial({map:t,transparent:true,fog:false}),ts=bbTex('top-strip');
       const bp=bbTex('beer-panel');[-1.525,1.525].forEach(x=>{add(mesh(new THREE.PlaneGeometry(1.15,.144),gm(ts)),x,2.37,FZ+.03);add(mesh(new THREE.PlaneGeometry(1.15,.29),gm(bp)),x,.72,FZ+.03);});
       add(mesh(new THREE.PlaneGeometry(.2,.2),gm(bbTex('sticker-sim'))),1.95,2.08,FZ+.031);add(mesh(new THREE.PlaneGeometry(.16,.16),gm(bbTex('sticker-logo'))),-1.07,2.1,FZ+.031);
       const ledge=FM({color:0xe8e4d8});const kinds=['cola','orange','lemon','tonic','cola','orange'];
